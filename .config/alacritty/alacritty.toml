@@ -1,0 +1,35 @@
+import = ["~/.config/alacritty/gnome_terminal.toml"]
+
+[shell]
+program = "/usr/bin/fish"
+
+[env]
+
+[window]
+  decorations = "None"
+  startup_mode = "Maximized"
+  padding = { x = 5, y = 5 }
+
+[scrolling]
+
+[font]
+  size = 20
+  normal = { family = "JetBrainsMonoNerdFontMono", style = "Regular" }
+
+[colors] # imported above
+
+[bell]
+
+[selection]
+
+[cursor]
+
+[terminal]
+
+[mouse]
+
+[hints]
+
+[keyboard]
+
+[debug]

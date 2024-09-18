@@ -1,8 +1,5 @@
 import = ["~/.config/alacritty/gnome_terminal.toml"]
 
-[shell]
-program = "/usr/bin/fish"
-
 [env]
 
 [window]
@@ -33,11 +30,11 @@ blink_interval = 500
 blink_timeout = 0
 
 [cursor.style]
-shape = "Beam"
+#shape = "Beam" # managed by fish
 blinking = "Always"
 
 [cursor.vi_mode_style]
-shape = "Underline"
+#shape = "Block" # managed by fish
 blinking = "Off"
 
 [terminal]

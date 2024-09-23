@@ -1,20 +1,23 @@
 import = ["~/.config/alacritty/gnome_terminal.toml"]
 
-[shell]
-program = "/usr/bin/fish"
-
 [env]
 
 [window]
-  decorations = "None"
-  startup_mode = "Maximized"
-  padding = { x = 5, y = 5 }
+decorations = "None"
+startup_mode = "Fullscreen"
+
+[window.padding]
+x = 5
+y = 5
 
 [scrolling]
 
 [font]
-  size = 20
-  normal = { family = "JetBrainsMonoNerdFontMono", style = "Regular" }
+size = 20
+
+[font.normal]
+family = "JetBrainsMonoNerdFontMono"
+style = "Regular"
 
 [colors] # imported above
 
@@ -23,10 +26,21 @@ program = "/usr/bin/fish"
 [selection]
 
 [cursor]
+blink_interval = 500
+blink_timeout = 0
+
+[cursor.style]
+#shape = "Beam" # managed by fish
+blinking = "Always"
+
+[cursor.vi_mode_style]
+#shape = "Block" # managed by fish
+blinking = "Off"
 
 [terminal]
 
 [mouse]
+hide_when_typing = true
 
 [hints]
 

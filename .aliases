@@ -1,0 +1,13 @@
+
+alias vim="nvim"
+alias ac="vim $HOME/.config/alacritty/alacritty.toml"
+alias fc="vim $HOME/.config/fish/config.fish"
+alias sc="vim $HOME/.config/starship.toml"
+alias tc="vim $HOME/.tmux.conf.local"
+alias i3c="vim $HOME/.config/i3/config"
+alias als="vim $HOME/.aliases"
+alias c="xclip -i -selection clipboard"
+alias p="xclip -o -selection clipboard"
+alias t="vim $HOME/TODO"
+alias sfish="source $HOME/.config/fish/config.fish"
+alias r="reset"

@@ -11,6 +11,6 @@ My configuration files for:
 ```
 git clone git@github.com:thomascit/dotfiles.git
 cd dotfiles
-cp -r * ~/
+cp -r .config/ ~/.config
 ```
 

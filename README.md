@@ -6,3 +6,11 @@ My configuration files for:
 - Starship
 - Tmux
 - Neovim
+
+
+```
+git clone git@github.com:thomascit/dotfiles.git
+cd dotfiles
+cp -r .config/ ~/.config
+```
+

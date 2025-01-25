@@ -1,0 +1,23 @@
+# Standard aliases
+alias r="reset"
+alias vim="nvim"
+alias c="xclip -i -selection clipboard"
+alias p="xclip -o -selection clipboard"
+
+# Config Files
+alias zrc="vim ~/.zshrc"
+alias brc="vim ~/.bashrc"
+alias vrc="vim ~/.vimrc"
+alias fc="vim ~/.config/fish/config.fish"
+alias ac="vim ~/.config/alacritty/alacritty.toml"
+alias sc="vim ~/.config/starship.toml"
+alias tc="vim ~/.tmux.conf.local"
+alias als="vim ~/.aliases"
+alias nvc="vim ~/.config/nvim"
+alias i3c="vim ~/.config/i3/config"
+
+# Source Files
+alias sz="source ~/.zshrc"
+alias sb="source ~/.bashrc"
+alias sf="source ~/.config/fish/config.fish"
+

@@ -20,7 +20,7 @@ set fish_greeting
 starship init fish | source
 
 ## ALIASES
-source $HOME/.aliases
+source $HOME/.config/.aliases
 
 ## VARIABLES
 

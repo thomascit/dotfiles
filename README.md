@@ -2,15 +2,14 @@
 My configuration files for:
 
 - Alacritty
+- Hammerspoon
 - Fish
 - Starship
 - Tmux
 - Neovim
 
 
+To change hammerspoon config directory:
 ```
-git clone git@github.com:thomascit/dotfiles.git
-cd dotfiles
-cp -r .config/ ~/.config
+defaults write org.hammerspoon.Hammerspoon MJConfigFile "~/.config/hammerspoon/init.lua"
 ```
-

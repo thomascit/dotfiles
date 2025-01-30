@@ -21,3 +21,6 @@ alias sz="source ~/.zshrc"
 alias sb="source ~/.bashrc"
 alias sf="source ~/.config/fish/config.fish"
 
+# Other
+alias t="vim ~/TODO"
+alias tk="tmux kill-session -a"

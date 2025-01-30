@@ -1,6 +1,7 @@
-if status is-interactive
-    # Commands to run in interactive sessions can go here
-end
+#if status is-interactive
+#    and not set -q TMUX
+#    exec tmux
+#end
 
 ## FISH CURSOR SETTING
 set fish_cursor_default block
@@ -17,11 +18,15 @@ fish_vi_key_bindings
 set fish_greeting
 
 ## ENABLE STARSHIP PROMPT
+set -gx STARSHIP_CONFIG ~/.config/starship/starship.toml
 starship init fish | source
 
 ## ALIASES
-source $HOME/.config/.aliases
+source ~/.config/.aliases
 
 ## VARIABLES
 
 ## PATH EXPORTS
+
+## EXTRAS
+neofetch

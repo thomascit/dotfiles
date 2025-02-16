@@ -1,20 +1,20 @@
 local spaces = require("hs.spaces") -- https://github.com/asmagill/hs._asm.spaces
 
--- Switch alacritty
+-- Switch ghostty
 hs.hotkey.bind({ "ctrl" }, "`", function()
-	local BUNDLE_ID = "org.alacritty" -- more accurate to avoid mismatching on browser titles
-	function moveWindow(alacritty, space, mainScreen)
+	local BUNDLE_ID = "com.mitchellh.ghostty" -- more accurate to avoid mismatching on browser titles
+	function moveWindow(ghostty, space, mainScreen)
 		-- move to main space
 		local win = nil
 		while win == nil do
-			win = alacritty:mainWindow()
+			win = ghostty:mainWindow()
 		end
 		print("win=" .. tostring(win))
 		print("space=" .. tostring(space))
 		print("screen=" .. tostring(win:screen()))
 		print("mainScr=" .. tostring(mainScreen))
 		if win:isFullScreen() then
-			hs.eventtap.keyStroke("cmd", "return", 0, alacritty)
+			hs.eventtap.keyStroke("cmd", "return", 0, ghostty)
 		end
 		winFrame = win:frame()
 		scrFrame = mainScreen:fullFrame()
@@ -26,17 +26,17 @@ hs.hotkey.bind({ "ctrl" }, "`", function()
 		print("win:frame=" .. tostring(win:frame()))
 		spaces.moveWindowToSpace(win, space)
 		if win:isFullScreen() then
-			hs.eventtap.keyStroke("cmd", "return", 0, alacritty)
+			hs.eventtap.keyStroke("cmd", "return", 0, ghostty)
 		end
 		win:focus()
 	end
-	local alacritty = hs.application.get(BUNDLE_ID)
-	if alacritty ~= nil and alacritty:isFrontmost() then
-		alacritty:hide()
+	local ghostty = hs.application.get(BUNDLE_ID)
+	if ghostty ~= nil and ghostty:isFrontmost() then
+		ghostty:hide()
 	else
 		local space = spaces.activeSpaceOnScreen()
 		local mainScreen = hs.screen.mainScreen()
-		if alacritty == nil and hs.application.launchOrFocusByBundleID(BUNDLE_ID) then
+		if ghostty == nil and hs.application.launchOrFocusByBundleID(BUNDLE_ID) then
 			local appWatcher = nil
 			print("create app watcher")
 			appWatcher = hs.application.watcher.new(function(name, event, app)
@@ -52,8 +52,8 @@ hs.hotkey.bind({ "ctrl" }, "`", function()
 			print("start watcher")
 			appWatcher:start()
 		end
-		if alacritty ~= nil then
-			moveWindow(alacritty, space, mainScreen)
+		if ghostty ~= nil then
+			moveWindow(ghostty, space, mainScreen)
 		end
 	end
 end)

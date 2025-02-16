@@ -1,29 +1,17 @@
-import = ["~/.config/alacritty/gnome_terminal.toml"]
-
-[env]
+[general]
+import = ["~/.config/alacritty/themes/themes/alabaster_dark.toml"]
 
 [window]
 decorations = "None"
-startup_mode = "Fullscreen"
-
-[window.padding]
-x = 5
-y = 5
-
-[scrolling]
+startup_mode = "Maximized"
+opacity = 0.8
 
 [font]
 size = 20
 
 [font.normal]
-family = "JetBrainsMonoNerdFontMono"
+family = "JetBrainsMono Nerd Font Mono"
 style = "Regular"
-
-[colors] # imported above
-
-[bell]
-
-[selection]
 
 [cursor]
 blink_interval = 500
@@ -37,13 +25,5 @@ blinking = "Always"
 #shape = "Block" # managed by fish
 blinking = "Off"
 
-[terminal]
-
 [mouse]
 hide_when_typing = true
-
-[hints]
-
-[keyboard]
-
-[debug]

@@ -11,6 +11,8 @@ My configuration files for:
 - Starship
 - Tmux
 - Neovim
+- i3
+- Polybar
 
 To change hammerspoon config directory:
 

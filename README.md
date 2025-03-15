@@ -4,13 +4,13 @@ This repository contains my configuration files for various applications, all ma
 
 ## Available Configurations
 
-### Alacritty
-### Kitty
-### Ghostty
-### Fish
-### Starship
-### Tmux
-### Neovim
+- Alacritty
+- Kitty
+- Ghostty
+- Fish
+- Starship
+- Tmux
+- Neovim
 
 ## Stow Format
 

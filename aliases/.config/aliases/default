@@ -1,24 +1,25 @@
-# Standard aliases
-alias r="reset"
-alias vim="nvim"
+# Edit Config Files
+alias ac="vim ~/.config/alacritty/alacritty.toml"
+alias als="vim ~/.config/aliases"
+alias brc="vim ~/.bashrc"
+alias fc="vim ~/.config/fish/config.fish"
+alias i3c="vim ~/.config/i3/config"
+alias nvc="vim ~/.config/nvim"
+alias sc="vim ~/.config/starship/starship.toml"
+alias tc="vim ~/.config/tmux/.tmux.conf.local"
+alias vrc="vim ~/.vimrc"
+alias zrc="vim ~/.zshrc"
+
+# Source Shells
+alias sb="source ~/.bashrc"
+alias sf="source ~/.config/fish/config.fish"
+alias sz="source ~/.zshrc"
+
+# Custom
 alias c="xclip -i -selection clipboard"
 alias cc="pbcopy"
 alias p="xclip -o -selection clipboard"
+alias r="reset"
+alias vim="nvim"
 
-# Config Files
-alias zrc="vim ~/.zshrc"
-alias brc="vim ~/.bashrc"
-alias vrc="vim ~/.vimrc"
-alias fc="vim ~/.config/fish/config.fish"
-alias ac="vim ~/.config/alacritty/alacritty.toml"
-alias sc="vim ~/.config/starship/starship.toml"
-alias tc="vim ~/.config/tmux/.tmux.conf.local"
-alias nvc="vim ~/.config/nvim"
-alias i3c="vim ~/.config/i3/config"
-alias als="vim ~/.config/aliases"
-
-# Source Files
-alias sz="source ~/.zshrc"
-alias sb="source ~/.bashrc"
-alias sf="source ~/.config/fish/config.fish"
 

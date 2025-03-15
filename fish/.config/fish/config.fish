@@ -22,7 +22,7 @@ set -gx STARSHIP_CONFIG ~/.config/starship/starship.toml
 starship init fish | source
 
 ## ALIASES
-source ~/.config/.aliases
+source ~/.config/aliases/default
 
 ## VARIABLES
 

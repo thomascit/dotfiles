@@ -1,19 +1,18 @@
+# Dotfiles
 
-# dotfiles
+This repository contains my configuration files for various applications, all managed in `stow` format for easy installation and management.
 
-My configuration files for:
+## Available Configurations
 
-- Alacritty
-- Kitty
-- Ghostty
-- Hammerspoon
-- Fish
-- Starship
-- Tmux
-- Neovim
+### Alacritty
+### Kitty
+### Ghostty
+### Fish
+### Starship
+### Tmux
+### Neovim
 
-To change hammerspoon config directory:
+## Stow Format
 
-```sh
-defaults write org.hammerspoon.Hammerspoon MJConfigFile "~/.config/hammerspoon/init.lua"
-```
+These configurations are managed using [GNU Stow](https://www.gnu.org/software/stow/), which allows you to easily manage and link these dotfiles to the correct locations in your home directory.
+

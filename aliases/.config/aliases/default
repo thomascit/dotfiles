@@ -2,6 +2,7 @@
 alias r="reset"
 alias vim="nvim"
 alias c="xclip -i -selection clipboard"
+alias cc="pbcopy"
 alias p="xclip -o -selection clipboard"
 
 # Config Files
@@ -14,6 +15,7 @@ alias sc="vim ~/.config/starship/starship.toml"
 alias tc="vim ~/.config/tmux/.tmux.conf.local"
 alias nvc="vim ~/.config/nvim"
 alias i3c="vim ~/.config/i3/config"
+alias als="vim ~/.config/aliases"
 
 # Source Files
 alias sz="source ~/.zshrc"

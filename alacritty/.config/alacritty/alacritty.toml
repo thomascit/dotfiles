@@ -1,0 +1,29 @@
+[general]
+import = ["~/.config/alacritty/themes/alabaster_dark.toml"]
+
+[window]
+decorations = "None"
+startup_mode = "Maximized"
+opacity = 0.8
+
+[font]
+size = 20
+
+[font.normal]
+family = "JetBrainsMono Nerd Font Mono"
+style = "Regular"
+
+[cursor]
+blink_interval = 500
+blink_timeout = 0
+
+[cursor.style]
+#shape = "Beam" # managed by fish
+blinking = "Always"
+
+[cursor.vi_mode_style]
+#shape = "Block" # managed by fish
+blinking = "Off"
+
+[mouse]
+hide_when_typing = true

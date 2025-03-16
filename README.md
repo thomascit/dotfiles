@@ -12,10 +12,6 @@ This repository contains my configuration files for various applications, all ma
 - Starship
 - Tmux
 
-## Stow Format
-
-These configurations are managed using [GNU Stow](https://www.gnu.org/software/stow/), which allows you to easily manage and link these dotfiles to the correct locations in your home directory.
-
 ### Install with stow
 
 ```bash

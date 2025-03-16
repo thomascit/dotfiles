@@ -6,7 +6,7 @@ alias fc="vim ~/.config/fish/config.fish"
 alias i3c="vim ~/.config/i3/config"
 alias nvc="vim ~/.config/nvim"
 alias sc="vim ~/.config/starship/starship.toml"
-alias tc="vim ~/.config/tmux/.tmux.conf.local"
+alias tc="vim ~/.config/tmux/tmux.conf"
 alias vrc="vim ~/.vimrc"
 alias zrc="vim ~/.zshrc"
 

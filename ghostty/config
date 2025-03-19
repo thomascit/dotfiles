@@ -1,5 +1,6 @@
 font-family = JetBrainsMono Nerd Font Mono
 font-size = 20
 window-decoration = none
-background-opacity = 0.8
-theme = alabaster_dark
+background-opacity = 0.7
+background-blur = 10
+theme = dracula

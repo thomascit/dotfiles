@@ -17,17 +17,18 @@ fish_vi_key_bindings
 ## DISABLE FISH GREETING
 set fish_greeting
 
+## ALIASES
+source ~/.config/aliases/default
+
+## PATH EXPORTS
+fish_add_path /opt/homebrew/bin .local/bin
+
 ## ENABLE STARSHIP PROMPT
 set -gx STARSHIP_CONFIG ~/.config/starship/starship.toml
 starship init fish | source
 
-## ALIASES
-source ~/.config/aliases/default
-
-## VARIABLES
-
-## PATH EXPORTS
-fish_add_path /opt/homebrew/bin
+## ENABLE ZOXIDE
+zoxide init fish | source
 
 ## EXTRAS
 neofetch

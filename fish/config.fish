@@ -1,7 +1,5 @@
-#if status is-interactive
-#    and not set -q TMUX
-#    exec tmux
-#end
+## THEME
+fish_config theme choose "Dracula Official"
 
 ## FISH CURSOR SETTING
 set fish_cursor_default block

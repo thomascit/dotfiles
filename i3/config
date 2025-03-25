@@ -200,7 +200,7 @@ exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 exec --no-startup-id picom -c
 
 # Enable custom i3lock Script after inactivity
-exec xautolock -time 15 -locker '~/Scripts/lock.sh'
+exec xautolock -time 15 -locker '~/.config/i3/lock.sh'
 
 # Custom shortcuts
 bindsym $mod+Shift+t exec ghostty
@@ -221,3 +221,6 @@ client.unfocused        #282A36 #282A36 #BFBFBF #282A36   #282A36
 client.urgent           #44475A #FF5555 #F8F8F2 #FF5555   #FF5555
 client.placeholder      #282A36 #282A36 #F8F8F2 #282A36   #282A36
 client.background       #F8F8F2
+
+for_window [class=".*"] border normal 1
+for_window [class="obsidian"] border normal 1

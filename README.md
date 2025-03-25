@@ -1,6 +1,6 @@
 # Dotfiles
 
-This repository contains my configuration files for various applications, all managed in `stow` format for easy installation and management.
+This repository contains my configuration files for various applications.
 
 ## Available Configurations
 

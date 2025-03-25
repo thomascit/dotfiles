@@ -11,6 +11,8 @@ This repository contains my configuration files for various applications, all ma
 - Neovim
 - Starship
 - Tmux
+- i3
+- Polybar
 
 ### Install with stow
 

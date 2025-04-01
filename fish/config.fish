@@ -29,4 +29,4 @@ starship init fish | source
 zoxide init fish | source
 
 ## EXTRAS
-neofetch
+fastfetch

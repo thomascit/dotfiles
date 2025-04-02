@@ -31,4 +31,5 @@ i3lock \
   --blur 5 \
   --clock \
   --indicator \
-  --time-str="%H:%M"
+  --time-str="%I:%M %p" \
+  --date-str="%m-%d-%Y"

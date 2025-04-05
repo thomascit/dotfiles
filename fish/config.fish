@@ -30,3 +30,10 @@ zoxide init fish | source
 
 ## EXTRAS
 fastfetch
+
+## POMODORO
+function pomodoro
+    echo $argv[1] | lolcat
+    timer "$argv[2]"m
+    say "'$argv[1]' session done"
+end

@@ -19,11 +19,9 @@ This repository contains my configuration files for various applications.
 ```sh
 stow .
 ```
-```
 
 ### Install TPM
 
 ```sh
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-```
 ```

@@ -1,2 +1,2 @@
 --target=~/.config
---ignore=.stowrc
+--ignore=.stowrc fonts

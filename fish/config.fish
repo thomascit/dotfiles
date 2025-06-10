@@ -16,7 +16,7 @@ fish_vi_key_bindings
 set fish_greeting
 
 ## ALIASES
-source ~/.config/aliases/default
+source ~/.config/aliases
 
 ## PATH EXPORTS
 fish_add_path /opt/homebrew/bin .local/bin
@@ -30,10 +30,3 @@ zoxide init fish | source
 
 ## EXTRAS
 fastfetch
-
-## POMODORO
-function pomodoro
-    echo $argv[1] | lolcat
-    timer "$argv[2]"m
-    say "'$argv[1]' session done"
-end

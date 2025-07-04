@@ -18,7 +18,7 @@ eval "$(starship init bash)"
 eval "$(zoxide init bash)"
 
 # VIM CONFIG DIRECTORY
-export VIMINIT="source $HOME/.config/vim/.vimrc"
+export VIMINIT="source $HOME/.config/vim/vimrc"
 
 # EXTRAS
 fastfetch

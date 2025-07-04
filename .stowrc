@@ -1,2 +1,2 @@
 --target=$HOME/.config
---ignore=.stowrc fonts
+--ignore=.stowrc .bashrc .zshrc fonts

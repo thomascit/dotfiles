@@ -1,0 +1,35 @@
+# -------------------------------
+# VI KEYBINDINGS
+# -------------------------------
+set -o vi
+
+# -------------------------------
+# ALIASES
+# -------------------------------
+[ -f "$HOME/.config/aliases" ] && source "$HOME/.config/aliases"
+
+# -------------------------------
+# PATH EXPORTS
+# -------------------------------
+export PATH="$PATH:/opt/homebrew/bin:$HOME/.local/bin"
+
+# -------------------------------
+# STARSHIP PROMPT
+# -------------------------------
+export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
+eval "$(starship init zsh)"
+
+# -------------------------------
+# ZOXIDE
+# -------------------------------
+eval "$(zoxide init zsh)"
+
+# -------------------------------
+# VIM CONFIG DIRECTORY
+# -------------------------------
+export VIMINIT="source $HOME/.config/.vimrc"
+
+# -------------------------------
+# EXTRAS
+# -------------------------------
+fastfetch

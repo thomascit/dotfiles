@@ -15,17 +15,21 @@ fish_vi_key_bindings
 # DISABLE FISH GREETING
 set fish_greeting
 
-source ~/.config/aliases
+## ALIASES
+source $HOME/.config/aliases
 
 # PATH EXPORTS
-fish_add_path /opt/homebrew/bin ~/.local/bin
+fish_add_path /opt/homebrew/bin $HOME/.local/bin
 
 # ENABLE STARSHIP PROMPT
-set -gx STARSHIP_CONFIG ~/.config/starship/starship.toml
+set -gx STARSHIP_CONFIG $HOME/.config/starship/starship.toml
 starship init fish | source
 
 # ENABLE ZOXIDE
 zoxide init fish | source
+
+## VIM CONFIG DIRECTORY
+set -gx VIMINIT "$HOME/.config/.vimrc"
 
 # EXTRAS
 fastfetch

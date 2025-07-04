@@ -27,7 +27,7 @@ eval "$(zoxide init zsh)"
 # -------------------------------
 # VIM CONFIG DIRECTORY
 # -------------------------------
-export VIMINIT="source $HOME/.config/.vimrc"
+export VIMINIT="source $HOME/.config/vim/.vimrc"
 
 # -------------------------------
 # EXTRAS

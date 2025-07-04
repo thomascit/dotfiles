@@ -29,7 +29,7 @@ starship init fish | source
 zoxide init fish | source
 
 ## VIM CONFIG DIRECTORY
-set -gx VIMINIT "$HOME/.config/vim/vimrc"
+set -gx VIMINIT "source $HOME/.config/vim/vimrc"
 
 # EXTRAS
 fastfetch

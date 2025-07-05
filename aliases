@@ -1,24 +1,29 @@
+# ─────────────────────────────────────────────
 # Edit Config Files
-alias ac="vim ~/.config/alacritty/alacritty.toml"
-alias als="vim ~/.config/aliases/default"
-alias brc="vim ~/.bashrc"
-alias fc="vim ~/.config/fish/config.fish"
-alias gc="vim ~/.config/ghostty/config"
-alias i3c="vim ~/.config/i3/config"
-alias kc="vim ~/.config/kitty/config"
-alias nvc="vim ~/.config/nvim"
-alias sc="vim ~/.config/starship/starship.toml"
-alias tc="vim ~/.config/tmux/tmux.conf"
-alias vrc="vim ~/.vimrc"
-alias zrc="vim ~/.zshrc"
+# ─────────────────────────────────────────────
+alias ac="vim $HOME/.config/alacritty/alacritty.toml"
+alias als="vim $HOME/.config/aliases/default"
+alias brc="vim $HOME/.config/bash/bashrc"
+alias fc="vim $HOME/.config/fish/config.fish"
+alias zrc="vim $HOME/zsh/zshrc"
+alias gc="vim $HOME/.config/ghostty/config"
+alias i3c="vim $HOME/.config/i3/config"
+alias kc="vim $HOME/.config/kitty/config"
+alias nvc="vim $HOME/.config/nvim"
+alias sc="vim $HOME/.config/starship/starship.toml"
+alias tc="vim $HOME/.config/tmux/tmux.conf"
+alias vrc="vim $HOME/vim/vimrc"
 
+# ─────────────────────────────────────────────
 # Source Shells
-alias sb="source ~/.bashrc"
-alias sf="source ~/.config/fish/config.fish"
-alias sz="source ~/.zshrc"
+# ─────────────────────────────────────────────
+alias sb="source $HOME/.bashrc"
+alias sf="source $HOME/.config/fish/config.fish"
+alias sz="source $HOME/.zshrc"
 
+# ─────────────────────────────────────────────
 # Custom
-alias br="pomodoro break 10"
+# ─────────────────────────────────────────────
 alias c="xclip -i -selection clipboard"
 alias cc="pbcopy"
 alias ff="fastfetch"
@@ -26,11 +31,9 @@ alias gs="git status"
 alias l="clear"
 alias ls="eza -la --sort=type"
 alias n="nvim ."
-alias po="pomodoro"
 alias r="reset"
 alias t="tmux new-session -A -s main"
 alias ta="tmux attach-session"
 alias tn="tmux split-window -h -b 'nvim .'"
 alias tr="tmux rename-session"
-alias vim="nvim"
-alias wo="pomodoro work 45"
+

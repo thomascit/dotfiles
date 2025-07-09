@@ -26,6 +26,8 @@ These are my personal dotfiles that configure my development environment and too
 git clone https://github.com/thomascit/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 stow .
+# Copy thin wrapper files that source configs from ~/.config
+cp .bashrc .zshrc .vimrc "$HOME"
 ```
 
 ## Usage

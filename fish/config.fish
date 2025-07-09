@@ -15,7 +15,7 @@ fish_vi_key_bindings
 # DISABLE FISH GREETING
 set fish_greeting
 
-## ALIASES
+# ALIASES
 source $HOME/.config/aliases
 
 # PATH EXPORTS
@@ -28,8 +28,6 @@ starship init fish | source
 # ENABLE ZOXIDE
 zoxide init fish | source
 
-## VIM CONFIG DIRECTORY
-set -gx VIMINIT "source $HOME/.config/vim/vimrc"
-
 # EXTRAS
-fastfetch
+#fastfetch
+echo $(basename "$STARSHIP_SHELL") | figlet | lolcat --animate --speed 100

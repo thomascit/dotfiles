@@ -17,8 +17,6 @@ eval "$(starship init bash)"
 # ENABLE ZOXIDE
 eval "$(zoxide init bash)"
 
-# VIM CONFIG DIRECTORY
-export VIMINIT="source $HOME/.config/vim/vimrc"
-
 # EXTRAS
-fastfetch
+#fastfetch
+echo $(basename "$STARSHIP_SHELL") | figlet | lolcat --animate --speed 100

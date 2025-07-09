@@ -1,2 +1,4 @@
-# ~/.vimrc
-[ -f "$HOME/.config/vim/vimrc" ] && source "$HOME/.config/vim/vimrc"
+" ~/.vimrc
+if filereadable(expand("~/.config/vim/vimrc"))
+  source ~/.config/vim/vimrc
+endif

@@ -2,24 +2,24 @@
 # Edit Config Files
 # ─────────────────────────────────────────────
 alias ac="vim $HOME/.config/alacritty/alacritty.toml"
-alias als="vim $HOME/.config/aliases/default"
+alias als="vim $HOME/.config/aliases"
 alias brc="vim $HOME/.config/bash/bashrc"
 alias fc="vim $HOME/.config/fish/config.fish"
-alias zrc="vim $HOME/zsh/zshrc"
+alias zrc="vim $HOME/.config/zsh/zshrc"
 alias gc="vim $HOME/.config/ghostty/config"
 alias i3c="vim $HOME/.config/i3/config"
 alias kc="vim $HOME/.config/kitty/config"
 alias nvc="vim $HOME/.config/nvim"
 alias sc="vim $HOME/.config/starship/starship.toml"
 alias tc="vim $HOME/.config/tmux/tmux.conf"
-alias vrc="vim $HOME/vim/vimrc"
+alias vrc="vim $HOME/.config/vim/vimrc"
 
 # ─────────────────────────────────────────────
 # Source Shells
 # ─────────────────────────────────────────────
-alias sb="source $HOME/.bashrc"
+alias sb="source $HOME/.config/bash/bashrc"
 alias sf="source $HOME/.config/fish/config.fish"
-alias sz="source $HOME/.zshrc"
+alias sz="source $HOME/.config/zsh/zshrc"
 
 # ─────────────────────────────────────────────
 # Custom

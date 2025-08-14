@@ -5,8 +5,9 @@ font-family                        = "JetBrainsMono Nerd Font Mono"
 font-size                          = 20
 keybind                            = "global:ctrl+grave_accent=toggle_quick_terminal"
 macos-titlebar-proxy-icon          = "hidden"
-quick-terminal-autohide              = false
+quick-terminal-autohide            = false
 quick-terminal-animation-duration  = 0
+quick-terminal-position            = bottom
 theme                              = "Dracula"
 title                              = "Ghostty"
 window-decoration                  = "true"

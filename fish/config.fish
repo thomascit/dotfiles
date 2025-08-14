@@ -19,7 +19,7 @@ set fish_greeting
 source $HOME/.config/aliases
 
 # PATH EXPORTS
-fish_add_path /opt/homebrew/bin $HOME/.local/bin
+eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # ENABLE STARSHIP PROMPT
 set -gx STARSHIP_CONFIG $HOME/.config/starship/starship.toml

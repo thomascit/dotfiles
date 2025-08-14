@@ -39,4 +39,7 @@ set encoding=utf-8     " Set encoding
 " Key mappings
 inoremap jk <Esc>      " Escape insert mode with jk
 
+" Fzf
+set rtp+=/opt/homebrew/opt/fzf
+
 " colorscheme dracula  " Set a color scheme (uncomment to use)

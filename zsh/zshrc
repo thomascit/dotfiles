@@ -15,7 +15,6 @@ eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"
 
 # PLUGINS
-source $HOMEBREW_PREFIX/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 source $HOMEBREW_PREFIX/share/zsh-autopair/autopair.zsh
 source $HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

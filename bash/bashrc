@@ -20,6 +20,8 @@ eval "$(starship init bash)"
 # ENABLE ZOXIDE
 eval "$(zoxide init bash)"
 
+# EZA CONFIG DIR
+export EZA_CONFIG_DIR="$HOME/.config/eza"
+
 # EXTRAS
-#fastfetch
 echo $(basename "$STARSHIP_SHELL") | figlet | lolcat --animate --speed 100

@@ -6,5 +6,5 @@ font-size                          = 20
 macos-titlebar-proxy-icon          = "hidden"
 theme                              = "Dracula"
 title                              = "Ghostty"
-window-decoration                  = "true"
+window-decoration                  = "none"
 window-save-state                  = "always"

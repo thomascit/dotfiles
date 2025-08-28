@@ -32,6 +32,8 @@ alias l="clear"
 alias ls="eza -la --sort=type"
 alias n="nvim ."
 alias r="reset"
+alias cat="bat"
+alias icat="kitten icat"
 #TMUX
 alias t="tmux new-session -A -s main"
 alias ta="tmux attach-session -t"

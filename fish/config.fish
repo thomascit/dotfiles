@@ -28,6 +28,8 @@ starship init fish | source
 # ENABLE ZOXIDE
 zoxide init fish | source
 
+# EZA CONFIG DIR
+set -gx EZA_CONFIG_DIR $HOME/.config/eza
+
 # EXTRAS
-#fastfetch
 echo $(basename "$STARSHIP_SHELL") | figlet | lolcat --animate --speed 100

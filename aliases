@@ -41,8 +41,8 @@ alias tt="eval tmux new-session -s "$(basename "$PWD")""
 alias tn="tmux new-window -c "#{pane_current_path}" nvim ."
 alias tr="tmux rename-session"
 #HOMEBREW
-alias be="nvim $HOME/.config/brewfile"
-alias bu="brew update && brew upgrade && brew bundle --file $HOME/.config/brewfile"
+alias be="nvim $HOME/Documents/brewfile"
+alias bu="brew update && brew upgrade && brew bundle --file $HOME/Documents/brewfile"
 alias ba="brew autoremove"
 alias bc="brew cleanup"
 

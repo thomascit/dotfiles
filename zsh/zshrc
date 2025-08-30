@@ -24,4 +24,5 @@ source $HOMEBREW_PREFIX/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 export EZA_CONFIG_DIR="$HOME/.config/eza"
 
 # EXTRAS
-echo $(basename "$STARSHIP_SHELL") | figlet | lolcat --animate --speed 100
+$HOME/.config/prompt.sh
+

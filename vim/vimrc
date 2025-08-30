@@ -9,12 +9,15 @@ set showmatch                 " Show matching brackets
 set columns=100               " Set the width of the window to 100 columns
 set foldcolumn=12             " Add 12 columns of empty space on the left
 set numberwidth=8             " Make line number column wider (default is 4)
+set colorcolumn=80            " Highlight column 80
+set scrolloff=8               " Keep 8 lines visible above/below cursor
 
 " Syntax highlighting
 syntax on
 
 " Tabs and indentation
 set tabstop=4                 " Number of spaces that a <Tab> counts for
+set softtabstop=4             " Number of spaces that a <Tab> counts for in insert mode
 set shiftwidth=4              " Number of spaces for autoindent
 set expandtab                 " Use spaces instead of tabs
 set smartindent               " Automatically indent new lines
@@ -47,7 +50,29 @@ inoremap jk <Esc>             " Escape insert mode with jk
 set rtp+=/opt/homebrew/opt/fzf
 
 " Wrapping settings
-set wrap                      " Enable visual wrapping
-set linebreak                 " Break at word boundaries
-set showbreak=                " No prefix character for wrapped lines
-set breakindent               " Preserve indentation when wrapping
+set nowrap                      " Enable visual wrapping
+
+" Plugin manager (vim-plug)
+call plug#begin()
+
+Plug 'dracula/vim', { 'as': 'dracula' }
+
+call plug#end()
+
+" Colorscheme
+" Enable 24-bit RGB colors (must be before colorscheme)
+set termguicolors
+colorscheme dracula
+
+" Transparent background overrides (keep after colorscheme)
+hi Normal       ctermbg=NONE guibg=NONE
+hi NonText      ctermbg=NONE guibg=NONE
+hi LineNr       ctermbg=NONE guibg=NONE
+hi FoldColumn   ctermbg=NONE guibg=NONE
+hi SignColumn   ctermbg=NONE guibg=NONE
+hi EndOfBuffer  ctermbg=NONE guibg=NONE
+hi NormalFloat  ctermbg=NONE guibg=NONE
+hi FloatBorder  ctermbg=NONE guibg=NONE
+
+" Highlight column 80 background (visible with transparent theme)
+hi ColorColumn  ctermbg=238  guibg=#44475a

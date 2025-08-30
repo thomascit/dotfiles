@@ -32,4 +32,5 @@ zoxide init fish | source
 set -gx EZA_CONFIG_DIR $HOME/.config/eza
 
 # EXTRAS
-echo $(basename "$STARSHIP_SHELL") | figlet | lolcat --animate --speed 100
+$HOME/.config/prompt.sh
+

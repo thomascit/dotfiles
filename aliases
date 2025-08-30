@@ -34,15 +34,20 @@ alias n="vim ."
 alias r="reset"
 alias cat="bat"
 alias icat="kitten icat"
-#TMUX
-alias t="tmux new-session -A -s main"
+alias bash="clear && bash"
+alias zsh="clear && zsh"
+alias fish="clear && fish"
+# ─────────────────────────────────────────────
+# Tmux
+# ─────────────────────────────────────────────
 alias ta="tmux attach-session -t"
-alias tt="eval tmux new-session -s "$(basename "$PWD")""
+alias tt='tmux new-session -A -s "${PWD##*/}" -c "$PWD"'
 alias tn="tmux new-window -c "#{pane_current_path}" vim ."
 alias tr="tmux rename-session"
-#HOMEBREW
+# ─────────────────────────────────────────────
+# Homebrew
+# ─────────────────────────────────────────────
 alias be="vim $HOME/Documents/brewfile"
 alias bu="brew update && brew upgrade && brew bundle --file $HOME/Documents/brewfile"
 alias ba="brew autoremove"
 alias bc="brew cleanup"
-

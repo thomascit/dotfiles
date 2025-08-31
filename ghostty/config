@@ -1,10 +1,10 @@
 background-blur                    = 10
-background-opacity                 = 0.5
+background-opacity                 = 0.7
 confirm-close-surface              = false
 font-family                        = "JetBrainsMono Nerd Font Mono"
 font-size                          = 20
 macos-titlebar-proxy-icon          = "hidden"
-shell-integration-features         = "cursor,sudo,title"
+shell-integration                  = "none"
 term                               = "xterm-256color"
 theme                              = "Dracula"
 title                              = "Ghostty"

@@ -1,28 +1,25 @@
-# SILENCE MAC BASH PROMPT
-export BASH_SILENCE_DEPRECATION_WARNING=1
-
-# ENABLE VI BINDINGS
-set -o vi
-
-# DISABLE BASH GREETING
-[ -f "$HOME/.hushlogin" ] || touch "$HOME/.hushlogin"
-
-# ALIASES
-[ -f "$HOME/.config/aliases" ] && . "$HOME/.config/aliases"
-
-# PATH EXPORTS
+# Path/Env
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-# ENABLE STARSHIP PROMPT
+# Exports
+export BASH_SILENCE_DEPRECATION_WARNING=1
 export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
-eval "$(starship init bash)"
-
-# ENABLE ZOXIDE
-eval "$(zoxide init bash)"
-
-# EZA CONFIG DIR
 export EZA_CONFIG_DIR="$HOME/.config/eza"
 
-# EXTRAS
-$HOME/.config/prompt.sh
+# Aliases
+[ -f "$HOME/.config/aliases" ] && . "$HOME/.config/aliases"
 
+# Disable: Greeting
+[ -f "$HOME/.hushlogin" ] || touch "$HOME/.hushlogin"
+
+# Enable: Starship
+eval "$(starship init bash)"
+
+# Enable: VI Keybindings
+set -o vi
+
+# Enable: Zoxide
+eval "$(zoxide init bash)"
+
+# Extras
+$HOME/.config/prompt.sh

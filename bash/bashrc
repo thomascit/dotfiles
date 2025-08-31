@@ -17,6 +17,16 @@ eval "$(starship init bash)"
 
 # Enable: VI Keybindings
 set -o vi
+bind "set show-mode-in-prompt on"
+bind "set vi-ins-mode-string \1\e[6 q\2"
+bind "set vi-cmd-mode-string \1\e[2 q\2"
+
+# Ensure external commands (like Vim) start with a block cursor
+# This resets the cursor shape right before any command runs so
+# DECSCUSR from the prompt doesn't leak into TUI programs.
+if [[ $- == *i* ]]; then
+  trap 'printf "\e[2 q" > /dev/tty' DEBUG
+fi
 
 # Enable: Zoxide
 eval "$(zoxide init bash)"

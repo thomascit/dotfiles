@@ -5,10 +5,9 @@ Personal dotfiles for macOS/Linux. Managed with GNU Stow into `~/.config` via th
 ## Prerequisites
 
 - Git and GNU Stow
-- Optional tools used by configs: Starship, Zoxide, Eza, Bat, Neovim/Vim, Tmux, Figlet, Lolcat, Fastfetch
-- Optional: tmux plugin manager (TPM)
+- Tools used by configs: Starship, Zoxide, Eza, Bat, Neovim/Vim, Tmux, Figlet, Lolcat, Fastfetch
 
-Tip: On macOS you can install many of these with Homebrew. On Linux use your distro’s package manager and `xclip` for clipboard support.
+Tip: On macOS you can install many of these with Homebrew.
 
 ## Install
 
@@ -59,6 +58,24 @@ Then inside tmux:
 
 1. Press `<prefix> + I` (usually `Ctrl+b` then `I`) to install/update plugins.
 2. Press `<prefix> + r` (usually `Ctrl+b` then `r`) to reload the config.
+
+## Vim‑Plug (Vim)
+
+This repo’s Vim config (`vim/vimrc`) uses vim-plug. Install it, then install plugins:
+
+```sh
+# Install vim-plug for Vim
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+# Install plugins defined in vim/vimrc
+vim +PlugInstall +qall
+```
+
+Notes:
+
+- Neovim in this repo uses `lazy.nvim` (LazyVim), not vim-plug — no action needed for Neovim.
+- Manage plugins in Vim: `:PlugUpdate`, `:PlugStatus`, `:PlugClean`.
 
 ## What’s Inside
 

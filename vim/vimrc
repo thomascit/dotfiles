@@ -1,4 +1,3 @@
-
 " Interface settings
 set number                    " Show absolute line number on current line
 set relativenumber            " Show relative line numbers on other lines
@@ -21,7 +20,6 @@ set softtabstop=4             " Number of spaces that a <Tab> counts for in inse
 set shiftwidth=4              " Number of spaces for autoindent
 set expandtab                 " Use spaces instead of tabs
 set smartindent               " Automatically indent new lines
-
 
 " Search settings
 set incsearch                 " Enable incremental search
@@ -76,3 +74,11 @@ hi FloatBorder  ctermbg=NONE guibg=NONE
 
 " Highlight column 80 background (visible with transparent theme)
 hi ColorColumn  ctermbg=238  guibg=#44475a
+
+" Cursor shape in terminal (Ghostty/xterm DECSCUSR)
+" - Normal/Visual: solid block
+" - Insert: vertical bar (I-beam)
+" - Replace: underline
+let &t_SI = "\e[6 q"   " Enter Insert: I-beam
+let &t_SR = "\e[4 q"   " Enter Replace: underline
+let &t_EI = "\e[2 q"   " Exit Insert/Replace: block

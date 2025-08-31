@@ -1,28 +1,29 @@
-# ENABLE VI KEYBINDINGS
-set -o vi
-
-# ALIASES
-[ -f "$HOME/.config/aliases" ] && source "$HOME/.config/aliases"
-
-# PATH EXPORTS
+# Path/Env
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-# ENABLE STARSHIP PROMPT
+# Exports
 export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
+export EZA_CONFIG_DIR="$HOME/.config/eza"
+export HOMEBREW_NO_AUTO_UPDATE=1
+export HOMEBREW_NO_ENV_HINTS=1
+
+# Aliases
+[ -f "$HOME/.config/aliases" ] && source "$HOME/.config/aliases"
+
+# Enable: Starship
 eval "$(starship init zsh)"
 
-# ENABLE ZOXIDE
+# Enable: VI Keybindings
+set -o vi
+
+# Enable: Zoxide
 eval "$(zoxide init zsh)"
 
-# PLUGINS
+# Extras
+$HOME/.config/prompt.sh
+
+# Plugins
 source $HOMEBREW_PREFIX/share/zsh-autopair/autopair.zsh
 source $HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source $HOMEBREW_PREFIX/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-
-# EZA CONFIG DIR
-export EZA_CONFIG_DIR="$HOME/.config/eza"
-
-# EXTRAS
-$HOME/.config/prompt.sh
-

@@ -1,7 +1,14 @@
-# THEME
-fish_config theme choose "Dracula Official"
+# Path/Env
+eval "$(/opt/homebrew/bin/brew shellenv)"
 
-# FISH CURSOR SETTING
+# Exports
+set -gx STARSHIP_CONFIG $HOME/.config/starship/starship.toml
+set -gx EZA_CONFIG_DIR $HOME/.config/eza
+
+# Aliases
+source $HOME/.config/fish/aliases.fish
+
+# Cursor: Settings
 set fish_cursor_default block
 set fish_cursor_insert line
 set fish_cursor_replace_one underscore
@@ -9,28 +16,20 @@ set fish_cursor_replace underscore
 set fish_cursor_external line
 set fish_cursor_visual block
 
-# ENABLE VI BINDINGS
-fish_vi_key_bindings
-
-# DISABLE FISH GREETING
+# Disable: Greeting
 set fish_greeting
 
-# ALIASES
-source $HOME/.config/aliases
-
-# PATH EXPORTS
-eval "$(/opt/homebrew/bin/brew shellenv)"
-
-# ENABLE STARSHIP PROMPT
-set -gx STARSHIP_CONFIG $HOME/.config/starship/starship.toml
+# Enable: Starship
 starship init fish | source
 
-# ENABLE ZOXIDE
+# Enable: VI Keybindings
+fish_vi_key_bindings
+
+# Enable: Zoxide
 zoxide init fish | source
 
-# EZA CONFIG DIR
-set -gx EZA_CONFIG_DIR $HOME/.config/eza
-
-# EXTRAS
+# Extras
 $HOME/.config/prompt.sh
 
+# Theme
+fish_config theme choose "Dracula Official"

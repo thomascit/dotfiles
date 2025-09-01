@@ -54,6 +54,7 @@ set nowrap                      " Enable visual wrapping
 call plug#begin()
 
 Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'christoomey/vim-tmux-navigator'
 
 call plug#end()
 

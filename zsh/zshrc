@@ -1,5 +1,7 @@
-# Path/Env
-eval "$(/opt/homebrew/bin/brew shellenv)"
+# Path/Env (macOS only)
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || /usr/local/bin/brew shellenv 2>/dev/null)"
+fi
 
 # Exports
 export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
@@ -22,8 +24,29 @@ eval "$(zoxide init zsh)"
 # Extras
 $HOME/.config/prompt.sh
 
-# Plugins
-source $HOMEBREW_PREFIX/share/zsh-autopair/autopair.zsh
-source $HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source $HOMEBREW_PREFIX/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+# Enable: Oh-my-zsh
+export ZSH="$HOME/.oh-my-zsh"
+[ -f "$ZSH/oh-my-zsh.sh" ] && source "$ZSH/oh-my-zsh.sh"
+
+### Added by Zinit's installer
+if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
+    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
+        print -P "%F{33} %F{34}Installation successful.%f%b" || \
+        print -P "%F{160} The clone has failed.%f%b"
+fi
+
+source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
+# Load a few important annexes, without Turbo
+# (this is currently required for annexes)
+zinit light-mode for \
+    zdharma-continuum/fast-syntax-highlighting \
+    zsh-users/zsh-autosuggestions \
+    zsh-users/zsh-history-substring-search \
+    zsh-users/zsh-completions \
+    jeffreytse/zsh-vi-mode \
+    hlissner/zsh-autopair

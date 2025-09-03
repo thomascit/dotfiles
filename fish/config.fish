@@ -1,5 +1,11 @@
-# Path/Env
-eval "$(/opt/homebrew/bin/brew shellenv)"
+# Path/Env (macOS only)
+if [ (uname) = "Darwin" ]
+    if [ -x /opt/homebrew/bin/brew ]
+        eval (/opt/homebrew/bin/brew shellenv)
+    else if [ -x /usr/local/bin/brew ]
+        eval (/usr/local/bin/brew shellenv)
+    end
+end
 
 # Exports
 set -gx STARSHIP_CONFIG $HOME/.config/starship/starship.toml

@@ -39,6 +39,21 @@ stow -v -R <package>
 stow -D <package>
 ```
 
+## Linux: bat vs batcat
+
+On some distributions (e.g., Debian/Ubuntu), the `bat` executable is installed as `batcat`. You can symlink it to `bat`:
+
+```sh
+mkdir -p ~/.local/bin
+ln -s /usr/bin/batcat ~/.local/bin/bat
+```
+
+Make sure `~/.local/bin` is on your `PATH`.
+
+## Theme
+
+Dracula is the preferred theme across these dotfiles. Many configs default to a Dracula theme or variant (e.g., Vim colorscheme, Fish theme, tmux theme, terminal themes). For more details, themes, and supported apps, see https://draculatheme.com.
+
 ## Fonts
 
 Includes JetBrainsMono Nerd Font at `fonts/`. Install it so terminals and prompts render glyphs:
@@ -61,7 +76,7 @@ Then inside tmux:
 
 ## Plugin Managers
 
-- Vim: uses `vim-plug`. The `vim/.config/vim/vimrc` auto-installs vim-plug and triggers `PlugInstall` on first run. No manual setup required.
+- Vim: uses `vim-plug`. The `vim/.config/vim/vimrc` auto-installs vim-plug and triggers `PlugInstall` on first run.
 - Zsh: uses `zinit` (zdharma-continuum) for plugins. `zsh/.config/zsh/zshrc` bootstraps zinit if missing.
 
 ## What’s Inside

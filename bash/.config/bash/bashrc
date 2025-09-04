@@ -9,7 +9,7 @@ export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
 export EZA_CONFIG_DIR="$HOME/.config/eza"
 
 # Aliases
-[ -f "$HOME/.config/aliases" ] && . "$HOME/.config/aliases"
+[ -f "$HOME/.config/aliases.sh" ] && . "$HOME/.config/aliases.sh"
 
 # Disable: Greeting
 [ -f "$HOME/.hushlogin" ] || touch "$HOME/.hushlogin"
@@ -34,4 +34,4 @@ fi
 eval "$(zoxide init bash)"
 
 # Extras
-$HOME/.config/prompt.sh
+echo $(basename "$STARSHIP_SHELL") | figlet | lolcat --animate --speed 100

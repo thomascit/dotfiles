@@ -1,2 +1,2 @@
---target=$HOME/.config
---ignore=.stowrc .bashrc .zshrc .vimrc fonts
+--target=$HOME
+--ignore=.stowrc fonts/*

@@ -16,7 +16,7 @@ git clone https://github.com/thomascit/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 
 # Stow selected packages into ~/.config (recommended)
-stow -v -R alacritty bat eza fish ghostty i3 kitty nvim polybar starship tmux vim zsh
+stow .
 
 # Copy wrapper files that source configs from ~/.config
 cp .bashrc .zshrc .vimrc "$HOME/"

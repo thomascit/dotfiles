@@ -10,7 +10,7 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_NO_ENV_HINTS=1
 
 # Aliases
-[ -f "$HOME/.config/aliases" ] && source "$HOME/.config/aliases"
+[ -f "$HOME/.config/aliases.sh" ] && source "$HOME/.config/aliases.sh"
 
 # Enable: Starship
 eval "$(starship init zsh)"
@@ -22,7 +22,7 @@ set -o vi
 eval "$(zoxide init zsh)"
 
 # Extras
-$HOME/.config/prompt.sh
+echo $(basename "$STARSHIP_SHELL") | figlet | lolcat --animate --speed 100
 
 # Enable: Oh-my-zsh
 export ZSH="$HOME/.oh-my-zsh"

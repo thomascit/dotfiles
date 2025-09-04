@@ -1,11 +1,11 @@
 # Dotfiles
 
-Personal dotfiles for macOS/Linux. Managed with GNU Stow into `~/.config` via the repo’s `.stowrc`.
+Personal dotfiles for macOS/Linux. Managed with GNU Stow into `$HOME` via `.stowrc` (most configs live under `~/.config`).
 
 ## Prerequisites
 
 - Git and GNU Stow
-- Tools used by configs: Starship, Zoxide, Eza, Bat, Neovim/Vim, Tmux, Figlet, Lolcat, Fastfetch
+- Tools used by configs: Starship, Zoxide, Eza, Bat, Vim, Tmux, Figlet, Lolcat, Fastfetch
 
 Tip: On macOS you can install many of these with Homebrew.
 
@@ -15,8 +15,8 @@ Tip: On macOS you can install many of these with Homebrew.
 git clone https://github.com/thomascit/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 
-# Stow selected packages into ~/.config (recommended)
-stow .
+# Stow packages into $HOME (symlinks land under ~/.config/*)
+stow -v -R alacritty aliases bash bat eza fish ghostty i3 kitty polybar starship tmux vim zsh
 
 # Copy wrapper files that source configs from ~/.config
 cp .bashrc .zshrc .vimrc "$HOME/"
@@ -25,8 +25,8 @@ cp .bashrc .zshrc .vimrc "$HOME/"
 Selective install example:
 
 ```sh
-# Only Zsh + Neovim + Tmux
-stow -v -R zsh nvim tmux
+# Only Zsh + Vim + Tmux
+stow -v -R zsh vim tmux
 ```
 
 Update configs after making changes:
@@ -59,23 +59,10 @@ Then inside tmux:
 1. Press `<prefix> + I` (usually `Ctrl+b` then `I`) to install/update plugins.
 2. Press `<prefix> + r` (usually `Ctrl+b` then `r`) to reload the config.
 
-## Vim‑Plug (Vim)
+## Plugin Managers
 
-This repo’s Vim config (`vim/vimrc`) uses vim-plug. Install it, then install plugins:
-
-```sh
-# Install vim-plug for Vim
-curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-
-# Install plugins defined in vim/vimrc
-vim +PlugInstall +qall
-```
-
-Notes:
-
-- Neovim in this repo uses `lazy.nvim` (LazyVim), not vim-plug — no action needed for Neovim.
-- Manage plugins in Vim: `:PlugUpdate`, `:PlugStatus`, `:PlugClean`.
+- Vim: uses `vim-plug`. The `vim/.config/vim/vimrc` auto-installs vim-plug and triggers `PlugInstall` on first run. No manual setup required.
+- Zsh: uses `zinit` (zdharma-continuum) for plugins. `zsh/.config/zsh/zshrc` bootstraps zinit if missing.
 
 ## What’s Inside
 
@@ -83,14 +70,14 @@ Notes:
 - Bash/Zsh/Fish: shells configured with aliases, Starship, Zoxide, VI keybindings
 - Bat/Eza: nicer `cat`/`ls` defaults
 - Ghostty, i3, Kitty: terminal/window manager configs
-- Neovim (LazyVim) + Vim: editor configs
+- Vim: editor configs
 - Polybar: status bar
 - Starship: prompt configuration
 - Tmux: plugins + Dracula theme
 - `aliases`: shared shell aliases
-- `prompt.sh`: optional animated banner (figlet + lolcat)
 
 ## Notes
 
-- `.stowrc` targets `~/.config` and ignores `fonts` and the wrapper files. Run stow from the repo root.
-- The configs assume Homebrew on macOS (`/opt/homebrew`). Adjust paths if using another setup.
+- `.stowrc` targets `$HOME` and ignores `fonts`. Run stow from the repo root.
+- Wrapper dotfiles (`.bashrc`, `.zshrc`, `.vimrc`) live in the repo root and simply source configs from `~/.config/*`.
+- macOS Homebrew: shell configs detect `/opt/homebrew` (Apple Silicon) or `/usr/local` (Intel) and initialize whichever exists.

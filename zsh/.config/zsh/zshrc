@@ -24,10 +24,6 @@ eval "$(zoxide init zsh)"
 # Extras
 echo $(basename "$STARSHIP_SHELL") | figlet | lolcat --animate --speed 100
 
-# Enable: Oh-my-zsh
-export ZSH="$HOME/.oh-my-zsh"
-[ -f "$ZSH/oh-my-zsh.sh" ] && source "$ZSH/oh-my-zsh.sh"
-
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
     print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"

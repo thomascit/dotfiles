@@ -9,7 +9,8 @@ set columns=100               " Set the width of the window to 100 columns
 set foldcolumn=12             " Add 12 columns of empty space on the left
 set numberwidth=8             " Make line number column wider (default is 4)
 set colorcolumn=80            " Highlight column 80
-set scrolloff=8               " Keep 8 lines visible above/below cursor
+set scroll=10                 " Set scroll to 25 lines
+set scrolloff=4               " Keep 8 lines visible above/below cursor
 
 " Syntax highlighting
 syntax on
@@ -42,7 +43,7 @@ set noswapfile                " Disable swap files
 set encoding=utf-8            " Set encoding
 
 " Key mappings
-inoremap jk <Esc>             " Escape insert mode with jk
+inoremap jk <Esc>
 
 " Fzf
 set rtp+=/opt/homebrew/opt/fzf
@@ -66,6 +67,8 @@ call plug#begin()
 
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 
 call plug#end()
 

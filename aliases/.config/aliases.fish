@@ -66,3 +66,11 @@ alias tr "tmux rename-session"
 function tt
     tmux new-session -A -s (basename $PWD) -c $PWD
 end
+
+# ─────────────────────────────────────────────
+# Docker
+# ─────────────────────────────────────────────
+alias dcu "docker-compose up -d"
+alias dcd "docker-compose down"
+alias dcl "docker-compose logs -f --tail=100"
+alias dcb "docker-compose build --no-cache"

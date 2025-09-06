@@ -65,3 +65,11 @@ alias ta="tmux attach-session -t"
 alias tn="tmux new-window -c "#{pane_current_path}" vim ."
 alias tr="tmux rename-session"
 alias tt='tmux new-session -A -s "${PWD##*/}" -c "$PWD"'
+
+# ─────────────────────────────────────────────
+# Docker
+# ─────────────────────────────────────────────
+alias dcu="docker-compose up -d"
+alias dcd="docker-compose down"
+alias dcl="docker-compose logs -f --tail=100"
+alias dcb="docker-compose build --no-cache"

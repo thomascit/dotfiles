@@ -35,6 +35,12 @@ fish_vi_key_bindings
 # Enable: Zoxide
 zoxide init fish | source
 
+# Fzf: load central config then enable
+if test -f $HOME/.config/fzfrc.fish
+    source $HOME/.config/fzfrc.fish
+end
+fzf --fish | source
+
 # Extras
 echo $(basename "$STARSHIP_SHELL") | figlet | lolcat --animate --speed 100
 

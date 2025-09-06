@@ -21,6 +21,10 @@ set -o vi
 # Enable: Zoxide
 eval "$(zoxide init zsh)"
 
+# Fzf: load central config then enable
+[ -f "$HOME/.config/fzfrc.sh" ] && source "$HOME/.config/.fzfrc"
+source <(fzf --zsh)
+
 # Extras
 echo $(basename "$STARSHIP_SHELL") | figlet | lolcat --animate --speed 100
 

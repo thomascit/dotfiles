@@ -22,7 +22,7 @@ set -o vi
 eval "$(zoxide init zsh)"
 
 # Fzf: load central config then enable
-[ -f "$HOME/.config/fzfrc.sh" ] && source "$HOME/.config/.fzfrc"
+[ -f "$HOME/.config/fzfrc.sh" ] && source "$HOME/.config/fzfrc.sh"
 source <(fzf --zsh)
 
 # Extras

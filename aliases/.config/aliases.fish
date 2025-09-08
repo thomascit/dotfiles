@@ -19,6 +19,7 @@ alias sc "vim $HOME/.config/starship/starship.toml"
 alias tc "vim $HOME/.config/tmux/tmux.conf"
 alias vrc "vim $HOME/.config/vim/vimrc"
 alias zrc "vim $HOME/.config/zsh/zshrc"
+alias yc "vim $HOME/.config/yazi/yazi.toml"
 
 # ─────────────────────────────────────────────
 # Git

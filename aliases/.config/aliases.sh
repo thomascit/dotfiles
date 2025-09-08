@@ -12,6 +12,8 @@ alias als="vim $HOME/.config/aliases.sh"
 alias alsf="vim $HOME/.config/aliases.fish"
 alias brc="vim $HOME/.config/bash/bashrc"
 alias fc="vim $HOME/.config/fish/config.fish"
+alias fzrc="vim $HOME/.config/fzfrc.sh"
+alias fzfrc="vim $HOME/.config/fzfrc.fish"
 alias gc="vim $HOME/.config/ghostty/config"
 alias i3c="vim $HOME/.config/i3/config"
 alias kc="vim $HOME/.config/kitty/kitty.conf"
@@ -19,6 +21,7 @@ alias sc="vim $HOME/.config/starship/starship.toml"
 alias tc="vim $HOME/.config/tmux/tmux.conf"
 alias vrc="vim $HOME/.config/vim/vimrc"
 alias zrc="vim $HOME/.config/zsh/zshrc"
+alias yc="vim $HOME/.config/yazi/yazi.toml"
 
 # ─────────────────────────────────────────────
 # Git

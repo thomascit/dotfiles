@@ -10,6 +10,8 @@ end
 # Exports
 set -gx STARSHIP_CONFIG $HOME/.config/starship/starship.toml
 set -gx EZA_CONFIG_DIR $HOME/.config/eza
+set -gx EDITOR vim
+#set -gx XDG_CONFIG_HOME $HOME/.config
 
 # Aliases
 if [ -f $HOME/.config/aliases.fish ]
@@ -41,8 +43,19 @@ if test -f $HOME/.config/fzfrc.fish
 end
 fzf --fish | source
 
+# Yazi Shell wrapper
+function y
+	set tmp (mktemp -t "yazi-cwd.XXXXXX")
+	yazi $argv --cwd-file="$tmp"
+	if read -z cwd < "$tmp"; and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
+		builtin cd -- "$cwd"
+	end
+	rm -f -- "$tmp"
+end
+
+
 # Extras
-echo $(basename "$STARSHIP_SHELL") | figlet | lolcat --animate --speed 100
+# echo $(basename "$STARSHIP_SHELL") | figlet | lolcat --animate --speed 100
 
 # Theme
 fish_config theme choose "Dracula Official"

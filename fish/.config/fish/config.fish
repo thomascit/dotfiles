@@ -8,13 +8,12 @@ if [ (uname) = "Darwin" ]
 end
 
 # Exports
-set -gx STARSHIP_CONFIG $HOME/.config/starship/starship.toml
-set -gx EZA_CONFIG_DIR $HOME/.config/eza
-set -gx EDITOR vim
-#set -gx XDG_CONFIG_HOME $HOME/.config
+if test -f $HOME/.config/exports.fish
+    source $HOME/.config/exports.fish
+end
 
 # Aliases
-if [ -f $HOME/.config/aliases.fish ]
+if test -f $HOME/.config/aliases.fish
     source $HOME/.config/aliases.fish
 end
 
@@ -53,6 +52,17 @@ function y
 	rm -f -- "$tmp"
 end
 
+# Lazygit wrapper function
+function lg
+    set -gx LAZYGIT_NEW_DIR_FILE ~/.lazygit/newdir
+    
+    lazygit $argv
+    
+    if test -f $LAZYGIT_NEW_DIR_FILE
+        cd (cat $LAZYGIT_NEW_DIR_FILE)
+        rm -f $LAZYGIT_NEW_DIR_FILE > /dev/null
+    end
+end
 
 # Extras
 # echo $(basename "$STARSHIP_SHELL") | figlet | lolcat --animate --speed 100

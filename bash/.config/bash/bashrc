@@ -5,8 +5,7 @@ fi
 
 # Exports
 export BASH_SILENCE_DEPRECATION_WARNING=1
-export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
-export EZA_CONFIG_DIR="$HOME/.config/eza"
+[ -f "$HOME/.config/exports/exports.sh" ] && source "$HOME/.config/exports/exports.sh"
 
 # Aliases
 [ -f "$HOME/.config/aliases.sh" ] && . "$HOME/.config/aliases.sh"
@@ -37,5 +36,27 @@ eval "$(zoxide init bash)"
 [ -f "$HOME/.config/fzfrc.sh" ] && . "$HOME/.config/fzfrc.sh"
 eval "$(fzf --bash)"
 
+# Yazi shell wrapper
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+	rm -f -- "$tmp"
+}
+
+# Lazygit wrapper function
+lg()
+{
+    export LAZYGIT_NEW_DIR_FILE=~/.lazygit/newdir
+
+    lazygit "$@"
+
+    if [ -f $LAZYGIT_NEW_DIR_FILE ]; then
+            cd "$(cat $LAZYGIT_NEW_DIR_FILE)"
+            rm -f $LAZYGIT_NEW_DIR_FILE > /dev/null
+    fi
+}
+
 # Extras
-echo $(basename "$STARSHIP_SHELL") | figlet | lolcat --animate --speed 100
+# echo $(basename "$STARSHIP_SHELL") | figlet | lolcat --animate --speed 100

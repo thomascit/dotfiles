@@ -4,10 +4,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 fi
 
 # Exports
-export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
-export EZA_CONFIG_DIR="$HOME/.config/eza"
-export HOMEBREW_NO_AUTO_UPDATE=1
-export HOMEBREW_NO_ENV_HINTS=1
+[ -f "$HOME/.config/exports.sh" ] && source "$HOME/.config/exports.sh"
 
 # Aliases
 [ -f "$HOME/.config/aliases.sh" ] && source "$HOME/.config/aliases.sh"
@@ -25,8 +22,27 @@ eval "$(zoxide init zsh)"
 [ -f "$HOME/.config/fzfrc.sh" ] && source "$HOME/.config/fzfrc.sh"
 source <(fzf --zsh)
 
-# Extras
-echo $(basename "$STARSHIP_SHELL") | figlet | lolcat --animate --speed 100
+# Yazi shell wrapper
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+	rm -f -- "$tmp"
+}
+
+# Lazygit wrapper function
+lg()
+{
+    export LAZYGIT_NEW_DIR_FILE=~/.lazygit/newdir
+
+    lazygit "$@"
+
+    if [ -f $LAZYGIT_NEW_DIR_FILE ]; then
+            cd "$(cat $LAZYGIT_NEW_DIR_FILE)"
+            rm -f $LAZYGIT_NEW_DIR_FILE > /dev/null
+    fi
+}
 
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
@@ -50,3 +66,6 @@ zinit light-mode for \
     zsh-users/zsh-completions \
     jeffreytse/zsh-vi-mode \
     hlissner/zsh-autopair
+
+# Extras
+# echo $(basename "$STARSHIP_SHELL") | figlet | lolcat --animate --speed 100

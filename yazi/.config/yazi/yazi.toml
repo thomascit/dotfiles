@@ -1,0 +1,24 @@
+[mgr]
+ratio          = [ 1, 4, 3 ]
+sort_by        = "natural"
+sort_dir_first = true
+sort_translit  = false
+linemode       = "mtime"
+
+[preview]
+wrap            = "no"
+tab_size        = 4
+
+[flavor]
+user = "dracula"
+
+[[plugin.prepend_fetchers]]
+id = "git"
+name = "*"
+run = "git"
+
+[[plugin.prepend_fetchers]]
+id = "git"
+name = "*/"
+run = "git"
+

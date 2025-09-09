@@ -20,7 +20,6 @@ set tabstop=4                 " Number of spaces that a <Tab> counts for
 set softtabstop=4             " Number of spaces that a <Tab> counts for in insert mode
 set shiftwidth=4              " Number of spaces for autoindent
 set expandtab                 " Use spaces instead of tabs
-set smartindent               " Automatically indent new lines
 
 " Search settings
 set incsearch                 " Enable incremental search
@@ -69,6 +68,7 @@ Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'tpope/vim-surround'
 
 call plug#end()
 

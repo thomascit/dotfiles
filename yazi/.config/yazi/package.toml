@@ -1,0 +1,29 @@
+[[plugin.deps]]
+use = "yazi-rs/plugins:full-border"
+rev = "d7588f6"
+hash = "3996fc74044bc44144b323686f887e1"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:git"
+rev = "d7588f6"
+hash = "63b6c222bf2103b3023389dde5e2ecfe"
+
+[[plugin.deps]]
+use = "imsi32/yatline"
+rev = "88bd1c5"
+hash = "981acbe9b758b1af3a8154c932bb936d"
+
+[[plugin.deps]]
+use = "wakaka6/yatline-dracula"
+rev = "598ea29"
+hash = "303f8ca9084dbdd15c640b1f7388f54d"
+
+[[plugin.deps]]
+use = "Rolv-Apneseth/starship"
+rev = "a63550b"
+hash = "c2021386289a0cbb3e152a052f67c177"
+
+[[flavor.deps]]
+use = "yazi-rs/flavors:dracula"
+rev = "3e6da98"
+hash = "eefb18cb038121aed2b6eeaacea5a63e"

@@ -35,15 +35,15 @@ alias gs="git status"
 # ─────────────────────────────────────────────
 alias ba="brew autoremove"
 alias bc="brew cleanup"
-alias be="vim $HOME/Documents/brewfile"
-alias bu="brew update && brew upgrade && brew bundle --file $HOME/Documents/brewfile"
+alias be="vim $HOME/Documents/SetupFiles/brewfile"
+alias bu="brew update && brew upgrade && brew bundle --file $HOME/Documents/SetupFiles/brewfile"
 
 # ─────────────────────────────────────────────
 # LS/FS
 # ─────────────────────────────────────────────
 alias cat="bat"
 alias icat="kitten icat"
-alias ls="eza --icons=always --sort=type --header -l"
+alias ls="eza --icons=always --sort=type --header -l --git"
 alias rm="trash"
 
 # ─────────────────────────────────────────────

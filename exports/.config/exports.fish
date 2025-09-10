@@ -16,3 +16,6 @@ set -gx LESS_TERMCAP_me \e'[0m'         # reset bold/blink
 set -gx LESS_TERMCAP_se \e'[0m'         # reset reverse video
 set -gx LESS_TERMCAP_ue \e'[0m'         # reset underline
 set -gx GROFF_NO_SGR 1                  # for konsole
+
+# PATH
+set -gx PATH $HOME/.local/bin $PATH

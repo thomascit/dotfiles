@@ -1,11 +1,9 @@
-" Interface settings
+
 set number                    " Show absolute line number on current line
 set relativenumber            " Show relative line numbers on other lines
-set ruler                     " Show line and column number
 set mouse=a                   " Enable mouse support
 set showcmd                   " Show command as you type
 set showmatch                 " Show matching brackets
-set columns=100               " Set the width of the window to 100 columns
 set foldcolumn=12             " Add 12 columns of empty space on the left
 set numberwidth=8             " Make line number column wider (default is 4)
 set colorcolumn=80            " Highlight column 80
@@ -37,15 +35,17 @@ set ttyfast                   " Faster scrolling
 " File handling
 set hidden                    " Allow hidden buffers (switch files without saving)
 set noswapfile                " Disable swap files
+set undodir=~/.vim/undodir        " Directory to store undo history files
+set undofile                     " Enable persistent undo across sessions
 
 " Encoding
 set encoding=utf-8            " Set encoding
 
+" Leader key
+let mapleader = " "             " Set leader key to space
+
 " Key mappings
 inoremap jk <Esc>
-
-" Fzf
-set rtp+=/opt/homebrew/opt/fzf
 
 " Wrapping settings
 set nowrap                      " Enable visual wrapping
@@ -67,10 +67,28 @@ call plug#begin()
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-surround'
+Plug 'vim-airline/vim-airline'
 
 call plug#end()
+                                                                                                                                          
+let g:airline#extensions#tabline#enabled = 1           " enable airline tabline                                                           
+let g:airline#extensions#tabline#formatter = 'unique_tail'
+
+" Airline status line customization
+let g:airline_section_a = airline#section#create_left(['mode', 'paste'])  " show vim mode and paste status
+let g:airline_section_b = ''                               " remove branch section  
+let g:airline_section_c = '%f'                             " show only filename
+let g:airline_section_x = ''                               " remove filetype
+let g:airline_section_y = ''                               " remove file encoding
+let g:airline_section_z = '%l:%c'                          " show only line:column
+let g:airline#extensions#whitespace#enabled = 0            " disable whitespace detection
+let g:airline_powerline_fonts = 1                          " enable powerline fonts for full width
+let g:airline_left_sep = ''                                " full width left separator
+let g:airline_right_sep = ''                               " full width right separator
+let g:airline#extensions#tabline#left_sep = ''             " tabline left separator
+let g:airline#extensions#tabline#right_sep = ''            " tabline right separator
+let g:airline_skip_empty_sections = 1                      " skip empty sections
 
 " Colorscheme
 " Enable 24-bit RGB colors (must be before colorscheme)
@@ -97,3 +115,4 @@ hi ColorColumn  ctermbg=238  guibg=#44475a
 let &t_SI = "\e[6 q"   " Enter Insert: I-beam
 let &t_SR = "\e[4 q"   " Enter Replace: underline
 let &t_EI = "\e[2 q"   " Exit Insert/Replace: block
+

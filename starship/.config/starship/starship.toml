@@ -1,17 +1,8 @@
-palette = "dracula"
 add_newline = false
-format = """
-$username\
-$directory\
-$git_branch\
-$git_commit\
-$git_state\
-$git_metrics\
-$git_status\
-$fill\
-$all\
-$line_break\
-$character"""
+palette = "dracula"
+format = """$directory$character"""
+right_format = """$all"""
+command_timeout = 1000
 
 [character]
 success_symbol = "[➜](green)"
@@ -19,9 +10,6 @@ error_symbol = "[✗](red)"
 vimcmd_symbol = "[❮](bold green)"
 vimcmd_replace_symbol = "[❮](bold purple)"
 vimcmd_visual_symbol = "[❮](bold yellow)"
-
-[fill]
-symbol = ' '
 
 # Define Dracula color palette
 [palettes.dracula]
@@ -36,3 +24,4 @@ pink = "#ff79c6"
 purple = "#bd93f9"
 red = "#ff5555"
 yellow = "#f1fa8c"
+

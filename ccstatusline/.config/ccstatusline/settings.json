@@ -1,0 +1,46 @@
+{
+  "version": 3,
+  "lines": [
+    [
+      {
+        "id": "1",
+        "type": "model",
+        "color": "hex:282A36",
+        "backgroundColor": "hex:FFB86C"
+      },
+      {
+        "id": "3",
+        "type": "version",
+        "color": "hex:282A36",
+        "backgroundColor": "hex:FFB86C"
+      },
+      {
+        "id": "7",
+        "type": "output-style",
+        "color": "hex:282A36",
+        "backgroundColor": "hex:FFB86C"
+      }
+    ],
+    [],
+    []
+  ],
+  "flexMode": "full-minus-40",
+  "compactThreshold": 60,
+  "colorLevel": 3,
+  "defaultPadding": " ",
+  "inheritSeparatorColors": false,
+  "globalBold": false,
+  "powerline": {
+    "enabled": true,
+    "separators": [
+      "\u0000"
+    ],
+    "separatorInvertBackground": [
+      false
+    ],
+    "startCaps": [],
+    "endCaps": [],
+    "theme": "custom",
+    "autoAlign": true
+  }
+}

@@ -2,16 +2,16 @@
 local dracula_theme = require("yatline-dracula"):setup()
 
 require("zoxide"):setup {
-	update_db = true,
+	update_db = false,
 }
 
-require("full-border"):setup({
-    type = ui.Border.ROUNDED,
-})
+
+require("full-border"):setup {
+	-- Available values: ui.Border.PLAIN, ui.Border.ROUNDED
+	type = ui.Border.PLAIN,
+}
 
 require("git"):setup()
-
-require("starship"):setup()
 
 require("yatline"):setup({
 	show_background = true,
@@ -19,6 +19,7 @@ require("yatline"):setup({
 	header_line = {
 		left = {
 			section_a = {
+        			{type = "line", custom = false, name = "tabs", params = {"left"}},
 			},
 			section_b = {
 			},
@@ -31,6 +32,7 @@ require("yatline"):setup({
 			section_b = {
 			},
 			section_c = {
+        			{type = "coloreds", custom = false, name = "count"},
 			}
 		}
 	},

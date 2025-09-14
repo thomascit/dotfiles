@@ -12,7 +12,6 @@ tab_size        = 4
 [flavor]
 user = "dracula"
 
-
 [[plugin.prepend_fetchers]]
 id = "git"
 name = "*"

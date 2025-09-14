@@ -2,12 +2,59 @@
 
 Personal dotfiles for macOS/Linux. Managed with GNU Stow into `$HOME` via `.stowrc` (most configs live under `~/.config`).
 
+## Quick Start
+
+```sh
+git clone https://github.com/thomascit/dotfiles.git ~/dotfiles
+cd ~/dotfiles
+
+# Minimal setup (shell + editor + multiplexer)
+stow -v -R zsh starship tmux vim
+cp .zshrc "$HOME/"
+
+# Or full setup
+stow -v -R alacritty aliases bash bat ccstatusline eza exports fish fzf ghostty i3 kitty lazygit ncspot polybar starship tmux vim vimium yazi zsh
+cp .bashrc .zshrc .vimrc "$HOME/"
+```
+
 ## Prerequisites
 
+### Required
 - Git and GNU Stow
-- Tools used by configs: Starship, Zoxide, Eza, Bat, Vim, Tmux, Figlet, Lolcat, Fastfetch
 
-Tip: On macOS you can install many of these with Homebrew.
+### Core Tools
+- **Shell & Prompt**: Bash, Fish, Starship, Zoxide
+- **File Management**: Eza, Bat, FZF, Yazi
+- **Development**: Vim, Tmux, Lazygit
+- **Terminals**: Alacritty, Ghostty, Kitty
+
+### Platform Specific
+- **Linux**: i3, Polybar
+- **Development**: Claude Code (ccstatusline)
+- **Media**: Ncspot (Spotify TUI)
+
+### Optional
+- Figlet, Lolcat, Fastfetch
+
+### Quick Install (macOS)
+```sh
+# Core tools
+brew install git stow starship zoxide eza bat fzf lazygit tmux vim
+
+# Terminal emulators
+brew install --cask alacritty ghostty kitty
+
+# Optional tools
+brew install figlet lolcat fastfetch ncspot yazi
+```
+
+### Quick Install (Linux)
+```sh
+# Ubuntu/Debian example - adjust package names for your distro
+sudo apt install git stow starship zoxide exa bat fzf lazygit tmux vim figlet lolcat
+
+# Additional tools may need manual installation or different repos
+```
 
 ## Install
 
@@ -16,7 +63,7 @@ git clone https://github.com/thomascit/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 
 # Stow packages into $HOME (symlinks land under ~/.config/*)
-stow -v -R alacritty aliases bash bat eza fish ghostty i3 kitty polybar starship tmux vim zsh
+stow -v -R alacritty aliases bash bat ccstatusline eza exports fish fzf ghostty i3 kitty lazygit ncspot polybar starship tmux vim vimium yazi zsh
 
 # Copy wrapper files that source configs from ~/.config
 cp .bashrc .zshrc .vimrc "$HOME/"
@@ -79,16 +126,23 @@ Then inside tmux:
 - Vim: uses `vim-plug`. The `vim/.config/vim/vimrc` auto-installs vim-plug and triggers `PlugInstall` on first run.
 - Zsh: uses `zinit` (zdharma-continuum) for plugins. `zsh/.config/zsh/zshrc` bootstraps zinit if missing.
 
-## What’s Inside
+## What's Inside
 
 - Alacritty: terminal config and themes
 - Bash/Zsh/Fish: shells configured with aliases, Starship, Zoxide, VI keybindings
 - Bat/Eza: nicer `cat`/`ls` defaults
+- ccstatusline: Claude Code status line configuration
+- Exports: environment variable configurations
+- FZF: fuzzy finder configuration
 - Ghostty, i3, Kitty: terminal/window manager configs
-- Vim: editor configs
-- Polybar: status bar
+- Lazygit: Git TUI configuration
+- Ncspot: Spotify TUI client configuration
+- Polybar: status bar configuration
 - Starship: prompt configuration
 - Tmux: plugins + Dracula theme
+- Vim: editor configs
+- Vimium: browser extension configuration
+- Yazi: file manager configuration
 - `aliases`: shared shell aliases
 
 ## Notes

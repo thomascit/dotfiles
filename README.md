@@ -23,7 +23,7 @@ cp .bashrc .zshrc .vimrc "$HOME/"
 - Git and GNU Stow
 
 ### Core Tools
-- **Shell & Prompt**: Bash, Fish, Starship, Zoxide
+- **Shell & Prompt**: Bash, Zsh, Fish, Starship, Zoxide
 - **File Management**: Eza, Bat, FZF, Yazi
 - **Development**: Vim, Tmux, Lazygit
 - **Terminals**: Alacritty, Ghostty, Kitty

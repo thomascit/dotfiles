@@ -14,14 +14,19 @@ rev = "88bd1c5"
 hash = "981acbe9b758b1af3a8154c932bb936d"
 
 [[plugin.deps]]
-use = "wakaka6/yatline-dracula"
-rev = "598ea29"
-hash = "303f8ca9084dbdd15c640b1f7388f54d"
+use = "hankertrix/augment-command"
+rev = "120406f"
+hash = "e83ccc99739cd500fb1b1014dc45824a"
 
 [[plugin.deps]]
 use = "Rolv-Apneseth/starship"
 rev = "a63550b"
 hash = "c2021386289a0cbb3e152a052f67c177"
+
+[[plugin.deps]]
+use = "thomascit/yatline-dracula"
+rev = "12ae153"
+hash = "ef1f9d229a33a67645c8b7cdffcc2a87"
 
 [[flavor.deps]]
 use = "yazi-rs/flavors:dracula"

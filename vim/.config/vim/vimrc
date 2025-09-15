@@ -2,6 +2,7 @@
 set number                    " Show absolute line number on current line
 set relativenumber            " Show relative line numbers on other lines
 set mouse=a                   " Enable mouse support
+
 set showcmd                   " Show command as you type
 set showmatch                 " Show matching brackets
 set foldcolumn=12             " Add 12 columns of empty space on the left

@@ -2,6 +2,8 @@
 
 Personal dotfiles for macOS/Linux. Managed with GNU Stow into `$HOME` via `.stowrc` (most configs live under `~/.config`).
 
+![Theme: Dracula](https://img.shields.io/badge/Theme-Dracula-bd93f9?style=flat-square)
+
 ## Quick Start
 
 ```sh
@@ -9,11 +11,11 @@ git clone https://github.com/thomascit/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 
 # Minimal setup (shell + editor + multiplexer)
-stow -v -R zsh starship tmux vim
+stow -v -R zsh starship tmux vim aliases exports
 cp .zshrc "$HOME/"
 
 # Or full setup
-stow -v -R alacritty aliases bash bat ccstatusline eza exports fish fzf ghostty i3 kitty lazygit ncspot polybar starship tmux vim vimium yazi zsh
+stow -v -R alacritty aliases bash bat eza exports fish fzf ghostty i3 kitty lazygit polybar starship tmux vim vimium yazi zsh
 cp .bashrc .zshrc .vimrc "$HOME/"
 ```
 
@@ -23,15 +25,15 @@ cp .bashrc .zshrc .vimrc "$HOME/"
 - Git and GNU Stow
 
 ### Core Tools
-- **Shell & Prompt**: Bash, Zsh, Fish, Starship, Zoxide
-- **File Management**: Eza, Bat, FZF, Yazi
-- **Development**: Vim, Tmux, Lazygit
-- **Terminals**: Alacritty, Ghostty, Kitty
+| Category | Tools |
+|----------|-------|
+| **Shell & Prompt** | Bash, Zsh, Fish, Starship, Zoxide |
+| **File Management** | Eza, Bat, FZF, Yazi |
+| **Development** | Vim, Tmux, Lazygit |
+| **Terminals** | Alacritty, Ghostty, Kitty |
 
 ### Platform Specific
-- **Linux**: i3, Polybar
-- **Development**: Claude Code (ccstatusline)
-- **Media**: Ncspot (Spotify TUI)
+- **Linux**: i3 (window manager), Polybar (status bar)
 
 ### Optional
 - Figlet, Lolcat, Fastfetch
@@ -39,21 +41,26 @@ cp .bashrc .zshrc .vimrc "$HOME/"
 ### Quick Install (macOS)
 ```sh
 # Core tools
-brew install git stow starship zoxide eza bat fzf lazygit tmux vim
+brew install git stow starship zoxide eza bat fzf lazygit tmux vim yazi
 
 # Terminal emulators
 brew install --cask alacritty ghostty kitty
 
 # Optional tools
-brew install figlet lolcat fastfetch ncspot yazi
+brew install figlet lolcat fastfetch 
 ```
 
 ### Quick Install (Linux)
 ```sh
 # Ubuntu/Debian example - adjust package names for your distro
-sudo apt install git stow starship zoxide exa bat fzf lazygit tmux vim figlet lolcat
+sudo apt install git stow zsh fish tmux vim
 
-# Additional tools may need manual installation or different repos
+# Tools that may require external repos or manual installation
+# starship: https://starship.rs/guide/#🚀-installation
+# zoxide: https://github.com/ajeetdsouza/zoxide#installation
+# eza: https://github.com/eza-community/eza#installation
+# lazygit: https://github.com/jesseduffield/lazygit#installation
+# yazi: https://github.com/sxyazi/yazi#installation
 ```
 
 ## Install
@@ -63,7 +70,7 @@ git clone https://github.com/thomascit/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 
 # Stow packages into $HOME (symlinks land under ~/.config/*)
-stow -v -R alacritty aliases bash bat ccstatusline eza exports fish fzf ghostty i3 kitty lazygit ncspot polybar starship tmux vim vimium yazi zsh
+stow -v -R alacritty aliases bash bat eza exports fish fzf ghostty i3 kitty lazygit polybar starship tmux vim vimium yazi zsh
 
 # Copy wrapper files that source configs from ~/.config
 cp .bashrc .zshrc .vimrc "$HOME/"
@@ -128,22 +135,33 @@ Then inside tmux:
 
 ## What's Inside
 
-- Alacritty: terminal config and themes
-- Bash/Zsh/Fish: shells configured with aliases, Starship, Zoxide, VI keybindings
-- Bat/Eza: nicer `cat`/`ls` defaults
-- ccstatusline: Claude Code status line configuration
-- Exports: environment variable configurations
-- FZF: fuzzy finder configuration
-- Ghostty, i3, Kitty: terminal/window manager configs
-- Lazygit: Git TUI configuration
-- Ncspot: Spotify TUI client configuration
-- Polybar: status bar configuration
-- Starship: prompt configuration
-- Tmux: plugins + Dracula theme
-- Vim: editor configs
-- Vimium: browser extension configuration
-- Yazi: file manager configuration
-- `aliases`: shared shell aliases
+| Package | Description |
+|---------|-------------|
+| `aliases` | Shared shell aliases for common commands |
+| `alacritty` | Terminal emulator with Dracula theme |
+| `bash`/`zsh`/`fish` | Shells with VI mode, Starship prompt, Zoxide |
+| `bat` | Cat replacement with syntax highlighting |
+| `exports` | Environment variables (XDG paths, etc.) |
+| `eza` | Modern ls replacement with icons and Git status |
+| `fzf` | Fuzzy finder for files and history |
+| `ghostty` | Fast GPU-accelerated terminal |
+| `i3` | Tiling window manager (Linux) |
+| `kitty` | GPU-based terminal emulator |
+| `lazygit` | Terminal UI for Git |
+| `polybar` | Status bar for i3 (Linux) |
+| `starship` | Fast, customizable shell prompt |
+| `tmux` | Terminal multiplexer with TPM plugins |
+| `vim` | Editor with vim-plug and Dracula theme |
+| `vimium` | Browser extension for Vim keybindings |
+| `yazi` | Terminal file manager |
+
+## Troubleshooting
+
+**Stow conflicts?** Use `stow -D <package>` to unstow first, then re-stow with `stow -R <package>`.
+
+**Fonts not working?** Ensure JetBrainsMono Nerd Font is installed and your terminal is configured to use it.
+
+**TPM plugins not loading?** In tmux, press `Ctrl+b` then `I` to install plugins.
 
 ## Notes
 

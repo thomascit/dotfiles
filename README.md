@@ -2,7 +2,7 @@
 
 Personal dotfiles for macOS/Linux. Managed with GNU Stow into `$HOME` via `.stowrc` (most configs live under `~/.config`).
 
-![Theme: Dracula](https://img.shields.io/badge/Theme-Dracula-bd93f9?style=flat-square)
+[![Theme: Dracula](https://img.shields.io/badge/Theme-Dracula-bd93f9?style=flat-square)](https://draculatheme.com)
 
 ## Quick Start
 

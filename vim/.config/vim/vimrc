@@ -1,18 +1,21 @@
-
+" Line numbers
 set number                    " Show absolute line number on current line
 set relativenumber            " Show relative line numbers on other lines
-set mouse=a                   " Enable mouse support
+set numberwidth=8             " Make line number column wider (default is 4)
 
-set cursorline
+" UI
+set cursorline                " Highlight current line
 set showcmd                   " Show command as you type
 set showmatch                 " Show matching brackets
-set numberwidth=8             " Make line number column wider (default is 4)
 set colorcolumn=80            " Highlight column 80
 set scroll=10                 " Set scroll to 10 lines
-set scrolloff=4               " Keep 8 lines visible above/below cursor
+set scrolloff=4               " Keep 4 lines visible above/below cursor
 
 " Syntax highlighting
 syntax on
+
+" Mouse
+set mouse=a                   " Enable mouse support
 
 " Tabs and indentation
 set tabstop=4                 " Number of spaces that a <Tab> counts for
@@ -36,20 +39,31 @@ set ttyfast                   " Faster scrolling
 " File handling
 set hidden                    " Allow hidden buffers (switch files without saving)
 set noswapfile                " Disable swap files
-set undodir=~/.vim/undodir        " Directory to store undo history files
-set undofile                     " Enable persistent undo across sessions
+set undodir=~/.vim/undodir    " Directory to store undo history files
+set undofile                  " Enable persistent undo across sessions
 
 " Encoding
 set encoding=utf-8            " Set encoding
 
+" Wrapping settings
+set nowrap                    " Disable line wrapping
+
+" Terminal
+set termguicolors             " Enable 24-bit RGB colors
+
 " Leader key
-let mapleader = " "             " Set leader key to space
+let mapleader = " "           " Set leader key to space
 
 " Key mappings
 inoremap jk <Esc>
 
-" Wrapping settings
-set nowrap                      " Enable visual wrapping
+" Cursor shape in terminal (Ghostty/xterm DECSCUSR)
+" - Normal/Visual: solid block
+" - Insert: vertical bar (I-beam)
+" - Replace: underline
+let &t_SI = "\e[6 q"   " Enter Insert: I-beam
+let &t_SR = "\e[4 q"   " Enter Replace: underline
+let &t_EI = "\e[2 q"   " Exit Insert/Replace: block
 
 " Install vim-plug if not found
 if empty(glob('~/.vim/autoload/plug.vim'))
@@ -72,13 +86,14 @@ Plug 'tpope/vim-surround'
 Plug 'vim-airline/vim-airline'
 
 call plug#end()
-                                                                                                                                          
-let g:airline#extensions#tabline#enabled = 1           " enable airline tabline                                                           
+
+" Airline configuration
+let g:airline#extensions#tabline#enabled = 1           " enable airline tabline
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 
 " Airline status line customization
 let g:airline_section_a = airline#section#create_left(['mode', 'paste'])  " show vim mode and paste status
-let g:airline_section_b = ''                               " remove branch section  
+let g:airline_section_b = ''                               " remove branch section
 let g:airline_section_c = '%f'                             " show only filename
 let g:airline_section_x = ''                               " remove filetype
 let g:airline_section_y = ''                               " remove file encoding
@@ -92,8 +107,6 @@ let g:airline#extensions#tabline#right_sep = ''            " tabline right separ
 let g:airline_skip_empty_sections = 1                      " skip empty sections
 
 " Colorscheme
-" Enable 24-bit RGB colors (must be before colorscheme)
-set termguicolors
 colorscheme dracula
 
 " Transparent background overrides (keep after colorscheme)
@@ -108,12 +121,3 @@ hi FloatBorder  ctermbg=NONE guibg=NONE
 
 " Highlight column 80 background (visible with transparent theme)
 hi ColorColumn  ctermbg=238  guibg=#44475a
-
-" Cursor shape in terminal (Ghostty/xterm DECSCUSR)
-" - Normal/Visual: solid block
-" - Insert: vertical bar (I-beam)
-" - Replace: underline
-let &t_SI = "\e[6 q"   " Enter Insert: I-beam
-let &t_SR = "\e[4 q"   " Enter Replace: underline
-let &t_EI = "\e[2 q"   " Exit Insert/Replace: block
-

@@ -1,12 +1,12 @@
 [mgr]
-ratio          = [ 1, 4, 3 ]
+ratio          = [ 1, 3, 5 ]
 sort_by        = "natural"
 sort_dir_first = true
 sort_translit  = false
 linemode       = "mtime"
 
 [preview]
-wrap            = "no"
+wrap            = "yes"
 tab_size        = 4
 
 [flavor]

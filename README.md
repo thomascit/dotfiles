@@ -15,7 +15,7 @@ stow -v -R zsh starship tmux vim aliases exports
 cp .zshrc "$HOME/"
 
 # Or full setup
-stow -v -R alacritty aliases bash bat eza exports fish fzf ghostty i3 kitty lazygit polybar starship tmux vim vimium yazi zsh
+stow -v -R aerospace alacritty aliases bash bat eza exports fish fzf ghostty i3 kitty lazygit polybar starship tmux vim vimium yazi zsh
 cp .bashrc .zshrc .vimrc "$HOME/"
 ```
 
@@ -33,6 +33,7 @@ cp .bashrc .zshrc .vimrc "$HOME/"
 | **Terminals** | Alacritty, Ghostty, Kitty |
 
 ### Platform Specific
+- **macOS**: Aerospace (tiling window manager)
 - **Linux**: i3 (window manager), Polybar (status bar)
 
 ### Optional
@@ -70,7 +71,7 @@ git clone https://github.com/thomascit/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 
 # Stow packages into $HOME (symlinks land under ~/.config/*)
-stow -v -R alacritty aliases bash bat eza exports fish fzf ghostty i3 kitty lazygit polybar starship tmux vim vimium yazi zsh
+stow -v -R aerospace alacritty aliases bash bat eza exports fish fzf ghostty i3 kitty lazygit polybar starship tmux vim vimium yazi zsh
 
 # Copy wrapper files that source configs from ~/.config
 cp .bashrc .zshrc .vimrc "$HOME/"
@@ -125,8 +126,8 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
 Then inside tmux:
 
-1. Press `<prefix> + I` (usually `Ctrl+b` then `I`) to install/update plugins.
-2. Press `<prefix> + r` (usually `Ctrl+b` then `r`) to reload the config.
+1. Press `<prefix> + I` (usually `Ctrl+Space` then `I`) to install/update plugins.
+2. Press `<prefix> + r` (usually `Ctrl+Space` then `r`) to reload the config.
 
 ## Plugin Managers
 
@@ -137,6 +138,7 @@ Then inside tmux:
 
 | Package | Description |
 |---------|-------------|
+| `aerospace` | Tiling window manager for macOS |
 | `aliases` | Shared shell aliases for common commands |
 | `alacritty` | Terminal emulator with Dracula theme |
 | `bash`/`zsh`/`fish` | Shells with VI mode, Starship prompt, Zoxide |
@@ -161,7 +163,7 @@ Then inside tmux:
 
 **Fonts not working?** Ensure JetBrainsMono Nerd Font is installed and your terminal is configured to use it.
 
-**TPM plugins not loading?** In tmux, press `Ctrl+b` then `I` to install plugins.
+**TPM plugins not loading?** In tmux, press `Ctrl+Space` then `I` to install plugins.
 
 ## Notes
 

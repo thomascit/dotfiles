@@ -2,12 +2,12 @@
 set -gx XDG_CONFIG_HOME $HOME/.config
 set -gx STARSHIP_CONFIG $HOME/.config/starship/starship.toml
 set -gx EZA_CONFIG_DIR $HOME/.config/eza
-set -gx EDITOR vim
+set -gx EDITOR nvim
 set -gx HOMEBREW_NO_AUTO_UPDATE 1
 set -gx HOMEBREW_NO_ENV_HINTS 1
 
 # Dracula Man Page Colors
-set -gx MANPAGER "/opt/homebrew/bin/less -s -M +Gg"
+set -gx MANPAGER "less -s -M +Gg"
 set -gx LESS_TERMCAP_mb \e'[1;31m'      # begin bold
 set -gx LESS_TERMCAP_md \e'[1;34m'      # begin blink
 set -gx LESS_TERMCAP_so \e'[01;45;37m'  # begin reverse video

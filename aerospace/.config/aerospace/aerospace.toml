@@ -3,7 +3,14 @@
 
 # You can use it to add commands that run after AeroSpace startup.
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
-after-startup-command = []
+after-startup-command = [
+    # Launch apps on startup
+    'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0',
+    'exec-and-forget open -na Ghostty',
+    
+    # Optional: Switch to a default workspace after launching
+    # 'workspace 1'
+]
 
 # Start AeroSpace at login
 start-at-login = true
@@ -51,12 +58,12 @@ automatically-unhide-macos-hidden-apps = false
 #                 See:
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
-    inner.horizontal = 5
-    inner.vertical =   5
-    outer.left =       5
-    outer.bottom =     5
-    outer.top =        5
-    outer.right =      5
+    inner.horizontal = 10
+    inner.vertical =   10
+    outer.left =       10
+    outer.bottom =     10
+    outer.top =        10
+    outer.right =      10
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -90,6 +97,15 @@ automatically-unhide-macos-hidden-apps = false
     #     activate
     # end tell'
     # '''
+    
+    # Launch applications
+    shift-cmd-t = 'exec-and-forget open -na Ghostty'
+    shift-cmd-b = 'exec-and-forget open -na "Google Chrome"'
+    shift-cmd-s = 'exec-and-forget open -na Slack'
+    shift-cmd-i = 'exec-and-forget open -na "Jira - IT"'
+    shift-cmd-m = 'exec-and-forget open -na "Google Meet"'
+    shift-cmd-c = 'exec-and-forget open -na "Google Calendar"'
+    shift-cmd-e = 'exec-and-forget open -na Gmail'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#layout
     alt-slash = 'layout tiles horizontal vertical'
@@ -204,3 +220,58 @@ automatically-unhide-macos-hidden-apps = false
     down = 'volume down'
     up = 'volume up'
     shift-down = ['volume set 0', 'mode main']
+
+# Application-specific workspace assignments
+# See: https://nikitabobko.github.io/AeroSpace/guide#assign-apps-to-workspaces
+
+[[on-window-detected]]
+if.app-id = 'com.google.Chrome'
+run = 'move-node-to-workspace B'  # B for Browser
+
+[[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
+run = 'move-node-to-workspace S'  # S for Slack
+
+[[on-window-detected]]
+if.app-id = 'com.mitchellh.ghostty'
+run = 'move-node-to-workspace T'  # T for Terminal
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Jira'
+run = 'move-node-to-workspace I'  # I for IT/Jira
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Google Meet'
+run = 'move-node-to-workspace M'  # M for Meet
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Google Calendar'
+run = 'move-node-to-workspace C'  # C for Calendar
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Gmail'
+run = 'move-node-to-workspace E'  # E for Email
+
+# Always float Finder windows
+[[on-window-detected]]
+if.app-id = 'com.apple.finder'
+run = 'layout floating'
+
+# Always float System Settings/Preferences
+[[on-window-detected]]
+if.app-id = 'com.apple.systempreferences'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.SystemProfiler'
+run = 'layout floating'
+
+# You can also use app name patterns
+# [[on-window-detected]]
+# if.app-name-regex-substring = 'Code'
+# run = 'move-node-to-workspace C'  # C for Code
+
+# Or window title patterns
+# [[on-window-detected]]
+# if.window-title-regex-substring = '.*[.]md.*'
+# run = 'move-node-to-workspace N'  # N for Notes

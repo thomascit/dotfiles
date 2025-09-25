@@ -1,5 +1,5 @@
 # ─────────────────────────────────────────────
-
+# Clipboard
 # ─────────────────────────────────────────────
 alias c "xclip -i -selection clipboard"
 alias cc "pbcopy"
@@ -14,10 +14,13 @@ alias brc "vim $HOME/.config/bash/bashrc"
 alias exs "vim $HOME/.config/exports.sh"
 alias exf "vim $HOME/.config/exports.fish"
 alias fc "vim $HOME/.config/fish/config.fish"
+alias fzrc "vim $HOME/.config/fzfrc.sh"
+alias fzfrc "vim $HOME/.config/fzfrc.fish"
 alias gc "vim $HOME/.config/ghostty/config"
 alias i3c "vim $HOME/.config/i3/config"
 alias kc "vim $HOME/.config/kitty/kitty.conf"
 alias sc "vim $HOME/.config/starship/starship.toml"
+alias sshc "vim $HOME/.ssh/config"
 alias tc "vim $HOME/.config/tmux/tmux.conf"
 alias vrc "vim $HOME/.config/vim/vimrc"
 alias zrc "vim $HOME/.config/zsh/zshrc"
@@ -26,6 +29,13 @@ alias yc "vim $HOME/.config/yazi/yazi.toml"
 # ─────────────────────────────────────────────
 # Git
 # ─────────────────────────────────────────────
+alias ga "git add"
+alias gb "git branch"
+alias gcm "git commit"
+alias gco "git checkout"
+alias gd "git diff"
+alias gl "git log --oneline --graph"
+alias gp "git push"
 alias gs "git status"
 
 # ─────────────────────────────────────────────
@@ -45,7 +55,7 @@ alias ls "eza --icons=always --sort=type --header -l --git"
 alias rm "trash"
 
 # ─────────────────────────────────────────────
-# Source Shell
+# Source Shells
 # ─────────────────────────────────────────────
 alias sf "source $HOME/.config/fish/config.fish"
 

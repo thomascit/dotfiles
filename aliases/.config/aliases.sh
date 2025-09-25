@@ -20,6 +20,7 @@ alias gc="vim $HOME/.config/ghostty/config"
 alias i3c="vim $HOME/.config/i3/config"
 alias kc="vim $HOME/.config/kitty/kitty.conf"
 alias sc="vim $HOME/.config/starship/starship.toml"
+alias sshc="vim $HOME/.ssh/config"
 alias tc="vim $HOME/.config/tmux/tmux.conf"
 alias vrc="vim $HOME/.config/vim/vimrc"
 alias zrc="vim $HOME/.config/zsh/zshrc"
@@ -28,6 +29,13 @@ alias yc="vim $HOME/.config/yazi/yazi.toml"
 # ─────────────────────────────────────────────
 # Git
 # ─────────────────────────────────────────────
+alias ga="git add"
+alias gb="git branch"
+alias gcm="git commit"
+alias gco="git checkout"
+alias gd="git diff"
+alias gl="git log --oneline --graph"
+alias gp="git push"
 alias gs="git status"
 
 # ─────────────────────────────────────────────

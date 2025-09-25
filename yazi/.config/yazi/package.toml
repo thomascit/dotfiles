@@ -28,6 +28,11 @@ use = "thomascit/yatline-dracula"
 rev = "12ae153"
 hash = "ef1f9d229a33a67645c8b7cdffcc2a87"
 
+[[plugin.deps]]
+use = "yazi-rs/plugins:toggle-pane"
+rev = "d1c8baa"
+hash = "8a7c58225816a163a6e8730c0adafbc8"
+
 [[flavor.deps]]
 use = "yazi-rs/flavors:dracula"
 rev = "3e6da98"

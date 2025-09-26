@@ -40,7 +40,7 @@ opt.timeoutlen = 300
 -- File handling
 opt.hidden = true                    -- Allow hidden buffers (switch files without saving)
 opt.swapfile = false                 -- Disable swap files
-opt.undodir = vim.fn.expand("~/.vim/undodir")  -- Directory to store undo history files
+opt.undodir = vim.fn.expand("~/.nvim/undodir")  -- Directory to store undo history files
 opt.undofile = true                  -- Enable persistent undo across sessions
 
 -- Encoding

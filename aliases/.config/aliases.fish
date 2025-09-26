@@ -8,6 +8,7 @@ alias cc "pbcopy"
 # Edit Config Files
 # ─────────────────────────────────────────────
 alias ac "vim $HOME/.config/alacritty/alacritty.toml"
+alias aec "vim $HOME/.config/aerospace/aerospace.toml"
 alias als "vim $HOME/.config/aliases.sh"
 alias alsf "vim $HOME/.config/aliases.fish"
 alias brc "vim $HOME/.config/bash/bashrc"
@@ -23,8 +24,10 @@ alias sc "vim $HOME/.config/starship/starship.toml"
 alias sshc "vim $HOME/.ssh/config"
 alias tc "vim $HOME/.config/tmux/tmux.conf"
 alias vrc "vim $HOME/.config/vim/vimrc"
+alias nvrc "vim $HOME/.config/nvim"
 alias zrc "vim $HOME/.config/zsh/zshrc"
 alias yc "vim $HOME/.config/yazi/yazi.toml"
+alias df "yazi $HOME/.config"
 
 # ─────────────────────────────────────────────
 # Git

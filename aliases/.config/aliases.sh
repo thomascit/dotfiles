@@ -81,6 +81,7 @@ alias ta="tmux attach-session -t"
 alias tn="tmux new-window -c "#{pane_current_path}" $EDITOR ."
 alias tr="tmux rename-session"
 alias tt='tmux new-session -A -s "${PWD##*/}" -c "$PWD"'
+alias tts='if [ -n "$TMUX" ]; then tmux switch-client -t "${PWD##*/}" 2>/dev/null || tmux new-session -d -s "${PWD##*/}" -c "$PWD" && tmux switch-client -t "${PWD##*/}"; else tmux new-session -A -s "${PWD##*/}" -c "$PWD"; fi'
 
 # ─────────────────────────────────────────────
 # Docker

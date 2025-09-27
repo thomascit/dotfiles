@@ -83,6 +83,17 @@ function tt
     tmux new-session -A -s (basename $PWD) -c $PWD
 end
 
+function tts
+    if test -n "$TMUX"
+        tmux switch-client -t (basename $PWD) 2>/dev/null; or begin
+            tmux new-session -d -s (basename $PWD) -c $PWD
+            tmux switch-client -t (basename $PWD)
+        end
+    else
+        tmux new-session -A -s (basename $PWD) -c $PWD
+    end
+end
+
 # ─────────────────────────────────────────────
 # Docker
 # ─────────────────────────────────────────────

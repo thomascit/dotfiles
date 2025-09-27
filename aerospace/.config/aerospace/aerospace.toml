@@ -9,7 +9,7 @@ after-startup-command = [
     'exec-and-forget open -na Ghostty',
     
     # Optional: Switch to a default workspace after launching
-    # 'workspace 1'
+    'workspace T'
 ]
 
 # Start AeroSpace at login
@@ -100,12 +100,11 @@ automatically-unhide-macos-hidden-apps = false
     
     # Launch applications
     shift-cmd-t = 'exec-and-forget open -na Ghostty'
-    shift-cmd-b = 'exec-and-forget open -na "Google Chrome"'
-    shift-cmd-s = 'exec-and-forget open -na Slack'
-    shift-cmd-i = 'exec-and-forget open -na "Jira - IT"'
-    shift-cmd-m = 'exec-and-forget open -na "Google Meet"'
-    shift-cmd-c = 'exec-and-forget open -na "Google Calendar"'
-    shift-cmd-e = 'exec-and-forget open -na Gmail'
+    shift-cmd-b = 'exec-and-forget open -na "Zen Browser"'
+    shift-cmd-c = 'exec-and-forget open -na Calendar'
+    shift-cmd-e = 'exec-and-forget open -na Mail'
+    shift-cmd-n = 'exec-and-forget open -na Notes'
+    shift-cmd-m = 'exec-and-forget open -na Spotify'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#layout
     alt-slash = 'layout tiles horizontal vertical'
@@ -229,6 +228,10 @@ if.app-id = 'com.google.Chrome'
 run = 'move-node-to-workspace B'  # B for Browser
 
 [[on-window-detected]]
+if.app-id = 'app.zen-browser.zen'
+run = 'move-node-to-workspace B'  # B for Browser
+
+[[on-window-detected]]
 if.app-id = 'com.tinyspeck.slackmacgap'
 run = 'move-node-to-workspace S'  # S for Slack
 
@@ -241,8 +244,16 @@ if.app-name-regex-substring = 'Jira'
 run = 'move-node-to-workspace I'  # I for IT/Jira
 
 [[on-window-detected]]
-if.app-name-regex-substring = 'Google Meet'
-run = 'move-node-to-workspace M'  # M for Meet
+if.app-id = 'com.apple.Music'
+run = 'move-node-to-workspace M'  # M for Music
+
+[[on-window-detected]]
+if.app-id = 'com.spotify.client'
+run = 'move-node-to-workspace M'  # M for Music
+
+[[on-window-detected]]
+if.app-id = 'com.apple.iCal'
+run = 'move-node-to-workspace C'  # C for Calendar
 
 [[on-window-detected]]
 if.app-name-regex-substring = 'Google Calendar'
@@ -250,6 +261,10 @@ run = 'move-node-to-workspace C'  # C for Calendar
 
 [[on-window-detected]]
 if.app-name-regex-substring = 'Gmail'
+run = 'move-node-to-workspace E'  # E for Email
+
+[[on-window-detected]]
+if.app-id = 'com.apple.mail'
 run = 'move-node-to-workspace E'  # E for Email
 
 # Always float Finder windows

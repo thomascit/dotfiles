@@ -1,40 +1,73 @@
-return {
-  "folke/which-key.nvim",
-  event = "VeryLazy",
-  opts = {
-    -- your configuration comes here
-    -- or leave it empty to use the default settings
-    -- refer to the configuration section below
-  },
-  config = function(_, opts)
-    local wk = require("which-key")
-    wk.setup(opts)
-
-    local group = vim.api.nvim_create_augroup("WhichKeyVisualHooks", { clear = true })
-
-    vim.api.nvim_create_autocmd("ModeChanged", {
-      group = group,
-      pattern = { "*:V", "*:\022" },
-      callback = function(ev)
-        wk.show("", { mode = ev.new_mode })
-      end,
-    })
-
-    vim.api.nvim_create_autocmd("ModeChanged", {
-      group = group,
-      pattern = { "V:*", "\022:*" },
-      callback = function()
-        require("which-key.view").hide()
-      end,
-    })
-  end,
-  keys = {
+return 
     {
-      "<leader>?",
-      function()
-        require("which-key").show({ global = false })
-      end,
-      desc = "Buffer Local Keymaps (which-key)",
-    },
-  },
-}
+        "folke/which-key.nvim",
+        event = "VeryLazy",
+        opts_extend = { "spec" },
+        opts = {
+            preset = "helix",
+            defaults = {},
+            spec = {
+                {
+                    mode = { "n", "v" },
+                    { "<leader><tab>", group = "tabs" },
+                    { "<leader>c", group = "code" },
+                    { "<leader>d", group = "debug" },
+                    { "<leader>dp", group = "profiler" },
+                    { "<leader>f", group = "file/find" },
+                    { "<leader>g", group = "git" },
+                    { "<leader>gh", group = "hunks" },
+                    { "<leader>q", group = "quit/session" },
+                    { "<leader>s", group = "search" },
+                    { "<leader>u", group = "ui" },
+                    { "<leader>x", group = "diagnostics/quickfix" },
+                    { "[", group = "prev" },
+                    { "]", group = "next" },
+                    { "g", group = "goto" },
+                    { "gs", group = "surround" },
+                    { "z", group = "fold" },
+                    {
+                        "<leader>b",
+                        group = "buffer",
+                        expand = function()
+                            return require("which-key.extras").expand.buf()
+                        end,
+                    },
+                    {
+                        "<leader>w",
+                        group = "windows",
+                        proxy = "<c-w>",
+                        expand = function()
+                            return require("which-key.extras").expand.win()
+                        end,
+                    },
+                    -- better descriptions
+                    { "gx", desc = "Open with system app" },
+                },
+            },
+        },
+        keys = {
+            {
+                "<leader>?",
+                function()
+                    require("which-key").show({ global = false })
+                end,
+                desc = "Buffer Keymaps (which-key)",
+            },
+            {
+                "<c-w><space>",
+                function()
+                    require("which-key").show({ keys = "<c-w>", loop = true })
+                end,
+                desc = "Window Hydra Mode (which-key)",
+            },
+        },
+        config = function(_, opts)
+            local wk = require("which-key")
+            wk.setup(opts)
+            if not vim.tbl_isempty(opts.defaults) then
+                LazyVim.warn("which-key: opts.defaults is deprecated. Please use opts.spec instead.")
+                wk.register(opts.defaults)
+            end
+        end,
+    }
+

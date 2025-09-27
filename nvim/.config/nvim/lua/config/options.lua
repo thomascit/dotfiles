@@ -9,7 +9,7 @@ opt.numberwidth = 8                  -- Make line number column wider (default i
 opt.cursorline = true                -- Highlight current line
 opt.showcmd = true                   -- Show command as you type
 opt.showmatch = true                 -- Show matching brackets
-opt.colorcolumn = "80"               -- Highlight column 80
+-- opt.colorcolumn = "80"               -- Highlight column 80
 opt.scroll = 10                      -- Set scroll to 10 lines
 opt.scrolloff = 4                    -- Keep 4 lines visible above/below cursor
 

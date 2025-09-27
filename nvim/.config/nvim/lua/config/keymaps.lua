@@ -12,3 +12,8 @@ vim.keymap.set("n", "<leader>tw", function()
   vim.wo.linebreak = not on
   vim.wo.breakindent = not on
 end, { desc = "Wrap: toggle for window" })
+
+vim.keymap.set("n", "<leader>tc", function()
+  local has_column = vim.wo.colorcolumn ~= ""
+  vim.wo.colorcolumn = has_column and "" or "80"
+end, { desc = "Colorcolumn: toggle" })

@@ -64,8 +64,10 @@ function lg
     end
 end
 
-# Extras
-# echo $(basename "$STARSHIP_SHELL") | figlet | lolcat --animate --speed 100
+# Binds
+bind -M insert \cp fish_clipboard_paste
+bind -M default p fish_clipboard_paste
+bind -M insert jk "if commandline -P; commandline -f cancel; else; set fish_bind_mode default; commandline -f force-repaint; end"
 
 # Theme
 fish_config theme choose "Dracula Official"

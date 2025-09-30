@@ -55,6 +55,7 @@ alias bu "brew update && brew upgrade && brew bundle --file $HOME/Documents/Setu
 alias cat "bat"
 alias icat "kitten icat"
 alias ls "eza --icons=always --sort=type --header -l --git"
+alias lst "eza --icons=always --sort=type --header -l --git --tree"
 alias rm "trash"
 
 # ─────────────────────────────────────────────

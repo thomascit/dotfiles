@@ -33,6 +33,11 @@ use = "yazi-rs/plugins:toggle-pane"
 rev = "d1c8baa"
 hash = "8a7c58225816a163a6e8730c0adafbc8"
 
+[[plugin.deps]]
+use = "AnirudhG07/rich-preview"
+rev = "843c3fa"
+hash = "b4040931f0d2f9670ddb4923e55cd881"
+
 [[flavor.deps]]
 use = "yazi-rs/flavors:dracula"
 rev = "3e6da98"

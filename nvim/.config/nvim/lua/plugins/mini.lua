@@ -1,6 +1,8 @@
 return {
-  'echasnovski/mini.nvim',
+  'nvim-mini/mini.nvim',
   version = false,
   config = function()
-    end
-    }
+        require('mini.ai').setup()
+        require('mini.pairs').setup()
+  end
+}

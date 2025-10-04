@@ -46,8 +46,8 @@ alias gs "git status"
 # ─────────────────────────────────────────────
 alias ba "brew autoremove"
 alias bc "brew cleanup"
-alias be "$EDITOR $HOME/Documents/SetupFiles/brewfile"
-alias bu "brew update && brew upgrade && brew bundle --file $HOME/Documents/SetupFiles/brewfile"
+alias be "$EDITOR $HOME/brewfile"
+alias bu "brew update && brew upgrade && brew bundle --file $HOME/brewfile"
 
 # ─────────────────────────────────────────────
 # LS/FS

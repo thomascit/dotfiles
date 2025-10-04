@@ -52,7 +52,15 @@ source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
+# ZSH-VI Settings
 ZVM_VI_ESCAPE_BINDKEY=jk
+ZVM_SYSTEM_CLIPBOARD_ENABLED=true
+# (MAC)
+ZVM_CLIPBOARD_COPY_CMD='pbcopy'
+ZVM_CLIPBOARD_PASTE_CMD='pbpaste'
+# (LINUX)
+# ZVM_CLIPBOARD_COPY_CMD='xclip -selection clipboard'
+# ZVM_CLIPBOARD_PASTE_CMD='xclip -selection clipboard -o'
 
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
@@ -62,7 +70,7 @@ zinit light-mode for \
     zsh-users/zsh-history-substring-search \
     zsh-users/zsh-completions \
     jeffreytse/zsh-vi-mode \
-    hlissner/zsh-autopair
+    hlissner/zsh-autopair  \
 
 # Enable: Starship (after plugins to avoid conflicts)
 eval "$(starship init zsh)"

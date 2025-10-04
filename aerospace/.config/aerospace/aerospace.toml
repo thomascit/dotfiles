@@ -2,11 +2,9 @@ after-startup-command = [
     # Launch apps on startup
     'exec-and-forget /opt/homebrew/bin/borders active_color=0xf8f8f2 inactive_color=0xf0xf8f8f264 width=5.0',
     'exec-and-forget open -na Ghostty',
-    'exec-and-forget open -na Messages',
-    'exec-and-forget open -na Home',
 
     # Optional: Switch to a default workspace after launching
-    'workspace 1'
+    'exec-and-forget sleep 1 && workspace 1'
 ]
 
 # Start AeroSpace at login
@@ -219,62 +217,6 @@ automatically-unhide-macos-hidden-apps = false
 
 # Application-specific workspace assignments
 # See: https://nikitabobko.github.io/AeroSpace/guide#assign-apps-to-workspaces
-
-[[on-window-detected]]
-if.app-id = 'com.google.Chrome'
-run = 'move-node-to-workspace B'  # B for Browser
-
-[[on-window-detected]]
-if.app-id = 'org.mozilla.nightly'
-run = 'move-node-to-workspace B'  # B for Browser
-
-[[on-window-detected]]
-if.app-id = 'com.tinyspeck.slackmacgap'
-run = 'move-node-to-workspace S'  # S for Slack
-
-[[on-window-detected]]
-if.app-id = 'com.mitchellh.ghostty'
-run = 'move-node-to-workspace T'  # T for Terminal
-
-[[on-window-detected]]
-if.app-name-regex-substring = 'Jira'
-run = 'move-node-to-workspace I'  # I for IT/Jira
-
-[[on-window-detected]]
-if.app-id = 'com.apple.Music'
-run = 'move-node-to-workspace M'  # M for Music
-
-[[on-window-detected]]
-if.app-id = 'com.spotify.client'
-run = 'move-node-to-workspace M'  # M for Music
-
-[[on-window-detected]]
-if.app-id = 'com.apple.Home'
-run = 'move-node-to-workspace 3'
-
-[[on-window-detected]]
-if.app-id = 'com.apple.iCal'
-run = 'move-node-to-workspace C'  # C for Calendar
-
-[[on-window-detected]]
-if.app-name-regex-substring = 'Google Calendar'
-run = 'move-node-to-workspace C'  # C for Calendar
-
-[[on-window-detected]]
-if.app-name-regex-substring = 'Gmail'
-run = 'move-node-to-workspace E'  # E for Email
-
-[[on-window-detected]]
-if.app-id = 'com.apple.mail'
-run = 'move-node-to-workspace E'  # E for Email
-
-[[on-window-detected]]
-if.app-id = 'com.facebook.WhatsApp'
-run = 'move-node-to-workspace 2'
-
-[[on-window-detected]]
-if.app-id = 'com.apple.MobileSMS'
-run = 'move-node-to-workspace 2'
 
 # Always float Finder windows
 [[on-window-detected]]

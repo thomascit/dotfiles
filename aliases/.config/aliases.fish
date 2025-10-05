@@ -99,7 +99,7 @@ end
 # Docker
 # ─────────────────────────────────────────────
 alias lzd "lazydocker"
-alias dcu "docker-compose up -d"
-alias dcd "docker-compose down"
-alias dcl "docker-compose logs -f --tail=100"
-alias dcb "docker-compose build --no-cache"
+alias dcu "docker compose up -d"
+alias dcd "docker compose down"
+alias dcl "docker compose logs -f --tail=100"
+alias dcb "docker compose build --no-cache"

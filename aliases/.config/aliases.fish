@@ -98,6 +98,7 @@ end
 # ─────────────────────────────────────────────
 # Docker
 # ─────────────────────────────────────────────
+alias lzd "lazydocker"
 alias dcu "docker-compose up -d"
 alias dcd "docker-compose down"
 alias dcl "docker-compose logs -f --tail=100"

@@ -46,8 +46,8 @@ alias gs="git status"
 # ─────────────────────────────────────────────
 alias ba="brew autoremove"
 alias bc="brew cleanup"
-alias be="$EDITOR $HOME/Documents/SetupFiles/brewfile"
-alias bu="brew update && brew upgrade && brew bundle --file $HOME/Documents/SetupFiles/brewfile"
+alias be="$EDITOR $HOME/brewfile"
+alias bu="brew update && brew upgrade && brew bundle --file $HOME/brewfile"
 
 # ─────────────────────────────────────────────
 # LS/FS
@@ -87,7 +87,8 @@ alias tts='if [ -n "$TMUX" ]; then tmux switch-client -t "${PWD##*/}" 2>/dev/nul
 # ─────────────────────────────────────────────
 # Docker
 # ─────────────────────────────────────────────
-alias dcu="docker-compose up -d"
-alias dcd="docker-compose down"
-alias dcl="docker-compose logs -f --tail=100"
-alias dcb="docker-compose build --no-cache"
+alias lzd="lazydocker"
+alias dcu="docker compose up -d"
+alias dcd="docker compose down"
+alias dcl="docker compose logs -f --tail=100"
+alias dcb="docker compose build --no-cache"

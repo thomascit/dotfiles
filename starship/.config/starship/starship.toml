@@ -1,8 +1,12 @@
 add_newline = false
 palette = "dracula"
-format = """$directory$character"""
+format = """$username$directory$character"""
 right_format = """$all"""
 command_timeout = 1000
+
+[username]
+disabled = false
+show_always = true
 
 [character]
 success_symbol = "[➜](green)"

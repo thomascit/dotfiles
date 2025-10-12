@@ -95,6 +95,7 @@ automatically-unhide-macos-hidden-apps = false
     
     # Close window
     alt-q = 'close --quit-if-last-window'
+    alt-f = 'macos-native-fullscreen'
     
     # Launch applications
     alt-t = 'exec-and-forget open -na Ghostty'

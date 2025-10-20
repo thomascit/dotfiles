@@ -1,7 +1,8 @@
+# App launch helpers source ~/.config/aerospace/app_vars.sh for adjustable names
 after-startup-command = [
     # Launch apps on startup
     'exec-and-forget /opt/homebrew/bin/borders active_color=0xfff8f8f2 inactive_color=0x66f8f8f2 width=5.0',
-    'exec-and-forget open -na Ghostty',
+    'exec-and-forget sh ~/.config/aerospace/launch_terminal.sh',
 
     # Optional: Switch to a default workspace after launching
     'exec-and-forget sleep 1 && workspace 1'
@@ -95,15 +96,21 @@ automatically-unhide-macos-hidden-apps = false
     
     # Close window
     alt-q = 'close --quit-if-last-window'
+    # Fullscreen window
     alt-f = 'macos-native-fullscreen'
     
     # Launch applications
-    alt-t = 'exec-and-forget open -na Ghostty'
-    alt-b = 'exec-and-forget open -na "Firefox Nightly"'
-    alt-c = 'exec-and-forget open -na Calendar'
-    alt-e = 'exec-and-forget open -na Mail'
-    alt-n = 'exec-and-forget open -na Notes'
-    alt-m = 'exec-and-forget open -na Spotify'
+    alt-a = 'exec-and-forget open -b ChatGPT' # A for AI
+    alt-t = 'exec-and-forget sh ~/.config/aerospace/launch_terminal.sh' # T for Terminal
+    alt-b = 'exec-and-forget sh ~/.config/aerospace/launch_browser.sh' # B for Browser
+    alt-c = 'exec-and-forget open -na Calendar' # C for Calendar
+    alt-e = 'exec-and-forget open -na Mail' # E for Emails
+    alt-x = 'exec-and-forget open -a Finder' # X for Explorer
+    alt-n = 'exec-and-forget open -na Notes' # N for Notes
+    alt-m = 'exec-and-forget open -na Spotify' # M for Music
+    alt-y = 'exec-and-forget open -na Youtube' # Y for Youtube
+    alt-r = 'exec-and-forget open -na Reddit' # R for Reddit
+    alt-s = 'exec-and-forget open -na "System Settings"' # S for Settings
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#layout
     alt-slash = 'layout tiles horizontal vertical'
@@ -121,8 +128,9 @@ automatically-unhide-macos-hidden-apps = false
     alt-shift-k = 'move up'
     alt-shift-l = 'move right'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#resize
+    # See: https://nikitabobko.github.io/AeroSpace/commands#resize'
     alt-minus = 'resize smart -50'
+
     alt-equal = 'resize smart +50'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
@@ -180,15 +188,40 @@ automatically-unhide-macos-hidden-apps = false
 # Application-specific workspace assignments
 # See: https://nikitabobko.github.io/AeroSpace/guide#assign-apps-to-workspaces
 
-# Always float Finder windows
+# Pin core apps to dedicated workspaces when they appear
+# Ghostty bundle id; adjust if you swap to another terminal
+[[on-window-detected]]
+if.app-id = 'com.mitchellh.ghostty'
+run = 'move-node-to-workspace 9'
+
+# ChatGPT Chrome PWA bundle id
+[[on-window-detected]]
+if.app-id = 'chatgpt'
+run = 'move-node-to-workspace 5'
+
+[[on-window-detected]]
+if.app-id = 'com.spotify.client'
+run = 'move-node-to-workspace 8'
+
+# Match YouTube apps by name (Safari/Chrome PWAs both appear as "YouTube")
+[[on-window-detected]]
+if.app-name-regex-substring = 'youtube'
+run = 'move-node-to-workspace 7'
+
+# Update the bundle id here if you point $BROWSER to a different browser
+[[on-window-detected]]
+if.app-id = 'org.mozilla.nightly'
+run = 'move-node-to-workspace 6'
+
+# Always float Finder windows on workspace 1
 [[on-window-detected]]
 if.app-id = 'com.apple.finder'
-run = 'layout floating'
+run = ['layout floating', 'move-node-to-workspace 1']
 
 # Always float System Settings/Preferences
 [[on-window-detected]]
 if.app-id = 'com.apple.systempreferences'
-run = 'layout floating'
+run = ['layout floating', 'move-node-to-workspace 1']
 
 [[on-window-detected]]
 if.app-id = 'com.apple.SystemProfiler'

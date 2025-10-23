@@ -210,7 +210,7 @@ run = 'move-node-to-workspace 7'
 
 # Update the bundle id here if you point $BROWSER to a different browser
 [[on-window-detected]]
-if.app-id = 'org.mozilla.nightly'
+if.app-id = 'org.mozilla.firefox'
 run = 'move-node-to-workspace 6'
 
 # Always float Finder windows on workspace 1

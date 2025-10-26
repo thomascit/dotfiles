@@ -5,6 +5,7 @@ set -gx EZA_CONFIG_DIR $HOME/.config/eza
 set -gx EDITOR nvim
 set -gx HOMEBREW_NO_AUTO_UPDATE 1
 set -gx HOMEBREW_NO_ENV_HINTS 1
+set -gx GOPATH /usr/local/share/go
 
 # Dracula Man Page Colors
 set -gx MANPAGER "less -s -M +Gg"

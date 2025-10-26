@@ -5,6 +5,7 @@ export EZA_CONFIG_DIR="$HOME/.config/eza"
 export EDITOR="nvim"
 export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_NO_ENV_HINTS=1
+export GOPATH="/usr/local/share/go"
 
 # Dracula Man Page Colors
 export MANPAGER="less -s -M +Gg"

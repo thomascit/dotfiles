@@ -189,36 +189,35 @@ automatically-unhide-macos-hidden-apps = false
 # See: https://nikitabobko.github.io/AeroSpace/guide#assign-apps-to-workspaces
 
 # Pin core apps to dedicated workspaces when they appear
-# Ghostty bundle id; adjust if you swap to another terminal
+
 [[on-window-detected]]
 if.app-id = 'com.mitchellh.ghostty'
 run = 'move-node-to-workspace 9'
-
-# ChatGPT Chrome PWA bundle id
-[[on-window-detected]]
-if.app-id = 'chatgpt'
-run = 'move-node-to-workspace 5'
 
 [[on-window-detected]]
 if.app-id = 'com.spotify.client'
 run = 'move-node-to-workspace 8'
 
-# Match YouTube apps by name (Safari/Chrome PWAs both appear as "YouTube")
+[[on-window-detected]]
+if.app-name-regex-substring = 'reddit'
+run = 'move-node-to-workspace 7'
+
 [[on-window-detected]]
 if.app-name-regex-substring = 'youtube'
 run = 'move-node-to-workspace 7'
 
-# Update the bundle id here if you point $BROWSER to a different browser
 [[on-window-detected]]
 if.app-id = 'org.mozilla.firefox'
 run = 'move-node-to-workspace 6'
 
-# Always float Finder windows on workspace 1
+[[on-window-detected]]
+if.app-id = 'chatgpt'
+run = 'move-node-to-workspace 5'
+
 [[on-window-detected]]
 if.app-id = 'com.apple.finder'
 run = ['layout floating', 'move-node-to-workspace 1']
 
-# Always float System Settings/Preferences
 [[on-window-detected]]
 if.app-id = 'com.apple.systempreferences'
 run = ['layout floating', 'move-node-to-workspace 1']

@@ -50,6 +50,12 @@ alias be="$EDITOR $HOME/brewfile"
 alias bu="brew update && brew upgrade && brew bundle --file $HOME/brewfile"
 
 # ─────────────────────────────────────────────
+# Pacman
+# ─────────────────────────────────────────────
+alias pi="pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S"
+alias pu="pacman -Qq | fzf --multi --preview 'pacman -Qi {1}' | xargs -ro sudo pacman -Rns"
+
+# ─────────────────────────────────────────────
 # LS/FS
 # ─────────────────────────────────────────────
 alias cat="bat"

@@ -78,7 +78,7 @@ alias zshc="clear && zsh"
 # ─────────────────────────────────────────────
 # Tmux
 # ─────────────────────────────────────────────
-alias t="tmux new-session -A -s Main"
+alias t="tmux new-session -A -s MAIN"
 alias ta="tmux attach-session -t"
 alias tn="tmux new-window -c "#{pane_current_path}" $EDITOR ."
 alias tr="tmux rename-session"

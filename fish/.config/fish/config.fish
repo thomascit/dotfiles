@@ -1,5 +1,5 @@
 # Path/Env (macOS only)
-if [ (uname) = "Darwin" ]
+if [ (uname) = Darwin ]
     if [ -x /opt/homebrew/bin/brew ]
         eval (/opt/homebrew/bin/brew shellenv)
     else if [ -x /usr/local/bin/brew ]
@@ -44,23 +44,23 @@ fzf --fish | source
 
 # Yazi Shell wrapper
 function y
-	set tmp (mktemp -t "yazi-cwd.XXXXXX")
-	yazi $argv --cwd-file="$tmp"
-	if read -z cwd < "$tmp"; and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
-		builtin cd -- "$cwd"
-	end
-	rm -f -- "$tmp"
+    set tmp (mktemp -t "yazi-cwd.XXXXXX")
+    yazi $argv --cwd-file="$tmp"
+    if read -z cwd <"$tmp"; and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
+        builtin cd -- "$cwd"
+    end
+    rm -f -- "$tmp"
 end
 
 # Lazygit wrapper function
 function lg
     set -gx LAZYGIT_NEW_DIR_FILE ~/.lazygit/newdir
-    
+
     lazygit $argv
-    
+
     if test -f $LAZYGIT_NEW_DIR_FILE
         cd (cat $LAZYGIT_NEW_DIR_FILE)
-        rm -f $LAZYGIT_NEW_DIR_FILE > /dev/null
+        rm -f $LAZYGIT_NEW_DIR_FILE >/dev/null
     end
 end
 
@@ -71,3 +71,7 @@ bind -M insert jk "if commandline -P; commandline -f cancel; else; set fish_bind
 
 # Theme
 fish_config theme choose "Dracula Official"
+
+# testing
+# opencode
+fish_add_path /home/t0mms1n/.opencode/bin

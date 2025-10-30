@@ -5,19 +5,15 @@
   "spacing" : 0,
   "modules-left": [
   "hyprland/workspaces",
-  "custom/uptime",
-  "cpu"
+  "cpu",
+  "memory"
   ],
 
   "modules-center": ["clock"],
 
   "modules-right": [
-    "custom/pomodoro",
     "bluetooth",
     "network",
-    "pulseaudio", 
-    "backlight",
-    "battery",
   ],
 
   "hyprland/workspaces": {
@@ -53,9 +49,9 @@
   },
 
   "clock": {
-    "timezone": "Asia/Kolkata",
+    "timezone": "America/Chicago",
     "tooltip": false,
-    "format": "{:%H:%M:%S  -  %A, %d}",
+    "format": "{:%I:%M %p  -  %B, %d %G}",
     "interval": 1
   },
 
@@ -73,7 +69,7 @@
     "interval": 1,
     "format": "  {icon0}{icon1}{icon2}{icon3} {usage:>2}%",
     "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
-    "on-click": "ghostty -e htop"
+    "on-click": "ghostty -e btop"
   },
 
   "memory": {
@@ -82,14 +78,6 @@
     "tooltip-format": "Memory"
   },
 
-  "custom/uptime": {
-    "format": "{}",
-    "format-icon": [""], 
-    "tooltip": false,
-    "interval": 1600,
-    "exec": "$HOME/.config/waybar/scripts/uptime.sh"
-  },
-  
   "backlight": {
         "format": "{icon}  {percent}%",
         "format-icons": ["","󰃜", "󰃛", "󰃞","󰃝","󰃟","󰃠"],

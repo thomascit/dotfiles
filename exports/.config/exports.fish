@@ -2,6 +2,7 @@
 set -gx XDG_CONFIG_HOME $HOME/.config
 set -gx STARSHIP_CONFIG $HOME/.config/starship/starship.toml
 set -gx EZA_CONFIG_DIR $HOME/.config/eza
+set -gx TERMINAL ghostty
 set -gx EDITOR nvim
 set -gx HOMEBREW_NO_AUTO_UPDATE 1
 set -gx HOMEBREW_NO_ENV_HINTS 1

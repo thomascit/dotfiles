@@ -2,11 +2,8 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || /usr/local/bin/brew shellenv 2>/dev/null)"
 fi
 
-# Exports
-[ -f "$HOME/.config/exports.sh" ] && source "$HOME/.config/exports.sh"
-
 # Aliases
-[ -f "$HOME/.config/aliases.sh" ] && source "$HOME/.config/aliases.sh"
+[ -f "$HOME/.config/zsh/aliases.sh" ] && source "$HOME/.config/zsh/aliases.sh"
 
 # VI Keybindings handled by zsh-vi-mode plugin
 

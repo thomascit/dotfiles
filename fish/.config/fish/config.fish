@@ -13,8 +13,8 @@ if test -f $HOME/.config/exports.fish
 end
 
 # Aliases
-if test -f $HOME/.config/aliases.fish
-    source $HOME/.config/aliases.fish
+if test -f $HOME/.config/fish/aliases.fish
+    source $HOME/.config/fish/aliases.fish
 end
 
 # Cursor: Settings

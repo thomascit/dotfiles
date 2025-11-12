@@ -27,17 +27,8 @@ set fish_cursor_visual block
 # Disable: Greeting
 set fish_greeting
 
-# Enable: Starship
-starship init fish | source
-
 # Enable: VI Keybindings
 fish_vi_key_bindings
-
-# Enable: Zoxide
-zoxide init fish | source
-
-# Fzf
-fzf --fish | source
 
 # Binds
 bind -M insert \cp fish_clipboard_paste
@@ -46,3 +37,12 @@ bind -M insert jk "if commandline -P; commandline -f cancel; else; set fish_bind
 
 # Theme
 fish_config theme choose Dracula
+
+# Enable: Zoxide
+zoxide init fish | source
+
+# Fzf
+fzf --fish | source
+
+# Enable: Starship
+starship init fish | source

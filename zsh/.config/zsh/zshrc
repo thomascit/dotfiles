@@ -1,3 +1,4 @@
+# Path/Env (macOS only)
 if [[ "$OSTYPE" == "darwin"* ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || /usr/local/bin/brew shellenv 2>/dev/null)"
 fi
@@ -5,36 +6,15 @@ fi
 # Aliases
 [ -f "$HOME/.config/zsh/aliases.sh" ] && source "$HOME/.config/zsh/aliases.sh"
 
-# VI Keybindings handled by zsh-vi-mode plugin
+# Functions
+fpath=(~/.config/zsh/functions $fpath)
+autoload -Uz ~/.config/zsh/functions/*(:t)
 
 # Enable: Zoxide
 eval "$(zoxide init zsh)"
 
-# Fzf: load central config then enable
-[ -f "$HOME/.config/fzfrc.sh" ] && source "$HOME/.config/fzfrc.sh"
+# Fzf
 source <(fzf --zsh)
-
-# Yazi shell wrapper
-function y() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-	yazi "$@" --cwd-file="$tmp"
-	IFS= read -r -d '' cwd < "$tmp"
-	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
-	rm -f -- "$tmp"
-}
-
-# Lazygit wrapper function
-lg()
-{
-    export LAZYGIT_NEW_DIR_FILE=~/.lazygit/newdir
-
-    lazygit "$@"
-
-    if [ -f $LAZYGIT_NEW_DIR_FILE ]; then
-            cd "$(cat $LAZYGIT_NEW_DIR_FILE)"
-            rm -f $LAZYGIT_NEW_DIR_FILE > /dev/null
-    fi
-}
 
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
@@ -49,16 +29,6 @@ source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
-# ZSH-VI Settings
-ZVM_VI_ESCAPE_BINDKEY=jk
-ZVM_SYSTEM_CLIPBOARD_ENABLED=true
-# (MAC)
-ZVM_CLIPBOARD_COPY_CMD='pbcopy'
-ZVM_CLIPBOARD_PASTE_CMD='pbpaste'
-# (LINUX)
-# ZVM_CLIPBOARD_COPY_CMD='xclip -selection clipboard'
-# ZVM_CLIPBOARD_PASTE_CMD='xclip -selection clipboard -o'
-
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
 zinit light-mode for \
@@ -68,6 +38,7 @@ zinit light-mode for \
     zsh-users/zsh-completions \
     jeffreytse/zsh-vi-mode \
     hlissner/zsh-autopair  \
+    dracula/zsh \
 
 # Enable: Starship (after plugins to avoid conflicts)
 eval "$(starship init zsh)"

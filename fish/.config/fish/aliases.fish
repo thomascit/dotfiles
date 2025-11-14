@@ -55,7 +55,6 @@ alias pu "pacman -Qq | fzf --multi --preview 'pacman -Qi {1}' | xargs -ro sudo p
 # ─────────────────────────────────────────────
 # LS/FS
 # ─────────────────────────────────────────────
-alias cat bat
 alias icat "kitten icat"
 alias ls "eza --icons=always --sort=type --header -l --git"
 alias lst "eza --icons=always --sort=type --header -l --git --tree"

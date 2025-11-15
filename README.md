@@ -40,6 +40,18 @@ cp .bashrc .zshrc .vimrc "$HOME/"
 - Figlet, Lolcat, Fastfetch
 
 ### Quick Install (macOS)
+
+**Option 1: Using Brewfile (Recommended)**
+```sh
+# Stow the Brewfile first
+cd ~/dotfiles
+stow -v -R homebrew
+
+# Install all packages
+brew bundle --file ~/Brewfile
+```
+
+**Option 2: Manual Installation**
 ```sh
 # Core tools
 brew install git stow starship zoxide eza bat fzf lazygit tmux vim yazi
@@ -71,7 +83,7 @@ git clone https://github.com/thomascit/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 
 # Stow packages into $HOME (symlinks land under ~/.config/*)
-stow -v -R aerospace alacritty bash bat btop eza fish ghostty hypr i3 kitty lazygit nvim polybar starship tmux vim vimium waybar yazi zsh
+stow -v -R aerospace alacritty bash bat btop eza fish ghostty homebrew hypr i3 kitty lazygit nvim polybar starship tmux vim vimium waybar yazi zsh
 
 # Copy wrapper files that source configs from ~/.config
 cp .bashrc .zshrc .vimrc "$HOME/"
@@ -118,16 +130,19 @@ Includes JetBrainsMono Nerd Font at `fonts/`. Install it so terminals and prompt
 
 ## Tmux + TPM
 
-If TPM is not installed:
+TPM (Tmux Plugin Manager) must be installed manually:
 
 ```sh
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
 ```
 
-Then inside tmux:
+Then start tmux and install plugins:
 
-1. Press `<prefix> + I` (usually `Ctrl+Space` then `I`) to install/update plugins.
-2. Press `<prefix> + r` (usually `Ctrl+Space` then `r`) to reload the config.
+1. Launch tmux: `tmux`
+2. Press `<prefix> + I` (default: `Ctrl+Space` then `I`) to install plugins
+3. Press `<prefix> + r` (default: `Ctrl+Space` then `r`) to reload config
+
+**Note**: Plugins are managed by TPM and are not tracked in this repository.
 
 ## Plugin Managers
 
@@ -139,23 +154,25 @@ Then inside tmux:
 | Package | Description |
 |---------|-------------|
 | `aerospace` | Tiling window manager for macOS |
-| `aliases` | Shared shell aliases for common commands |
 | `alacritty` | Terminal emulator with Dracula theme |
-| `bash`/`zsh`/`fish` | Shells with VI mode, Starship prompt, Zoxide |
+| `bash`/`zsh`/`fish` | Shells with VI mode, Starship prompt, Zoxide, shared aliases |
 | `bat` | Cat replacement with syntax highlighting |
-| `exports` | Environment variables (XDG paths, etc.) |
+| `btop` | Resource monitor with customizable interface |
 | `eza` | Modern ls replacement with icons and Git status |
-| `fzf` | Fuzzy finder for files and history |
 | `ghostty` | Fast GPU-accelerated terminal |
+| `homebrew` | Brewfile for automated package installation (macOS) |
+| `hypr` | Hyprland compositor configuration (Linux) |
 | `i3` | Tiling window manager (Linux) |
 | `kitty` | GPU-based terminal emulator |
 | `lazygit` | Terminal UI for Git |
+| `nvim` | Neovim with LazyVim configuration |
 | `polybar` | Status bar for i3 (Linux) |
 | `starship` | Fast, customizable shell prompt |
 | `tmux` | Terminal multiplexer with TPM plugins |
 | `vim` | Editor with vim-plug and Dracula theme |
 | `vimium` | Browser extension for Vim keybindings |
-| `yazi` | Terminal file manager |
+| `waybar` | Wayland status bar (Linux) |
+| `yazi` | Terminal file manager with plugins |
 
 ## Troubleshooting
 

@@ -1,8 +1,28 @@
-# Dotfiles
+<div align="center">
 
-Personal dotfiles for macOS/Linux. Managed with GNU Stow into `$HOME` via `.stowrc` (most configs live under `~/.config`).
+```
+ ██████╗  ██████╗ ████████╗███████╗██╗██╗     ███████╗███████╗
+ ██╔══██╗██╔═══██╗╚══██╔══╝██╔════╝██║██║     ██╔════╝██╔════╝
+ ██║  ██║██║   ██║   ██║   █████╗  ██║██║     █████╗  ███████╗
+ ██║  ██║██║   ██║   ██║   ██╔══╝  ██║██║     ██╔══╝  ╚════██║
+ ██████╔╝╚██████╔╝   ██║   ██║     ██║███████╗███████╗███████║
+ ╚═════╝  ╚═════╝    ╚═╝   ╚═╝     ╚═╝╚══════╝╚══════╝╚══════╝
+```
+
+### 🎨 Personal Development Environment Configuration
+
+> _Meticulously crafted dotfiles for macOS & Linux developers who appreciate clean configs, powerful tools, and the Dracula aesthetic._
 
 [![Theme: Dracula](https://img.shields.io/badge/Theme-Dracula-bd93f9?style=flat-square)](https://draculatheme.com)
+[![Platform: macOS](https://img.shields.io/badge/Platform-macOS-999999?style=flat-square&logo=apple)](https://www.apple.com/macos/)
+[![Platform: Linux](https://img.shields.io/badge/Platform-Linux-FCC624?style=flat-square&logo=linux&logoColor=black)](https://www.linux.org/)
+[![Manager: GNU Stow](https://img.shields.io/badge/Manager-GNU_Stow-4EAA25?style=flat-square)](https://www.gnu.org/software/stow/)
+
+**Managed with GNU Stow** • **XDG Base Directory Compliant** • **Modular & Portable**
+
+---
+
+</div>
 
 ## Quick Start
 

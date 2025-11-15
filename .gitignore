@@ -1,5 +1,19 @@
 .DS_Store
-tmux/plugins/
+*.swp
+*.swo
+*~
+.netrwhist
 userstate.cbor
+
+# Fish-specific
 fish/.config/fish/fish_variables
+fish/.config/fish/fishd.*
+
+# Tmux plugins (managed by TPM)
+tmux/.config/tmux/plugins/*
+!tmux/.config/tmux/plugins/.gitkeep
+
+# Neovim state
+nvim/.config/nvim/.netrwhist
+nvim/.config/nvim/plugin/
 

@@ -1,0 +1,45 @@
+# Homebrew Bundle for Dotfiles
+# Install with: brew bundle --file ~/Brewfile
+
+# Core tools
+brew "git"
+brew "stow"
+
+# Shell & Prompt
+brew "bash"
+brew "zsh"
+brew "fish"
+brew "starship"
+brew "zoxide"
+
+# File Management
+brew "eza"
+brew "bat"
+brew "fzf"
+brew "yazi"
+
+# Development
+brew "vim"
+brew "neovim"
+brew "tmux"
+brew "lazygit"
+
+# System Monitoring
+brew "btop"
+
+# Optional tools
+brew "figlet"
+brew "lolcat"
+brew "fastfetch"
+
+# Terminal Emulators
+cask "alacritty"
+cask "ghostty"
+cask "kitty"
+
+# Window Managers (macOS)
+# Uncomment if desired
+# cask "nikitabobko/tap/aerospace"
+
+# Fonts
+cask "font-jetbrains-mono-nerd-font"

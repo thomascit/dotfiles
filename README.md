@@ -11,11 +11,11 @@ git clone https://github.com/thomascit/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 
 # Minimal setup (shell + editor + multiplexer)
-stow -v -R zsh starship tmux vim aliases exports
+stow -v -R zsh starship tmux vim
 cp .zshrc "$HOME/"
 
 # Or full setup
-stow -v -R aerospace alacritty aliases bash bat eza exports fish fzf ghostty i3 kitty lazygit polybar starship tmux vim vimium yazi zsh
+stow -v -R aerospace alacritty bash bat btop eza fish ghostty hypr i3 kitty lazygit nvim polybar starship tmux vim vimium waybar yazi zsh
 cp .bashrc .zshrc .vimrc "$HOME/"
 ```
 
@@ -71,7 +71,7 @@ git clone https://github.com/thomascit/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 
 # Stow packages into $HOME (symlinks land under ~/.config/*)
-stow -v -R aerospace alacritty aliases bash bat eza exports fish fzf ghostty i3 kitty lazygit polybar starship tmux vim vimium yazi zsh
+stow -v -R aerospace alacritty bash bat btop eza fish ghostty hypr i3 kitty lazygit nvim polybar starship tmux vim vimium waybar yazi zsh
 
 # Copy wrapper files that source configs from ~/.config
 cp .bashrc .zshrc .vimrc "$HOME/"

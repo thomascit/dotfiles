@@ -5,10 +5,9 @@ fi
 
 # Exports
 export BASH_SILENCE_DEPRECATION_WARNING=1
-[ -f "$HOME/.config/exports/exports.sh" ] && source "$HOME/.config/exports/exports.sh"
 
 # Aliases
-[ -f "$HOME/.config/aliases.sh" ] && . "$HOME/.config/aliases.sh"
+[ -f "$HOME/.config/zsh/aliases.sh" ] && . "$HOME/.config/zsh/aliases.sh"
 
 # Disable: Greeting
 [ -f "$HOME/.hushlogin" ] || touch "$HOME/.hushlogin"
@@ -32,8 +31,7 @@ fi
 # Enable: Zoxide
 eval "$(zoxide init bash)"
 
-# Fzf: load central confi then enable
-[ -f "$HOME/.config/fzfrc.sh" ] && . "$HOME/.config/fzfrc.sh"
+# Fzf
 eval "$(fzf --bash)"
 
 # Yazi shell wrapper

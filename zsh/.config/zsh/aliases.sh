@@ -11,8 +11,6 @@ alias ac="$EDITOR $HOME/.config/alacritty/alacritty.toml"
 alias aec="$EDITOR $HOME/.config/aerospace/aerospace.toml"
 alias als="$EDITOR $HOME/.config/zsh/aliases.*"
 alias brc="$EDITOR $HOME/.config/bash/bashrc"
-alias exs="$EDITOR $HOME/.config/exports.sh"
-alias exf="$EDITOR $HOME/.config/exports.fish"
 alias fc="$EDITOR $HOME/.config/fish/config.fish"
 alias gc="$EDITOR $HOME/.config/ghostty/config"
 alias i3c="$EDITOR $HOME/.config/i3/config"
@@ -43,8 +41,8 @@ alias gs="git status"
 # ─────────────────────────────────────────────
 alias ba="brew autoremove"
 alias bc="brew cleanup"
-alias be="$EDITOR $HOME/brewfile"
-alias bu="brew update && brew upgrade && brew bundle --file $HOME/brewfile"
+alias be="$EDITOR $HOME/Brewfile"
+alias bu="brew update && brew upgrade && brew bundle --file $HOME/Brewfile"
 
 # ─────────────────────────────────────────────
 # Pacman

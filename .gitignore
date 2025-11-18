@@ -4,6 +4,7 @@
 *~
 .netrwhist
 userstate.cbor
+todo.md
 
 # Fish-specific
 fish/.config/fish/fish_variables

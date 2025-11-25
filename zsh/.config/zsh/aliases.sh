@@ -42,7 +42,8 @@ alias gs="git status"
 alias ba="brew autoremove"
 alias bc="brew cleanup"
 alias be="$EDITOR $HOME/Brewfile"
-alias bu="brew update && brew upgrade && brew bundle --file $HOME/Brewfile"
+alias bs="brew search"
+alias bu="brew update && brew upgrade -g"
 
 # ─────────────────────────────────────────────
 # Pacman

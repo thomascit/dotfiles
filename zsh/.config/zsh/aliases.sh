@@ -42,7 +42,10 @@ alias gs="git status"
 alias ba="brew autoremove"
 alias bc="brew cleanup"
 alias be="$EDITOR $HOME/Brewfile"
+alias bi="brew install"
 alias bs="brew search"
+alias bup="brew update"
+alias brm="brew remove"
 alias bu="brew update && brew upgrade -g"
 
 # ─────────────────────────────────────────────

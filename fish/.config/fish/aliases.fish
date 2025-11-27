@@ -9,10 +9,8 @@ alias cc pbcopy
 # ─────────────────────────────────────────────
 alias ac "$EDITOR $HOME/.config/alacritty/alacritty.toml"
 alias aec "$EDITOR $HOME/.config/aerospace/aerospace.toml"
-alias als "$EDITOR $HOME/.config/fish/aliases.*"
+alias als "$EDITOR $HOME/.config/zsh/aliases.*"
 alias brc "$EDITOR $HOME/.config/bash/bashrc"
-alias exs "$EDITOR $HOME/.config/exports.sh"
-alias exf "$EDITOR $HOME/.config/exports.fish"
 alias fc "$EDITOR $HOME/.config/fish/config.fish"
 alias gc "$EDITOR $HOME/.config/ghostty/config"
 alias i3c "$EDITOR $HOME/.config/i3/config"
@@ -43,8 +41,12 @@ alias gs "git status"
 # ─────────────────────────────────────────────
 alias ba "brew autoremove"
 alias bc "brew cleanup"
-alias be "$EDITOR $HOME/brewfile"
-alias bu "brew update && brew upgrade && brew bundle --file $HOME/brewfile"
+alias be "$EDITOR $HOME/Brewfile"
+alias bi "brew install"
+alias bs "brew search"
+alias bu "brew update"
+alias br "brew remove"
+alias bup "brew upgrade -g"
 
 # ─────────────────────────────────────────────
 # Pacman
@@ -55,6 +57,7 @@ alias pu "pacman -Qq | fzf --multi --preview 'pacman -Qi {1}' | xargs -ro sudo p
 # ─────────────────────────────────────────────
 # LS/FS
 # ─────────────────────────────────────────────
+alias cat "bat"
 alias icat "kitten icat"
 alias ls "eza --icons=always --sort=type --header -l --git"
 alias lst "eza --icons=always --sort=type --header -l --git --tree"
@@ -63,7 +66,9 @@ alias rm trash
 # ─────────────────────────────────────────────
 # Source Shells
 # ─────────────────────────────────────────────
+alias sb "source $HOME/.config/bash/bashrc"
 alias sf "source $HOME/.config/fish/config.fish"
+alias sz "source $HOME/.config/zsh/zshrc"
 
 # ─────────────────────────────────────────────
 # Terminal
@@ -101,7 +106,7 @@ end
 # ─────────────────────────────────────────────
 # Docker
 # ─────────────────────────────────────────────
-alias lzd lazydocker
+alias ld lazydocker
 alias dcu "docker compose up -d"
 alias dcd "docker compose down"
 alias dcl "docker compose logs -f --tail=100"

@@ -44,9 +44,9 @@ alias bc="brew cleanup"
 alias be="$EDITOR $HOME/Brewfile"
 alias bi="brew install"
 alias bs="brew search"
-alias bup="brew update"
-alias brm="brew remove"
-alias bu="brew update && brew upgrade -g"
+alias bu="brew update"
+alias br="brew remove"
+alias bup="brew upgrade -g"
 
 # ─────────────────────────────────────────────
 # Pacman
@@ -93,7 +93,7 @@ alias tts='if [ -n "$TMUX" ]; then tmux switch-client -t "${PWD##*/}" 2>/dev/nul
 # ─────────────────────────────────────────────
 # Docker
 # ─────────────────────────────────────────────
-alias lzd="lazydocker"
+alias ld="lazydocker"
 alias dcu="docker compose up -d"
 alias dcd="docker compose down"
 alias dcl="docker compose logs -f --tail=100"

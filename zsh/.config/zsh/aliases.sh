@@ -79,6 +79,7 @@ alias l="clear"
 alias n="$EDITOR ."
 alias r="reset"
 alias zshc="clear && zsh"
+alias oc="opencode"
 
 # ─────────────────────────────────────────────
 # Tmux

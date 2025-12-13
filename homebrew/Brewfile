@@ -17,6 +17,7 @@ brew "eza"
 brew "bat"
 brew "fzf"
 brew "yazi"
+brew "watch"
 
 # Development
 brew "vim"

@@ -54,7 +54,8 @@ cp .bashrc .zshrc .vimrc "$HOME/"
 
 ### Platform Specific
 - **macOS**: Aerospace (tiling window manager)
-- **Linux**: i3 (window manager), Polybar (status bar)
+- **Linux (X11)**: i3 (window manager), Polybar (status bar)
+- **Linux (Wayland)**: Hyprland (compositor), Waybar (status bar)
 
 ### Optional
 - Figlet, Lolcat, Fastfetch

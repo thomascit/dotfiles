@@ -99,3 +99,8 @@ alias dcu="docker compose up -d"
 alias dcd="docker compose down"
 alias dcl="docker compose logs -f --tail=100"
 alias dcb="docker compose build --no-cache"
+# ─────────────────────────────────────────────
+# Pomodoro
+# ─────────────────────────────────────────────
+alias p50="work 50m && rest 10m"
+alias p20="work 20m && rest 10m"

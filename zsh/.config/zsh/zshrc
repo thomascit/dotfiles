@@ -32,7 +32,6 @@ zinit light-mode for \
     zsh-users/zsh-completions \
     jeffreytse/zsh-vi-mode \
     hlissner/zsh-autopair  \
-    dracula/zsh \
 
 # Enable: Zoxide
 eval "$(zoxide init zsh)"

@@ -27,7 +27,7 @@ fi
 PACKAGES_TERM="bash zsh fish starship tmux vim nvim bat btop eza lazygit yazi"
 
 # Platform-specific packages
-PACKAGES_MACOS="aerospace alacritty ghostty kitty homebrew"
+PACKAGES_MACOS="aerospace alacritty ghostty kitty"
 PACKAGES_LINUX="alacritty ghostty kitty hypr i3 polybar waybar"
 
 # Combined full packages (built dynamically based on OS)
@@ -179,13 +179,13 @@ install_linux_packages() {
 }
 
 install_packages_from_brewfile() {
-    if [[ ! -f "$DOTFILES_DIR/homebrew/Brewfile" ]]; then
+    if [[ ! -f "$DOTFILES_DIR/reference/Brewfile" ]]; then
         warn "Brewfile not found, skipping package installation"
         return
     fi
 
     info "Installing packages from Brewfile..."
-    brew bundle --file="$DOTFILES_DIR/homebrew/Brewfile" || warn "Some packages may have failed to install"
+    brew bundle --file="$DOTFILES_DIR/reference/Brewfile" || warn "Some packages may have failed to install"
     success "Brewfile packages installed"
 }
 

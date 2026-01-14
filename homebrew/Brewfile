@@ -1,6 +1,10 @@
 # Homebrew Bundle for Dotfiles
 # Install with: brew bundle --file ~/Brewfile
 
+# Taps
+tap "caarlos0/tap"
+tap "nikitabobko/tap"
+
 # Core tools
 brew "git"
 brew "stow"
@@ -29,7 +33,7 @@ brew "lazygit"
 brew "btop"
 
 # Pomodoro / Notifications
-brew "caarlos0/tap/timer"
+brew "timer"
 brew "terminal-notifier"
 
 # Terminal Emulators
@@ -38,7 +42,7 @@ cask "ghostty"
 cask "kitty"
 
 # Window Managers (macOS)
-cask "nikitabobko/tap/aerospace"
+cask "aerospace"
 
 # Fonts
 cask "font-jetbrains-mono-nerd-font"

@@ -228,7 +228,7 @@ The setup script installs all plugin managers automatically, or they bootstrap t
 | `btop` | Resource monitor with customizable interface |
 | `eza` | Modern ls replacement with icons and Git status |
 | `ghostty` | Fast GPU-accelerated terminal |
-| `reference/Brewfile` | Homebrew packages for macOS (not stowed, use with `brew bundle`) |
+| `reference/Brewfile` | Homebrew packages for macOS |
 | `hypr` | Hyprland compositor configuration (Linux) |
 | `i3` | Tiling window manager (Linux) |
 | `kitty` | GPU-based terminal emulator |

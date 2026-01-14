@@ -92,12 +92,9 @@ Plug 'vim-airline/vim-airline'
 
 call plug#end()
 
-" Airline configuration
+" Airline configuration (settings that don't require functions)
 let g:airline#extensions#tabline#enabled = 1           " enable airline tabline
 let g:airline#extensions#tabline#formatter = 'unique_tail'
-
-" Airline status line customization
-let g:airline_section_a = airline#section#create_left(['mode', 'paste'])  " show vim mode and paste status
 let g:airline_section_b = ''                               " remove branch section
 let g:airline_section_c = '%f'                             " show only filename
 let g:airline_section_x = ''                               " remove filetype
@@ -111,8 +108,11 @@ let g:airline#extensions#tabline#left_sep = ''             " tabline left separa
 let g:airline#extensions#tabline#right_sep = ''            " tabline right separator
 let g:airline_skip_empty_sections = 1                      " skip empty sections
 
-" Colorscheme
-colorscheme dracula
+" Airline section_a customization (requires function, set after plugins load)
+autocmd VimEnter * if exists('*airline#section#create_left') | let g:airline_section_a = airline#section#create_left(['mode', 'paste']) | endif
+
+" Colorscheme (silent to avoid error on first run before plugins install)
+silent! colorscheme dracula
 
 " Transparent background overrides (keep after colorscheme)
 hi Normal       ctermbg=NONE guibg=NONE

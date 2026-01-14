@@ -7,6 +7,11 @@ if [ (uname) = Darwin ]
     end
 end
 
+# Variables / Environment
+if test -f $HOME/.config/fish/variables.fish
+    source $HOME/.config/fish/variables.fish
+end
+
 # Aliases
 if test -f $HOME/.config/fish/aliases.fish
     source $HOME/.config/fish/aliases.fish

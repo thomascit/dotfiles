@@ -246,7 +246,8 @@ install_additional_linux_tools() {
         esac
         curl -fsSL "https://github.com/neovim/neovim/releases/latest/download/nvim-${nvim_arch}.tar.gz" | sudo tar -xz -C /opt
         sudo ln -sf "/opt/nvim-${nvim_arch}/bin/nvim" /usr/local/bin/nvim
-        success "neovim installed to /usr/local/bin"
+        sudo ln -sf "/opt/nvim-${nvim_arch}/bin/nvim" /usr/bin/nvim
+        success "neovim installed to /usr/local/bin and /usr/bin"
     fi
 
     # eza (modern ls)

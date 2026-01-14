@@ -70,6 +70,11 @@ prompt() {
     echo -e "${PURPLE}[?]${NC} $1"
 }
 
+# Read user input (works even when script is piped)
+read_input() {
+    read -r "$@" < /dev/tty
+}
+
 command_exists() {
     command -v "$1" &>/dev/null
 }
@@ -421,7 +426,7 @@ select_packages() {
     fi
     echo ""
     prompt "Enter packages to install (space-separated):"
-    read -r SELECTED_PACKAGES
+    read_input SELECTED_PACKAGES
 }
 
 get_platform_packages() {
@@ -524,7 +529,7 @@ run_custom_install() {
     if [[ "$OS" == "macos" ]]; then
         install_homebrew
         prompt "Install packages from Brewfile? (y/n)"
-        read -r install_brew
+        read_input install_brew
         if [[ "$install_brew" =~ ^[Yy]$ ]]; then
             install_packages_from_brewfile
         fi
@@ -554,7 +559,7 @@ run_stow_only() {
     echo "  4) Custom"
     echo ""
     prompt "Select packages to stow [1-4]:"
-    read -r stow_choice
+    read_input stow_choice
 
     case "$stow_choice" in
         1) stow_packages "$PACKAGES_FULL" ;;
@@ -657,7 +662,7 @@ main() {
     while true; do
         show_menu
         prompt "Select an option [1-7]:"
-        read -r choice
+        read_input choice
 
         case "$choice" in
             1) run_full_install; break ;;

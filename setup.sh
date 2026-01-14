@@ -212,8 +212,22 @@ install_additional_linux_tools() {
     # fzf
     if ! command_exists fzf; then
         info "Installing fzf..."
-        git clone --depth 1 https://github.com/junegunn/fzf.git "$HOME/.fzf"
-        "$HOME/.fzf/install" --all --no-bash --no-fish
+        case "$DISTRO" in
+            ubuntu|debian|pop)
+                sudo apt install -y fzf
+                ;;
+            fedora)
+                sudo dnf install -y fzf
+                ;;
+            arch|manjaro|endeavouros)
+                sudo pacman -S --noconfirm fzf
+                ;;
+            *)
+                # Fallback: install from git
+                git clone --depth 1 https://github.com/junegunn/fzf.git "$HOME/.fzf"
+                "$HOME/.fzf/install" --all --no-bash --no-fish
+                ;;
+        esac
     fi
 
     # eza (modern ls)

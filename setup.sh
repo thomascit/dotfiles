@@ -160,13 +160,13 @@ install_linux_packages() {
     case "$DISTRO" in
         ubuntu|debian|pop)
             sudo apt update
-            sudo apt install -y git stow curl zsh fish tmux vim neovim ripgrep build-essential
+            sudo apt install -y git stow curl zsh fish tmux vim ripgrep build-essential
             ;;
         fedora)
-            sudo dnf install -y git stow curl zsh fish tmux vim neovim ripgrep
+            sudo dnf install -y git stow curl zsh fish tmux vim ripgrep
             ;;
         arch|manjaro|endeavouros)
-            sudo pacman -Syu --noconfirm git stow curl zsh fish tmux vim neovim ripgrep base-devel
+            sudo pacman -Syu --noconfirm git stow curl zsh fish tmux vim ripgrep base-devel
             ;;
         *)
             warn "Unknown distribution: $DISTRO"
@@ -233,6 +233,20 @@ install_additional_linux_tools() {
         esac
         curl -fsSL "https://github.com/junegunn/fzf/releases/download/v${fzf_version}/fzf-${fzf_version}-linux_${fzf_arch}.tar.gz" | sudo tar -xz -C /usr/local/bin
         success "fzf ${fzf_version} installed to /usr/local/bin"
+    fi
+
+    # neovim (install latest from GitHub)
+    if ! command_exists nvim; then
+        info "Installing neovim..."
+        local nvim_arch
+        case "$(uname -m)" in
+            x86_64) nvim_arch="linux-x86_64" ;;
+            aarch64|arm64) nvim_arch="linux-arm64" ;;
+            *) nvim_arch="linux-x86_64" ;;
+        esac
+        curl -fsSL "https://github.com/neovim/neovim/releases/latest/download/nvim-${nvim_arch}.tar.gz" | sudo tar -xz -C /opt
+        sudo ln -sf "/opt/nvim-${nvim_arch}/bin/nvim" /usr/local/bin/nvim
+        success "neovim installed to /usr/local/bin"
     fi
 
     # eza (modern ls)

@@ -398,7 +398,7 @@ install_fonts() {
             success "Fonts installed via Homebrew"
         else
             # Fallback: Copy from local fonts directory
-            local fonts_dir="$DOTFILES_DIR/fonts"
+            local fonts_dir="$DOTFILES_DIR/reference/fonts"
             if [[ -d "$fonts_dir" ]]; then
                 local dest="$HOME/Library/Fonts"
                 mkdir -p "$dest"

@@ -1,8 +1,15 @@
 # ─────────────────────────────────────────────
-# Clipboard
+# Clipboard (OS-specific)
 # ─────────────────────────────────────────────
-alias c "xclip -i -selection clipboard"
-alias cc pbcopy
+if test (uname) = Darwin
+    alias c pbcopy
+else
+    if test -n "$WAYLAND_DISPLAY"
+        alias c wl-copy
+    else
+        alias c "xclip -i -selection clipboard"
+    end
+end
 
 # ─────────────────────────────────────────────
 # Edit Config Files
@@ -80,6 +87,7 @@ alias l clear
 alias n "$EDITOR ."
 alias r reset
 alias zshc "clear && zsh"
+alias oc opencode
 
 # ─────────────────────────────────────────────
 # Tmux
@@ -111,3 +119,9 @@ alias dcu "docker compose up -d"
 alias dcd "docker compose down"
 alias dcl "docker compose logs -f --tail=100"
 alias dcb "docker compose build --no-cache"
+
+# ─────────────────────────────────────────────
+# Pomodoro
+# ─────────────────────────────────────────────
+alias p50 "work 50m && rest 10m"
+alias p20 "work 20m && rest 10m"

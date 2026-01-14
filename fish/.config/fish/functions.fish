@@ -19,3 +19,19 @@ function lg
         rm -f $LAZYGIT_NEW_DIR_FILE >/dev/null
     end
 end
+
+# Pomodoro work timer (default 20m)
+function work
+    set -l duration (test -n "$argv[1]"; and echo $argv[1]; or echo "20m")
+    timer $duration; and terminal-notifier -message 'Pomodoro' \
+        -title 'Work Timer is up! Take a Break 😊' \
+        -sound Crystal
+end
+
+# Pomodoro rest timer (default 5m)
+function rest
+    set -l duration (test -n "$argv[1]"; and echo $argv[1]; or echo "5m")
+    timer $duration; and terminal-notifier -message 'Pomodoro' \
+        -title 'Break is over! Get back to work 😬' \
+        -sound Crystal
+end

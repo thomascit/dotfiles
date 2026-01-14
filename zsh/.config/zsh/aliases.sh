@@ -4,7 +4,9 @@
 if [[ "$OSTYPE" == "darwin"* ]]; then
     alias c="pbcopy"
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    if [[ -n "$WAYLAND_DISPLAY" ]]; then
+    if grep -qiE "(microsoft|wsl)" /proc/version 2>/dev/null; then
+        alias c="clip.exe"
+    elif [[ -n "$WAYLAND_DISPLAY" ]]; then
         alias c="wl-copy"
     else
         alias c="xclip -i -selection clipboard"

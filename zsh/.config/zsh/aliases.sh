@@ -1,8 +1,15 @@
 # ─────────────────────────────────────────────
-# Clipboard
+# Clipboard (OS-specific)
 # ─────────────────────────────────────────────
-alias c="xclip -i -selection clipboard"
-alias cc="pbcopy"
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    alias c="pbcopy"
+elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    if [[ -n "$WAYLAND_DISPLAY" ]]; then
+        alias c="wl-copy"
+    else
+        alias c="xclip -i -selection clipboard"
+    fi
+fi
 
 # ─────────────────────────────────────────────
 # Edit Config Files

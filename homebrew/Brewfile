@@ -17,7 +17,7 @@ brew "eza"
 brew "bat"
 brew "fzf"
 brew "yazi"
-brew "watch"
+brew "trash"
 
 # Development
 brew "vim"
@@ -28,10 +28,9 @@ brew "lazygit"
 # System Monitoring
 brew "btop"
 
-# Optional tools
-brew "figlet"
-brew "lolcat"
-brew "fastfetch"
+# Pomodoro / Notifications
+brew "caarlos0/tap/timer"
+brew "terminal-notifier"
 
 # Terminal Emulators
 cask "alacritty"
@@ -39,8 +38,7 @@ cask "ghostty"
 cask "kitty"
 
 # Window Managers (macOS)
-# Uncomment if desired
-# cask "nikitabobko/tap/aerospace"
+cask "nikitabobko/tap/aerospace"
 
 # Fonts
 cask "font-jetbrains-mono-nerd-font"

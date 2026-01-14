@@ -63,8 +63,8 @@ Package groups:
 | Group | Packages |
 |-------|----------|
 | **Terminal** | bash, zsh, fish, starship, tmux, vim, nvim, bat, btop, eza, lazygit, yazi |
-| **macOS** | aerospace, alacritty, ghostty, kitty, homebrew, vimium |
-| **Linux** | alacritty, ghostty, kitty, hypr, i3, polybar, waybar, vimium |
+| **macOS** | aerospace, alacritty, ghostty, kitty, homebrew |
+| **Linux** | alacritty, ghostty, kitty, hypr, i3, polybar, waybar |
 
 ### Manual Setup
 
@@ -77,10 +77,10 @@ stow -v -R bash zsh fish starship tmux vim nvim bat btop eza lazygit yazi
 cp .bashrc .zshrc .vimrc "$HOME/"
 
 # macOS platform packages
-stow -v -R aerospace alacritty ghostty kitty homebrew vimium
+stow -v -R aerospace alacritty ghostty kitty homebrew
 
 # Linux platform packages
-stow -v -R alacritty ghostty kitty hypr i3 polybar waybar vimium
+stow -v -R alacritty ghostty kitty hypr i3 polybar waybar
 ```
 
 ## Prerequisites
@@ -154,8 +154,8 @@ cd ~/dotfiles
 stow -v -R bash zsh fish starship tmux vim nvim bat btop eza lazygit yazi
 
 # Stow platform-specific packages (choose one)
-stow -v -R aerospace alacritty ghostty kitty homebrew vimium  # macOS
-stow -v -R alacritty ghostty kitty hypr i3 polybar waybar vimium  # Linux
+stow -v -R aerospace alacritty ghostty kitty homebrew  # macOS
+stow -v -R alacritty ghostty kitty hypr i3 polybar waybar  # Linux
 
 # Copy wrapper files that source configs from ~/.config
 cp .bashrc .zshrc .vimrc "$HOME/"
@@ -247,7 +247,7 @@ The setup script installs all plugin managers automatically, or they bootstrap t
 | `starship` | Fast, customizable shell prompt |
 | `tmux` | Terminal multiplexer with TPM plugins |
 | `vim` | Editor with vim-plug and Dracula theme |
-| `vimium` | Browser extension for Vim keybindings |
+| `browser/vimium` | Vimium browser extension settings (manual import) |
 | `waybar` | Wayland status bar (Linux) |
 | `yazi` | Terminal file manager with plugins |
 

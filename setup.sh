@@ -27,8 +27,8 @@ fi
 PACKAGES_TERM="bash zsh fish starship tmux vim nvim bat btop eza lazygit yazi"
 
 # Platform-specific packages
-PACKAGES_MACOS="aerospace alacritty ghostty kitty homebrew vimium"
-PACKAGES_LINUX="alacritty ghostty kitty hypr i3 polybar waybar vimium"
+PACKAGES_MACOS="aerospace alacritty ghostty kitty homebrew"
+PACKAGES_LINUX="alacritty ghostty kitty hypr i3 polybar waybar"
 
 # Combined full packages (built dynamically based on OS)
 PACKAGES_FULL=""

@@ -223,25 +223,20 @@ install_additional_linux_tools() {
         esac
     fi
 
-    # fzf
+    # fzf (install latest from GitHub for shell integration support)
     if ! command_exists fzf; then
         info "Installing fzf..."
-        case "$DISTRO" in
-            ubuntu|debian|pop)
-                sudo apt install -y fzf
-                ;;
-            fedora)
-                sudo dnf install -y fzf
-                ;;
-            arch|manjaro|endeavouros)
-                sudo pacman -S --noconfirm fzf
-                ;;
-            *)
-                # Fallback: install from git
-                git clone --depth 1 https://github.com/junegunn/fzf.git "$HOME/.fzf"
-                "$HOME/.fzf/install" --all --no-bash --no-fish
-                ;;
+        local fzf_version
+        fzf_version=$(curl -sS https://api.github.com/repos/junegunn/fzf/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | tr -d 'v')
+        local fzf_arch
+        case "$(uname -m)" in
+            x86_64) fzf_arch="amd64" ;;
+            aarch64|arm64) fzf_arch="arm64" ;;
+            armv7l) fzf_arch="armv7" ;;
+            *) fzf_arch="amd64" ;;
         esac
+        curl -fsSL "https://github.com/junegunn/fzf/releases/download/v${fzf_version}/fzf-${fzf_version}-linux_${fzf_arch}.tar.gz" | sudo tar -xz -C /usr/local/bin
+        success "fzf ${fzf_version} installed to /usr/local/bin"
     fi
 
     # eza (modern ls)

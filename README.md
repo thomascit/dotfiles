@@ -224,7 +224,7 @@ The setup script installs all plugin managers automatically, or they bootstrap t
 
 - **Vim**: uses `vim-plug`. The `vim/.config/vim/vimrc` auto-installs vim-plug and triggers `PlugInstall` on first run.
 - **Zsh**: uses `zinit` (zdharma-continuum) for plugins. `zsh/.config/zsh/zshrc` bootstraps zinit if missing.
-- **Tmux**: uses `TPM`. Install plugins with `<prefix> + I` after launching tmux.
+- **Tmux**: uses `TPM`. Unlike vim-plug and zinit, TPM does not auto-bootstrap. Install manually or use `./setup.sh --plugins`, then press `<prefix> + I` to install plugins.
 
 ## What's Inside
 

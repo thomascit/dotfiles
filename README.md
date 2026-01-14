@@ -26,17 +26,61 @@
 
 ## Quick Start
 
+### Automated Setup (Recommended)
+
+```sh
+# One-liner installation (clones to ~/dotfiles)
+curl -fsSL https://raw.githubusercontent.com/thomascit/dotfiles/main/setup.sh | bash
+
+# Or clone anywhere you prefer, then run setup
+git clone https://github.com/thomascit/dotfiles.git ~/dotfiles
+cd ~/dotfiles
+./setup.sh
+```
+
+> **Note**: The setup script auto-detects its location. Clone the repo wherever you like and run `./setup.sh` from there.
+
+The setup script provides:
+- **Full installation**: Terminal + platform-specific packages
+- **Terminal only**: Shells, editors, utilities (bash, zsh, fish, vim, nvim, tmux, etc.)
+- **Platform only**: Window managers, terminal emulators, GUI apps
+- **Custom installation**: Choose specific packages
+- **Plugin managers**: TPM, vim-plug, and zinit
+- **Fonts**: JetBrainsMono Nerd Font
+
+Command line options:
+```sh
+./setup.sh --full       # Full install (terminal + platform)
+./setup.sh --terminal   # Terminal packages only
+./setup.sh --platform   # Platform-specific packages only
+./setup.sh --stow       # Stow packages only (no software install)
+./setup.sh --plugins    # Install plugin managers only
+./setup.sh --fonts      # Install fonts only
+./setup.sh --help       # Show help and package lists
+```
+
+Package groups:
+| Group | Packages |
+|-------|----------|
+| **Terminal** | bash, zsh, fish, starship, tmux, vim, nvim, bat, btop, eza, lazygit, yazi |
+| **macOS** | aerospace, alacritty, ghostty, kitty, homebrew, vimium |
+| **Linux** | alacritty, ghostty, kitty, hypr, i3, polybar, waybar, vimium |
+
+### Manual Setup
+
 ```sh
 git clone https://github.com/thomascit/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 
-# Minimal setup (shell + editor + multiplexer)
-stow -v -R zsh starship tmux vim
-cp .zshrc "$HOME/"
-
-# Or full setup
-stow -v -R aerospace alacritty bash bat btop eza fish ghostty hypr i3 kitty lazygit nvim polybar starship tmux vim vimium waybar yazi zsh
+# Terminal only (works on any system)
+stow -v -R bash zsh fish starship tmux vim nvim bat btop eza lazygit yazi
 cp .bashrc .zshrc .vimrc "$HOME/"
+
+# macOS platform packages
+stow -v -R aerospace alacritty ghostty kitty homebrew vimium
+
+# Linux platform packages
+stow -v -R alacritty ghostty kitty hypr i3 polybar waybar vimium
 ```
 
 ## Prerequisites
@@ -64,12 +108,11 @@ cp .bashrc .zshrc .vimrc "$HOME/"
 
 **Option 1: Using Brewfile (Recommended)**
 ```sh
-# Stow the Brewfile first
-cd ~/dotfiles
+# Stow the Brewfile first (from your dotfiles directory)
 stow -v -R homebrew
 
 # Install all packages
-brew bundle --file ~/Brewfile
+brew bundle --file "$HOME/Brewfile"
 ```
 
 **Option 2: Manual Installation**
@@ -99,12 +142,20 @@ sudo apt install git stow zsh fish tmux vim
 
 ## Install
 
+For automated installation, use the setup script (see [Quick Start](#quick-start)).
+
+### Manual Installation
+
 ```sh
 git clone https://github.com/thomascit/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 
-# Stow packages into $HOME (symlinks land under ~/.config/*)
-stow -v -R aerospace alacritty bash bat btop eza fish ghostty homebrew hypr i3 kitty lazygit nvim polybar starship tmux vim vimium waybar yazi zsh
+# Stow terminal packages (cross-platform)
+stow -v -R bash zsh fish starship tmux vim nvim bat btop eza lazygit yazi
+
+# Stow platform-specific packages (choose one)
+stow -v -R aerospace alacritty ghostty kitty homebrew vimium  # macOS
+stow -v -R alacritty ghostty kitty hypr i3 polybar waybar vimium  # Linux
 
 # Copy wrapper files that source configs from ~/.config
 cp .bashrc .zshrc .vimrc "$HOME/"
@@ -144,14 +195,16 @@ Dracula is the preferred theme across these dotfiles. Many configs default to a 
 
 ## Fonts
 
-Includes JetBrainsMono Nerd Font at `fonts/`. Install it so terminals and prompts render glyphs:
+Includes JetBrainsMono Nerd Font at `fonts/`. The setup script installs fonts automatically, or install manually:
 
-- macOS: open the `.ttf` file to install.
-- Linux: copy to `~/.local/share/fonts` then run `fc-cache -f -v`.
+- macOS: open the `.ttf` file to install, or run `./setup.sh --fonts`
+- Linux: copy to `~/.local/share/fonts` then run `fc-cache -f -v`
+
+> **Note**: Terminal configs (alacritty, ghostty, kitty) are pre-configured to use JetBrainsMono Nerd Font - no manual setup needed.
 
 ## Tmux + TPM
 
-TPM (Tmux Plugin Manager) must be installed manually:
+TPM (Tmux Plugin Manager) is installed automatically by the setup script, or install manually:
 
 ```sh
 git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
@@ -167,8 +220,11 @@ Then start tmux and install plugins:
 
 ## Plugin Managers
 
-- Vim: uses `vim-plug`. The `vim/.config/vim/vimrc` auto-installs vim-plug and triggers `PlugInstall` on first run.
-- Zsh: uses `zinit` (zdharma-continuum) for plugins. `zsh/.config/zsh/zshrc` bootstraps zinit if missing.
+The setup script installs all plugin managers automatically, or they bootstrap themselves on first use:
+
+- **Vim**: uses `vim-plug`. The `vim/.config/vim/vimrc` auto-installs vim-plug and triggers `PlugInstall` on first run.
+- **Zsh**: uses `zinit` (zdharma-continuum) for plugins. `zsh/.config/zsh/zshrc` bootstraps zinit if missing.
+- **Tmux**: uses `TPM`. Install plugins with `<prefix> + I` after launching tmux.
 
 ## What's Inside
 
@@ -199,7 +255,7 @@ Then start tmux and install plugins:
 
 **Stow conflicts?** Use `stow -D <package>` to unstow first, then re-stow with `stow -R <package>`.
 
-**Fonts not working?** Ensure JetBrainsMono Nerd Font is installed and your terminal is configured to use it.
+**Fonts not working?** Ensure JetBrainsMono Nerd Font is installed. Terminal configs are pre-configured to use it.
 
 **TPM plugins not loading?** In tmux, press `Ctrl+Space` then `I` to install plugins.
 

@@ -677,7 +677,10 @@ main() {
     echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     echo ""
     echo -e "${CYAN}Next steps:${NC}"
-    echo "  1. Restart your terminal or run: source ~/.zshrc"
+    echo "  1. Restart your terminal or source your shell config:"
+    echo "     - Zsh:  source ~/.zshrc"
+    echo "     - Bash: source ~/.bashrc"
+    echo "     - Fish: source ~/.config/fish/config.fish"
     echo "  2. Start tmux and press Ctrl+Space then I to install plugins"
     echo ""
 }

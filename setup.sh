@@ -679,7 +679,6 @@ main() {
     echo -e "${CYAN}Next steps:${NC}"
     echo "  1. Restart your terminal or run: source ~/.zshrc"
     echo "  2. Start tmux and press Ctrl+Space then I to install plugins"
-    echo "  3. Open vim and run :PlugInstall"
     echo ""
 }
 

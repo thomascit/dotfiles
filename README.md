@@ -30,7 +30,7 @@
 
 ```sh
 # One-liner installation (clones to ~/dotfiles)
-curl -fsSL https://raw.githubusercontent.com/thomascit/dotfiles/main/setup.sh | bash
+bash <(curl -fsSL https://raw.githubusercontent.com/thomascit/dotfiles/main/setup.sh)
 
 # Or clone anywhere you prefer, then run setup
 git clone https://github.com/thomascit/dotfiles.git ~/dotfiles

@@ -203,24 +203,20 @@ install_starship() {
 install_additional_linux_tools() {
     info "Installing additional tools for Linux..."
 
-    # zoxide
+    # zoxide (install latest from GitHub)
     if ! command_exists zoxide; then
         info "Installing zoxide..."
-        case "$DISTRO" in
-            ubuntu|debian|pop)
-                sudo apt install -y zoxide
-                ;;
-            fedora)
-                sudo dnf install -y zoxide
-                ;;
-            arch|manjaro|endeavouros)
-                sudo pacman -S --noconfirm zoxide
-                ;;
-            *)
-                # Fallback: install from official script
-                curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
-                ;;
+        local zoxide_version
+        zoxide_version=$(curl -sS https://api.github.com/repos/ajeetdsouza/zoxide/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | tr -d 'v')
+        local zoxide_arch
+        case "$(uname -m)" in
+            x86_64) zoxide_arch="x86_64" ;;
+            aarch64|arm64) zoxide_arch="aarch64" ;;
+            armv7l) zoxide_arch="armv7" ;;
+            *) zoxide_arch="x86_64" ;;
         esac
+        curl -fsSL "https://github.com/ajeetdsouza/zoxide/releases/download/v${zoxide_version}/zoxide-${zoxide_version}-${zoxide_arch}-unknown-linux-musl.tar.gz" | sudo tar -xz -C /usr/local/bin zoxide
+        success "zoxide ${zoxide_version} installed to /usr/local/bin"
     fi
 
     # fzf (install latest from GitHub for shell integration support)

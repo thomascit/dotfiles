@@ -104,6 +104,27 @@ detect_os() {
 # Installation Functions
 # ─────────────────────────────────────────────────────────────────────────────
 
+install_xcode_cli() {
+    if [[ "$OS" != "macos" ]]; then
+        return
+    fi
+
+    if xcode-select -p &>/dev/null; then
+        success "Xcode Command Line Tools already installed"
+        return
+    fi
+
+    info "Installing Xcode Command Line Tools..."
+    xcode-select --install
+
+    # Wait for installation to complete
+    until xcode-select -p &>/dev/null; do
+        sleep 5
+    done
+
+    success "Xcode Command Line Tools installed"
+}
+
 install_homebrew() {
     if command_exists brew; then
         success "Homebrew already installed"
@@ -449,6 +470,7 @@ run_full_install() {
     clone_dotfiles
 
     if [[ "$OS" == "macos" ]]; then
+        install_xcode_cli
         install_homebrew
         install_packages_from_brewfile
     elif [[ "$OS" == "linux" ]]; then
@@ -474,6 +496,7 @@ run_terminal_install() {
     clone_dotfiles
 
     if [[ "$OS" == "macos" ]]; then
+        install_xcode_cli
         install_homebrew
         brew install git stow bash zsh fish starship tmux vim neovim bat btop eza lazygit yazi
     elif [[ "$OS" == "linux" ]]; then
@@ -501,6 +524,7 @@ run_platform_install() {
     clone_dotfiles
 
     if [[ "$OS" == "macos" ]]; then
+        install_xcode_cli
         install_homebrew
         brew install --cask alacritty ghostty kitty
         # aerospace requires tap
@@ -527,6 +551,7 @@ run_custom_install() {
     fi
 
     if [[ "$OS" == "macos" ]]; then
+        install_xcode_cli
         install_homebrew
         prompt "Install packages from Brewfile? (y/n)"
         read_input install_brew

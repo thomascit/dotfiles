@@ -192,7 +192,7 @@ Dracula is the preferred theme across these dotfiles. Many configs default to a 
 
 ## Fonts
 
-Includes JetBrainsMono Nerd Font at `fonts/`. The setup script installs fonts automatically, or install manually:
+Includes JetBrainsMono Nerd Font at `reference/fonts/`. The setup script installs fonts automatically, or install manually:
 
 - macOS: open the `.ttf` file to install, or run `./setup.sh --fonts`
 - Linux: copy to `~/.local/share/fonts` then run `fc-cache -f -v`
@@ -258,6 +258,6 @@ The setup script installs all plugin managers automatically, or they bootstrap t
 
 ## Notes
 
-- `.stowrc` targets `$HOME` and ignores `fonts`. Run stow from the repo root.
+- `.stowrc` targets `$HOME` and ignores `reference`. Run stow from the repo root.
 - Wrapper dotfiles (`.bashrc`, `.zshrc`, `.vimrc`) live in the repo root and simply source configs from `~/.config/*`.
 - macOS Homebrew: shell configs detect `/opt/homebrew` (Apple Silicon) or `/usr/local` (Intel) and initialize whichever exists.

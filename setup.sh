@@ -93,6 +93,12 @@ detect_os() {
             else
                 DISTRO="unknown"
             fi
+            # Detect WSL
+            if grep -qiE "(microsoft|wsl)" /proc/version 2>/dev/null; then
+                IS_WSL=true
+            else
+                IS_WSL=false
+            fi
             ;;
         *)
             error "Unsupported operating system: $OSTYPE"
@@ -154,13 +160,13 @@ install_linux_packages() {
     case "$DISTRO" in
         ubuntu|debian|pop)
             sudo apt update
-            sudo apt install -y git stow curl zsh tmux vim build-essential
+            sudo apt install -y git stow curl zsh fish tmux vim build-essential
             ;;
         fedora)
-            sudo dnf install -y git stow curl zsh tmux vim
+            sudo dnf install -y git stow curl zsh fish tmux vim
             ;;
         arch|manjaro|endeavouros)
-            sudo pacman -Syu --noconfirm git stow curl zsh tmux vim base-devel
+            sudo pacman -Syu --noconfirm git stow curl zsh fish tmux vim base-devel
             ;;
         *)
             warn "Unknown distribution: $DISTRO"
@@ -425,7 +431,7 @@ show_menu() {
     echo ""
     echo -e "${CYAN}Installation Options:${NC}"
     echo "  1) Full installation (terminal + platform-specific packages)"
-    echo "  2) Terminal only (shells, editors, utilities)"
+    echo "  2) Terminal only (shells, editors, utilities) - recommended for WSL"
     echo "  3) Platform only (window managers, terminals, GUI apps)"
     echo "  4) Custom installation"
     echo "  5) Install plugin managers only"
@@ -498,7 +504,7 @@ run_terminal_install() {
     if [[ "$OS" == "macos" ]]; then
         install_xcode_cli
         install_homebrew
-        brew install git stow bash zsh fish starship tmux vim neovim bat btop eza lazygit yazi
+        brew install git stow bash zsh fish starship zoxide fzf tmux vim neovim bat btop eza lazygit yazi trash caarlos0/tap/timer terminal-notifier
     elif [[ "$OS" == "linux" ]]; then
         install_linux_packages
         install_starship
@@ -624,6 +630,9 @@ main() {
     info "Detected OS: $OS"
     if [[ "$OS" == "linux" ]]; then
         info "Detected distro: ${DISTRO:-unknown}"
+        if [[ "$IS_WSL" == true ]]; then
+            info "Running in WSL"
+        fi
     fi
 
     # Check for required commands

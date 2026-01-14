@@ -4,7 +4,9 @@
 if test (uname) = Darwin
     alias c pbcopy
 else
-    if test -n "$WAYLAND_DISPLAY"
+    if grep -qiE "(microsoft|wsl)" /proc/version 2>/dev/null
+        alias c clip.exe
+    else if test -n "$WAYLAND_DISPLAY"
         alias c wl-copy
     else
         alias c "xclip -i -selection clipboard"

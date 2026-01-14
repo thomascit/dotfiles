@@ -206,7 +206,21 @@ install_additional_linux_tools() {
     # zoxide
     if ! command_exists zoxide; then
         info "Installing zoxide..."
-        curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+        case "$DISTRO" in
+            ubuntu|debian|pop)
+                sudo apt install -y zoxide
+                ;;
+            fedora)
+                sudo dnf install -y zoxide
+                ;;
+            arch|manjaro|endeavouros)
+                sudo pacman -S --noconfirm zoxide
+                ;;
+            *)
+                # Fallback: install from official script
+                curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+                ;;
+        esac
     fi
 
     # fzf

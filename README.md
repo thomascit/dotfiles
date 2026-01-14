@@ -63,7 +63,7 @@ Package groups:
 | Group | Packages |
 |-------|----------|
 | **Terminal** | bash, zsh, fish, starship, tmux, vim, nvim, bat, btop, eza, lazygit, yazi |
-| **macOS** | aerospace, alacritty, ghostty, kitty, homebrew |
+| **macOS** | aerospace, alacritty, ghostty, kitty |
 | **Linux** | alacritty, ghostty, kitty, hypr, i3, polybar, waybar |
 
 ### Manual Setup
@@ -77,7 +77,7 @@ stow -v -R bash zsh fish starship tmux vim nvim bat btop eza lazygit yazi
 cp .bashrc .zshrc .vimrc "$HOME/"
 
 # macOS platform packages
-stow -v -R aerospace alacritty ghostty kitty homebrew
+stow -v -R aerospace alacritty ghostty kitty
 
 # Linux platform packages
 stow -v -R alacritty ghostty kitty hypr i3 polybar waybar
@@ -108,11 +108,8 @@ stow -v -R alacritty ghostty kitty hypr i3 polybar waybar
 
 **Option 1: Using Brewfile (Recommended)**
 ```sh
-# Stow the Brewfile first (from your dotfiles directory)
-stow -v -R homebrew
-
-# Install all packages
-brew bundle --file "$HOME/Brewfile"
+# Install all packages from the reference Brewfile
+brew bundle --file ~/dotfiles/reference/Brewfile
 ```
 
 **Option 2: Manual Installation**
@@ -154,7 +151,7 @@ cd ~/dotfiles
 stow -v -R bash zsh fish starship tmux vim nvim bat btop eza lazygit yazi
 
 # Stow platform-specific packages (choose one)
-stow -v -R aerospace alacritty ghostty kitty homebrew  # macOS
+stow -v -R aerospace alacritty ghostty kitty  # macOS
 stow -v -R alacritty ghostty kitty hypr i3 polybar waybar  # Linux
 
 # Copy wrapper files that source configs from ~/.config
@@ -237,7 +234,7 @@ The setup script installs all plugin managers automatically, or they bootstrap t
 | `btop` | Resource monitor with customizable interface |
 | `eza` | Modern ls replacement with icons and Git status |
 | `ghostty` | Fast GPU-accelerated terminal |
-| `homebrew` | Brewfile for automated package installation (macOS) |
+| `reference/Brewfile` | Homebrew packages for macOS (not stowed, use with `brew bundle`) |
 | `hypr` | Hyprland compositor configuration (Linux) |
 | `i3` | Tiling window manager (Linux) |
 | `kitty` | GPU-based terminal emulator |
@@ -247,7 +244,7 @@ The setup script installs all plugin managers automatically, or they bootstrap t
 | `starship` | Fast, customizable shell prompt |
 | `tmux` | Terminal multiplexer with TPM plugins |
 | `vim` | Editor with vim-plug and Dracula theme |
-| `browser/vimium` | Vimium browser extension settings (manual import) |
+| `reference/vimium` | Vimium browser extension settings (manual import) |
 | `waybar` | Wayland status bar (Linux) |
 | `yazi` | Terminal file manager with plugins |
 

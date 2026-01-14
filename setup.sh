@@ -160,13 +160,13 @@ install_linux_packages() {
     case "$DISTRO" in
         ubuntu|debian|pop)
             sudo apt update
-            sudo apt install -y git stow curl zsh fish tmux vim build-essential
+            sudo apt install -y git stow curl zsh fish tmux vim neovim ripgrep build-essential
             ;;
         fedora)
-            sudo dnf install -y git stow curl zsh fish tmux vim
+            sudo dnf install -y git stow curl zsh fish tmux vim neovim ripgrep
             ;;
         arch|manjaro|endeavouros)
-            sudo pacman -Syu --noconfirm git stow curl zsh fish tmux vim base-devel
+            sudo pacman -Syu --noconfirm git stow curl zsh fish tmux vim neovim ripgrep base-devel
             ;;
         *)
             warn "Unknown distribution: $DISTRO"

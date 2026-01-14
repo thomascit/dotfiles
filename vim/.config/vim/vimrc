@@ -39,8 +39,13 @@ set ttyfast                   " Faster scrolling
 " File handling
 set hidden                    " Allow hidden buffers (switch files without saving)
 set noswapfile                " Disable swap files
-set undodir=~/.vim/undodir    " Directory to store undo history files
+set undodir=$HOME/.local/state/vim/undo    " XDG-compliant undo directory
 set undofile                  " Enable persistent undo across sessions
+
+" Create undo directory if it doesn't exist
+if !isdirectory($HOME . '/.local/state/vim/undo')
+    call mkdir($HOME . '/.local/state/vim/undo', 'p', 0700)
+endif
 
 " Encoding
 set encoding=utf-8            " Set encoding

@@ -101,9 +101,6 @@ stow -v -R alacritty ghostty kitty hypr i3 polybar waybar
 - **Linux (X11)**: i3 (window manager), Polybar (status bar)
 - **Linux (Wayland)**: Hyprland (compositor), Waybar (status bar)
 
-### Optional
-- Figlet, Lolcat, Fastfetch
-
 ### Quick Install (macOS)
 
 **Option 1: Using Brewfile (Recommended)**
@@ -119,9 +116,6 @@ brew install git stow starship zoxide eza bat fzf lazygit tmux vim yazi
 
 # Terminal emulators
 brew install --cask alacritty ghostty kitty
-
-# Optional tools
-brew install figlet lolcat fastfetch 
 ```
 
 ### Quick Install (Linux)

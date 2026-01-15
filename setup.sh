@@ -488,7 +488,7 @@ install_fonts() {
         fi
     elif [[ "$OS" == "linux" ]]; then
         # Linux: Copy from local fonts directory
-        local fonts_dir="$DOTFILES_DIR/fonts"
+        local fonts_dir="$DOTFILES_DIR/reference/fonts"
         if [[ -d "$fonts_dir" ]]; then
             local dest="$HOME/.local/share/fonts"
             mkdir -p "$dest"

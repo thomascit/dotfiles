@@ -160,16 +160,16 @@ install_linux_packages() {
     case "$DISTRO" in
         debian|ubuntu|mint|kali|parrotos)
             sudo apt update
-            sudo apt install -y git stow curl zsh fish tmux vim ripgrep build-essential
+            sudo apt install -y git stow curl zsh fish tmux vim ripgrep build-essential btop lazygit
             ;;
         fedora|asahi)
-            sudo dnf install -y git stow curl zsh fish tmux vim ripgrep
+            sudo dnf install -y git stow curl zsh fish tmux vim ripgrep btop lazygit
             ;;
         opensuse*)
-            sudo zypper install -y git stow curl zsh fish tmux vim ripgrep
+            sudo zypper install -y git stow curl zsh fish tmux vim ripgrep btop lazygit
             ;;
         arch|steamos|cachyos|bazzite)
-            sudo pacman -Syu --noconfirm git stow curl zsh fish tmux vim ripgrep base-devel
+            sudo pacman -Syu --noconfirm git stow curl zsh fish tmux vim ripgrep base-devel btop lazygit
             ;;
         *)
             warn "Unknown distribution: $DISTRO"
@@ -298,6 +298,11 @@ install_additional_linux_tools() {
                 warn "Please install bat manually"
                 ;;
         esac
+    fi
+
+    # yazi (file manager) - not in most repos, manual install required
+    if ! command_exists yazi; then
+        warn "yazi not available in repos, install manually: https://github.com/sxyazi/yazi"
     fi
 
     success "Additional Linux tools installed"

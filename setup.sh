@@ -158,14 +158,17 @@ install_linux_packages() {
     info "Installing base packages for Linux..."
 
     case "$DISTRO" in
-        ubuntu|debian|pop)
+        debian|ubuntu|mint|kali|parrotos)
             sudo apt update
             sudo apt install -y git stow curl zsh fish tmux vim ripgrep build-essential
             ;;
-        fedora)
+        fedora|asahi)
             sudo dnf install -y git stow curl zsh fish tmux vim ripgrep
             ;;
-        arch|manjaro|endeavouros)
+        opensuse*)
+            sudo zypper install -y git stow curl zsh fish tmux vim ripgrep
+            ;;
+        arch|steamos|cachyos|bazzite)
             sudo pacman -Syu --noconfirm git stow curl zsh fish tmux vim ripgrep base-devel
             ;;
         *)
@@ -253,10 +256,16 @@ install_additional_linux_tools() {
     # eza (modern ls)
     if ! command_exists eza; then
         case "$DISTRO" in
-            ubuntu|debian|pop)
+            debian|ubuntu|mint|kali|parrotos)
                 sudo apt install -y eza 2>/dev/null || warn "eza not available in repos, install manually"
                 ;;
-            arch|manjaro|endeavouros)
+            fedora|asahi)
+                sudo dnf install -y eza 2>/dev/null || warn "eza not available in repos, install manually"
+                ;;
+            opensuse*)
+                sudo zypper install -y eza 2>/dev/null || warn "eza not available in repos, install manually"
+                ;;
+            arch|steamos|cachyos|bazzite)
                 sudo pacman -S --noconfirm eza
                 ;;
             *)
@@ -268,7 +277,7 @@ install_additional_linux_tools() {
     # bat
     if ! command_exists bat && ! command_exists batcat; then
         case "$DISTRO" in
-            ubuntu|debian|pop)
+            debian|ubuntu|mint|kali|parrotos)
                 sudo apt install -y bat
                 # Create symlink if installed as batcat
                 if command_exists batcat && ! command_exists bat; then
@@ -276,7 +285,13 @@ install_additional_linux_tools() {
                     ln -sf /usr/bin/batcat "$HOME/.local/bin/bat"
                 fi
                 ;;
-            arch|manjaro|endeavouros)
+            fedora|asahi)
+                sudo dnf install -y bat
+                ;;
+            opensuse*)
+                sudo zypper install -y bat
+                ;;
+            arch|steamos|cachyos|bazzite)
                 sudo pacman -S --noconfirm bat
                 ;;
             *)

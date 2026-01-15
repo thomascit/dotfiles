@@ -322,6 +322,22 @@ stow_packages() {
     done
 }
 
+unstow_packages() {
+    local packages="$1"
+
+    info "Unstowing packages: $packages"
+    cd "$DOTFILES_DIR"
+
+    for package in $packages; do
+        if [[ -d "$DOTFILES_DIR/$package" ]]; then
+            stow -v -D "$package" 2>&1 || true
+            success "Unstowed $package"
+        else
+            warn "Package not found: $package"
+        fi
+    done
+}
+
 copy_wrapper_files() {
     info "Copying wrapper files to \$HOME..."
 
@@ -333,6 +349,22 @@ copy_wrapper_files() {
             fi
             cp "$DOTFILES_DIR/$file" "$HOME/$file"
             success "Copied $file"
+        fi
+    done
+}
+
+remove_wrapper_files() {
+    info "Removing wrapper files from \$HOME..."
+
+    for file in $WRAPPER_FILES; do
+        if [[ -f "$HOME/$file" ]]; then
+            rm "$HOME/$file"
+            success "Removed $file"
+            # Restore backup if it exists
+            if [[ -f "$HOME/$file.backup" ]]; then
+                mv "$HOME/$file.backup" "$HOME/$file"
+                info "Restored $file from backup"
+            fi
         fi
     done
 }
@@ -382,6 +414,31 @@ install_zinit() {
     mkdir -p "$(dirname "$zinit_dir")"
     git clone https://github.com/zdharma-continuum/zinit "$zinit_dir"
     success "Zinit installed"
+}
+
+remove_plugin_managers() {
+    info "Removing plugin managers..."
+
+    # TPM
+    local tpm_dir="$HOME/.config/tmux/plugins/tpm"
+    if [[ -d "$tpm_dir" ]]; then
+        rm -rf "$tpm_dir"
+        success "Removed TPM"
+    fi
+
+    # vim-plug
+    local plug_file="$HOME/.vim/autoload/plug.vim"
+    if [[ -f "$plug_file" ]]; then
+        rm "$plug_file"
+        success "Removed vim-plug"
+    fi
+
+    # Zinit
+    local zinit_dir="$HOME/.local/share/zinit"
+    if [[ -d "$zinit_dir" ]]; then
+        rm -rf "$zinit_dir"
+        success "Removed Zinit"
+    fi
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -470,7 +527,8 @@ show_menu() {
     echo "  4) Custom installation"
     echo "  5) Install plugin managers only"
     echo "  6) Install fonts only"
-    echo "  7) Exit"
+    echo "  7) Uninstall / remove dotfiles"
+    echo "  8) Exit"
     echo ""
 }
 
@@ -653,6 +711,68 @@ run_fonts_only() {
     install_fonts
 }
 
+run_uninstall() {
+    info "Running uninstall..."
+    build_full_packages
+
+    echo ""
+    echo -e "${CYAN}Uninstall Options:${NC}"
+    echo "  1) Full uninstall (unstow all + remove plugins + remove wrappers)"
+    echo "  2) Unstow packages only"
+    echo "  3) Remove plugin managers only"
+    echo "  4) Remove wrapper files only"
+    echo "  5) Cancel"
+    echo ""
+    prompt "Select uninstall option [1-5]:"
+    read_input uninstall_choice
+
+    case "$uninstall_choice" in
+        1)
+            prompt "This will remove all dotfiles symlinks and plugin managers. Continue? (y/n)"
+            read_input confirm
+            if [[ "$confirm" =~ ^[Yy]$ ]]; then
+                unstow_packages "$PACKAGES_FULL"
+                remove_wrapper_files
+                remove_plugin_managers
+                success "Full uninstall complete!"
+            else
+                info "Cancelled"
+            fi
+            ;;
+        2)
+            echo ""
+            echo -e "${CYAN}Unstow Options:${NC}"
+            echo "  1) All packages"
+            echo "  2) Terminal only"
+            echo "  3) Platform only"
+            echo "  4) Custom"
+            echo ""
+            prompt "Select packages to unstow [1-4]:"
+            read_input unstow_choice
+
+            case "$unstow_choice" in
+                1) unstow_packages "$PACKAGES_FULL" ;;
+                2) unstow_packages "$PACKAGES_TERM" ;;
+                3) unstow_packages "$(get_platform_packages)" ;;
+                4) select_packages; unstow_packages "$SELECTED_PACKAGES" ;;
+                *) warn "Invalid option" ;;
+            esac
+            ;;
+        3)
+            remove_plugin_managers
+            ;;
+        4)
+            remove_wrapper_files
+            ;;
+        5)
+            info "Cancelled"
+            ;;
+        *)
+            warn "Invalid option"
+            ;;
+    esac
+}
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Main
 # ─────────────────────────────────────────────────────────────────────────────
@@ -704,6 +824,10 @@ main() {
             run_fonts_only
             exit 0
             ;;
+        --uninstall|-u)
+            run_uninstall
+            exit 0
+            ;;
         --help|-h)
             echo "Usage: $0 [OPTION]"
             echo ""
@@ -714,6 +838,7 @@ main() {
             echo "  --stow, -s      Stow packages only (no software installation)"
             echo "  --plugins, -p   Install plugin managers only"
             echo "  --fonts         Install fonts only"
+            echo "  --uninstall, -u Remove dotfiles symlinks and plugin managers"
             echo "  --help, -h      Show this help message"
             echo ""
             echo "Package groups:"
@@ -729,7 +854,7 @@ main() {
     # Interactive mode
     while true; do
         show_menu
-        prompt "Select an option [1-7]:"
+        prompt "Select an option [1-8]:"
         read_input choice
 
         case "$choice" in
@@ -739,7 +864,8 @@ main() {
             4) run_custom_install; break ;;
             5) run_plugin_managers_only; break ;;
             6) run_fonts_only; break ;;
-            7) info "Exiting..."; exit 0 ;;
+            7) run_uninstall; break ;;
+            8) info "Exiting..."; exit 0 ;;
             *) warn "Invalid option, please try again" ;;
         esac
     done

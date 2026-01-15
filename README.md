@@ -60,6 +60,7 @@ The setup script handles OS detection, package installation, stowing configs, an
 ./setup.sh --stow       # Stow packages only (no software install)
 ./setup.sh --plugins    # Install plugin managers only
 ./setup.sh --fonts      # Install fonts only
+./setup.sh --uninstall  # Remove dotfiles symlinks and plugins
 ./setup.sh --help       # Show help and package lists
 ```
 
@@ -117,6 +118,20 @@ The setup script installs all plugin managers automatically, or they bootstrap t
 - **Vim**: uses `vim-plug` - auto-installs and runs `PlugInstall` on first run
 - **Zsh**: uses `zinit` - bootstraps automatically if missing
 - **Tmux**: uses `TPM` - requires `<prefix> + I` to install plugins after setup
+
+## Uninstall
+
+To remove dotfiles symlinks and plugin managers:
+
+```sh
+./setup.sh --uninstall
+```
+
+Options:
+- **Full uninstall**: Unstow all packages, remove wrapper files, remove plugin managers
+- **Unstow only**: Remove symlinks (keeps software installed)
+- **Remove plugins only**: Remove TPM, vim-plug, Zinit
+- **Remove wrappers only**: Remove `.bashrc`, `.zshrc`, `.vimrc` from `$HOME`
 
 ## Troubleshooting
 

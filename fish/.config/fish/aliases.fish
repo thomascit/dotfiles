@@ -58,10 +58,22 @@ alias br "brew remove"
 alias bup "brew upgrade -g"
 
 # ─────────────────────────────────────────────
-# Pacman
+# Pacman (Arch)
 # ─────────────────────────────────────────────
 alias pi "pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S"
 alias pu "pacman -Qq | fzf --multi --preview 'pacman -Qi {1}' | xargs -ro sudo pacman -Rns"
+
+# ─────────────────────────────────────────────
+# APT (Debian/Ubuntu)
+# ─────────────────────────────────────────────
+alias ai "apt-cache pkgnames | fzf --multi --preview 'apt-cache show {1}' | xargs -ro sudo apt install"
+alias au "dpkg --get-selections | grep -v deinstall | cut -f1 | fzf --multi --preview 'apt-cache show {1}' | xargs -ro sudo apt remove"
+
+# ─────────────────────────────────────────────
+# DNF (Fedora/RHEL)
+# ─────────────────────────────────────────────
+alias di "dnf list available | tail -n +2 | cut -d' ' -f1 | fzf --multi --preview 'dnf info {1}' | xargs -ro sudo dnf install"
+alias du "dnf list installed | tail -n +2 | cut -d' ' -f1 | fzf --multi --preview 'dnf info {1}' | xargs -ro sudo dnf remove"
 
 # ─────────────────────────────────────────────
 # LS/FS

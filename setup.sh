@@ -928,9 +928,22 @@ run_full_install() {
     install_fonts
 
     success "Full installation complete!"
+
+    # Prompt for optional terminal emulators
     echo ""
-    info "To install terminal emulators, run this script again and select option 3"
-    info "To install window managers, run this script again and select option 4"
+    prompt "Would you like to install terminal emulators? (y/n)"
+    read_input install_terminals
+    if [[ "$install_terminals" =~ ^[Yy]$ ]]; then
+        install_terminals
+    fi
+
+    # Prompt for optional window managers
+    echo ""
+    prompt "Would you like to install window managers? (y/n)"
+    read_input install_wm
+    if [[ "$install_wm" =~ ^[Yy]$ ]]; then
+        install_window_managers
+    fi
 }
 
 run_terminals_install() {

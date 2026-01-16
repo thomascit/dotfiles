@@ -160,16 +160,16 @@ install_linux_packages() {
     case "$DISTRO" in
         debian|ubuntu|mint|kali|parrotos)
             sudo apt update
-            sudo apt install -y git stow curl zsh fish tmux vim ripgrep build-essential btop lazygit
+            sudo apt install -y git stow curl zsh fish tmux vim ripgrep build-essential btop lazygit trash-cli
             ;;
         fedora|asahi)
-            sudo dnf install -y git stow curl zsh fish tmux vim ripgrep btop lazygit
+            sudo dnf install -y git stow curl zsh fish tmux vim ripgrep btop lazygit trash-cli
             ;;
         opensuse*)
-            sudo zypper install -y git stow curl zsh fish tmux vim ripgrep btop lazygit
+            sudo zypper install -y git stow curl zsh fish tmux vim ripgrep btop lazygit trash-cli
             ;;
         arch|steamos|cachyos|bazzite)
-            sudo pacman -Syu --noconfirm git stow curl zsh fish tmux vim ripgrep base-devel btop lazygit
+            sudo pacman -Syu --noconfirm git stow curl zsh fish tmux vim ripgrep base-devel btop lazygit trash-cli
             ;;
         *)
             warn "Unknown distribution: $DISTRO"
@@ -305,7 +305,42 @@ install_additional_linux_tools() {
         warn "yazi not available in repos, install manually: https://github.com/sxyazi/yazi"
     fi
 
+    # kitten (Kitty terminal helper tool)
+    if ! command_exists kitten; then
+        info "Installing kitten..."
+        curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin installer=kitten dest="$HOME/.local"
+        success "kitten installed to ~/.local/bin"
+    fi
+
     success "Additional Linux tools installed"
+}
+
+install_kitty() {
+    if command_exists kitty; then
+        success "Kitty terminal already installed"
+        return
+    fi
+
+    info "Installing Kitty terminal..."
+    curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
+
+    # Create symlinks so kitty/kitten are in PATH
+    mkdir -p "$HOME/.local/bin"
+    ln -sf "$HOME/.local/kitty.app/bin/kitty" "$HOME/.local/bin/kitty"
+    ln -sf "$HOME/.local/kitty.app/bin/kitten" "$HOME/.local/bin/kitten"
+
+    # Desktop integration (for application launchers)
+    mkdir -p "$HOME/.local/share/applications"
+    cp "$HOME/.local/kitty.app/share/applications/kitty.desktop" "$HOME/.local/share/applications/"
+    cp "$HOME/.local/kitty.app/share/applications/kitty-open.desktop" "$HOME/.local/share/applications/"
+
+    # Update icon path and exec path in desktop file
+    sed -i "s|Icon=kitty|Icon=$HOME/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" \
+        "$HOME/.local/share/applications/kitty.desktop"
+    sed -i "s|Exec=kitty|Exec=$HOME/.local/kitty.app/bin/kitty|g" \
+        "$HOME/.local/share/applications/kitty.desktop"
+
+    success "Kitty terminal installed to ~/.local/kitty.app"
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -547,8 +582,9 @@ show_menu() {
     echo "  4) Custom installation"
     echo "  5) Install plugin managers only"
     echo "  6) Install fonts only"
-    echo "  7) Uninstall / remove dotfiles"
-    echo "  8) Exit"
+    echo "  7) Install Kitty terminal (Linux only)"
+    echo "  8) Uninstall / remove dotfiles"
+    echo "  9) Exit"
     echo ""
 }
 
@@ -731,6 +767,17 @@ run_fonts_only() {
     install_fonts
 }
 
+run_kitty_install() {
+    if [[ "$OS" != "linux" ]]; then
+        warn "Kitty installer is for Linux only. On macOS, use: brew install --cask kitty"
+        return
+    fi
+
+    create_xdg_dirs
+    install_kitty
+    success "Kitty installation complete!"
+}
+
 run_uninstall() {
     info "Running uninstall..."
     build_full_packages
@@ -844,6 +891,10 @@ main() {
             run_fonts_only
             exit 0
             ;;
+        --kitty|-k)
+            run_kitty_install
+            exit 0
+            ;;
         --uninstall|-u)
             run_uninstall
             exit 0
@@ -858,6 +909,7 @@ main() {
             echo "  --stow, -s      Stow packages only (no software installation)"
             echo "  --plugins, -p   Install plugin managers only"
             echo "  --fonts         Install fonts only"
+            echo "  --kitty, -k     Install Kitty terminal (Linux only)"
             echo "  --uninstall, -u Remove dotfiles symlinks and plugin managers"
             echo "  --help, -h      Show this help message"
             echo ""
@@ -874,7 +926,7 @@ main() {
     # Interactive mode
     while true; do
         show_menu
-        prompt "Select an option [1-8]:"
+        prompt "Select an option [1-9]:"
         read_input choice
 
         case "$choice" in
@@ -884,8 +936,9 @@ main() {
             4) run_custom_install; break ;;
             5) run_plugin_managers_only; break ;;
             6) run_fonts_only; break ;;
-            7) run_uninstall; break ;;
-            8) info "Exiting..."; exit 0 ;;
+            7) run_kitty_install; break ;;
+            8) run_uninstall; break ;;
+            9) info "Exiting..."; exit 0 ;;
             *) warn "Invalid option, please try again" ;;
         esac
     done

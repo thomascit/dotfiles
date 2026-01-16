@@ -61,8 +61,8 @@ bindsym $mod+Shift+q kill
 
 # change focus
 bindsym $mod+h focus left
-bindsym $mod+j focus up
-bindsym $mod+k focus down
+bindsym $mod+j focus down
+bindsym $mod+k focus up
 bindsym $mod+l focus right
 
 # alternatively, you can use the cursor keys:
@@ -73,8 +73,8 @@ bindsym $mod+Right focus right
 
 # move focused window
 bindsym $mod+Shift+h move left
-bindsym $mod+Shift+j move up
-bindsym $mod+Shift+k move down
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
 
 # alternatively, you can use the cursor keys:
@@ -90,7 +90,7 @@ bindsym $mod+- split h
 bindsym $mod+\ split v
 
 # enter fullscreen mode for the focused container
-bindsym $mod+Return fullscreen toggle
+bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+s layout stacking
@@ -157,14 +157,11 @@ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 mode "resize" {
         # These bindings trigger as soon as you enter the resize mode
 
-        # Pressing left will shrink the window’s width.
-        # Pressing right will grow the window’s width.
-        # Pressing up will shrink the window’s height.
-        # Pressing down will grow the window’s height.
-        bindsym j resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym l resize shrink height 10 px or 10 ppt
-        bindsym semicolon resize grow width 10 px or 10 ppt
+        # Vim-style resize: h/j/k/l
+        bindsym h resize shrink width 10 px or 10 ppt
+        bindsym j resize grow height 10 px or 10 ppt
+        bindsym k resize shrink height 10 px or 10 ppt
+        bindsym l resize grow width 10 px or 10 ppt
 
         # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 10 ppt
@@ -203,6 +200,7 @@ exec --no-startup-id picom -c
 exec xautolock -time 15 -locker '~/.config/i3/lock.sh'
 
 # Custom shortcuts
+bindsym $mod+t exec kitty
 bindsym $mod+Shift+t exec ghostty
 bindsym $mod+Shift+b exec zen-browser
 bindsym $mod+Shift+f exec nemo
@@ -210,8 +208,8 @@ bindsym $mod+Shift+m exec spotify
 bindsym $mod+Shift+n exec obsidian
 bindsym $mod+Shift+d exec discord
 bindsym $mod+Shift+g exec steam
-bindsym $mod+Shift+i exec $HOME/Scripts/lock.sh
-bindsym $mod+Shift+y exec rofi -show drun
+bindsym $mod+i exec ~/.config/i3/lock.sh
+bindsym Mod1+space exec rofi -show drun
 
 # Dracula Colors
 # class                 border  bground text    indicator child_border
@@ -223,4 +221,3 @@ client.placeholder      #282A36 #282A36 #F8F8F2 #282A36   #282A36
 client.background       #F8F8F2
 
 for_window [class=".*"] border normal 1
-for_window [class="obsidian"] border normal 1

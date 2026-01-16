@@ -218,43 +218,57 @@ install_starship() {
     fi
 
     info "Installing Starship prompt..."
-    curl -sS https://starship.rs/install.sh | sh -s -- -y
-    success "Starship installed"
+    if curl -sS https://starship.rs/install.sh | sh -s -- -y 2>/dev/null; then
+        success "Starship installed"
+    else
+        warn "starship: failed to install"
+    fi
 }
 
 install_additional_linux_tools() {
     info "Installing additional tools for Linux..."
+    local failed_tools=()
 
     # zoxide (install latest from GitHub)
     if ! command_exists zoxide; then
         info "Installing zoxide..."
-        local zoxide_version
-        zoxide_version=$(curl -sS https://api.github.com/repos/ajeetdsouza/zoxide/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | tr -d 'v')
-        local zoxide_arch
-        case "$(uname -m)" in
-            x86_64) zoxide_arch="x86_64" ;;
-            aarch64|arm64) zoxide_arch="aarch64" ;;
-            armv7l) zoxide_arch="armv7" ;;
-            *) zoxide_arch="x86_64" ;;
-        esac
-        curl -fsSL "https://github.com/ajeetdsouza/zoxide/releases/download/v${zoxide_version}/zoxide-${zoxide_version}-${zoxide_arch}-unknown-linux-musl.tar.gz" | sudo tar -xz -C /usr/local/bin zoxide
-        success "zoxide ${zoxide_version} installed to /usr/local/bin"
+        if zoxide_version=$(curl -sS https://api.github.com/repos/ajeetdsouza/zoxide/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | tr -d 'v') && [[ -n "$zoxide_version" ]]; then
+            local zoxide_arch
+            case "$(uname -m)" in
+                x86_64) zoxide_arch="x86_64" ;;
+                aarch64|arm64) zoxide_arch="aarch64" ;;
+                armv7l) zoxide_arch="armv7" ;;
+                *) zoxide_arch="x86_64" ;;
+            esac
+            if curl -fsSL "https://github.com/ajeetdsouza/zoxide/releases/download/v${zoxide_version}/zoxide-${zoxide_version}-${zoxide_arch}-unknown-linux-musl.tar.gz" | sudo tar -xz -C /usr/local/bin zoxide 2>/dev/null; then
+                success "zoxide ${zoxide_version} installed"
+            else
+                failed_tools+=("zoxide")
+            fi
+        else
+            failed_tools+=("zoxide")
+        fi
     fi
 
     # fzf (install latest from GitHub for shell integration support)
     if ! command_exists fzf; then
         info "Installing fzf..."
-        local fzf_version
-        fzf_version=$(curl -sS https://api.github.com/repos/junegunn/fzf/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | tr -d 'v')
-        local fzf_arch
-        case "$(uname -m)" in
-            x86_64) fzf_arch="amd64" ;;
-            aarch64|arm64) fzf_arch="arm64" ;;
-            armv7l) fzf_arch="armv7" ;;
-            *) fzf_arch="amd64" ;;
-        esac
-        curl -fsSL "https://github.com/junegunn/fzf/releases/download/v${fzf_version}/fzf-${fzf_version}-linux_${fzf_arch}.tar.gz" | sudo tar -xz -C /usr/local/bin
-        success "fzf ${fzf_version} installed to /usr/local/bin"
+        if fzf_version=$(curl -sS https://api.github.com/repos/junegunn/fzf/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | tr -d 'v') && [[ -n "$fzf_version" ]]; then
+            local fzf_arch
+            case "$(uname -m)" in
+                x86_64) fzf_arch="amd64" ;;
+                aarch64|arm64) fzf_arch="arm64" ;;
+                armv7l) fzf_arch="armv7" ;;
+                *) fzf_arch="amd64" ;;
+            esac
+            if curl -fsSL "https://github.com/junegunn/fzf/releases/download/v${fzf_version}/fzf-${fzf_version}-linux_${fzf_arch}.tar.gz" | sudo tar -xz -C /usr/local/bin 2>/dev/null; then
+                success "fzf ${fzf_version} installed"
+            else
+                failed_tools+=("fzf")
+            fi
+        else
+            failed_tools+=("fzf")
+        fi
     fi
 
     # neovim (install latest from GitHub)
@@ -266,35 +280,41 @@ install_additional_linux_tools() {
             aarch64|arm64) nvim_arch="linux-arm64" ;;
             *) nvim_arch="linux-x86_64" ;;
         esac
-        curl -fsSL "https://github.com/neovim/neovim/releases/latest/download/nvim-${nvim_arch}.tar.gz" | sudo tar -xz -C /opt
-        sudo ln -sf "/opt/nvim-${nvim_arch}/bin/nvim" /usr/local/bin/nvim
-        sudo ln -sf "/opt/nvim-${nvim_arch}/bin/nvim" /usr/bin/nvim
-        success "neovim installed to /usr/local/bin and /usr/bin"
+        if curl -fsSL "https://github.com/neovim/neovim/releases/latest/download/nvim-${nvim_arch}.tar.gz" | sudo tar -xz -C /opt 2>/dev/null; then
+            sudo ln -sf "/opt/nvim-${nvim_arch}/bin/nvim" /usr/local/bin/nvim
+            sudo ln -sf "/opt/nvim-${nvim_arch}/bin/nvim" /usr/bin/nvim
+            success "neovim installed"
+        else
+            failed_tools+=("neovim")
+        fi
     fi
 
     # eza (modern ls)
     if ! command_exists eza; then
+        info "Installing eza..."
         case "$DISTRO" in
             debian|ubuntu|mint|kali|parrotos)
-                sudo apt install -y eza 2>/dev/null || warn "eza: failed to install, not available in repos"
+                sudo apt install -y eza 2>/dev/null || failed_tools+=("eza")
                 ;;
             fedora|asahi)
-                sudo dnf install -y eza 2>/dev/null || warn "eza: failed to install, not available in repos"
+                sudo dnf install -y eza 2>/dev/null || failed_tools+=("eza")
                 ;;
             opensuse*)
-                sudo zypper install -y eza 2>/dev/null || warn "eza: failed to install, not available in repos"
+                sudo zypper install -y eza 2>/dev/null || failed_tools+=("eza")
                 ;;
             arch|steamos|cachyos|bazzite)
-                sudo pacman -S --noconfirm eza 2>/dev/null || warn "eza: failed to install"
+                sudo pacman -S --noconfirm eza 2>/dev/null || failed_tools+=("eza")
                 ;;
             *)
-                warn "eza: please install manually - https://github.com/eza-community/eza"
+                failed_tools+=("eza")
                 ;;
         esac
+        command_exists eza && success "eza installed"
     fi
 
     # bat
     if ! command_exists bat && ! command_exists batcat; then
+        info "Installing bat..."
         case "$DISTRO" in
             debian|ubuntu|mint|kali|parrotos)
                 if sudo apt install -y bat 2>/dev/null; then
@@ -303,38 +323,46 @@ install_additional_linux_tools() {
                         mkdir -p "$HOME/.local/bin"
                         ln -sf /usr/bin/batcat "$HOME/.local/bin/bat"
                     fi
+                    success "bat installed"
                 else
-                    warn "bat: failed to install"
+                    failed_tools+=("bat")
                 fi
                 ;;
             fedora|asahi)
-                sudo dnf install -y bat 2>/dev/null || warn "bat: failed to install"
+                sudo dnf install -y bat 2>/dev/null && success "bat installed" || failed_tools+=("bat")
                 ;;
             opensuse*)
-                sudo zypper install -y bat 2>/dev/null || warn "bat: failed to install"
+                sudo zypper install -y bat 2>/dev/null && success "bat installed" || failed_tools+=("bat")
                 ;;
             arch|steamos|cachyos|bazzite)
-                sudo pacman -S --noconfirm bat 2>/dev/null || warn "bat: failed to install"
+                sudo pacman -S --noconfirm bat 2>/dev/null && success "bat installed" || failed_tools+=("bat")
                 ;;
             *)
-                warn "bat: please install manually"
+                failed_tools+=("bat")
                 ;;
         esac
     fi
 
     # yazi (file manager) - not in most repos, manual install required
     if ! command_exists yazi; then
-        warn "yazi not available in repos, install manually: https://github.com/sxyazi/yazi"
+        failed_tools+=("yazi")
     fi
 
     # kitten (Kitty terminal helper tool)
     if ! command_exists kitten; then
         info "Installing kitten..."
-        curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin installer=kitten dest="$HOME/.local"
-        success "kitten installed to ~/.local/bin"
+        if curl -L https://sw.kovidgoyal.net/kitty/installer.sh 2>/dev/null | sh /dev/stdin installer=kitten dest="$HOME/.local" 2>/dev/null; then
+            success "kitten installed"
+        else
+            failed_tools+=("kitten")
+        fi
     fi
 
-    success "Additional Linux tools installed"
+    if [[ ${#failed_tools[@]} -gt 0 ]]; then
+        warn "Failed to install: ${failed_tools[*]}"
+    fi
+
+    success "Additional Linux tools complete"
 }
 
 install_kitty() {

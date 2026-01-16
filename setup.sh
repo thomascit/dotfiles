@@ -289,27 +289,24 @@ install_additional_linux_tools() {
         fi
     fi
 
-    # eza (modern ls)
+    # eza (modern ls) - install from GitHub releases
     if ! command_exists eza; then
         info "Installing eza..."
-        case "$DISTRO" in
-            debian|ubuntu|mint|kali|parrotos)
-                sudo apt install -y eza 2>/dev/null || failed_tools+=("eza")
-                ;;
-            fedora|asahi)
-                sudo dnf install -y eza 2>/dev/null || failed_tools+=("eza")
-                ;;
-            opensuse*)
-                sudo zypper install -y eza 2>/dev/null || failed_tools+=("eza")
-                ;;
-            arch|steamos|cachyos|bazzite)
-                sudo pacman -S --noconfirm eza 2>/dev/null || failed_tools+=("eza")
-                ;;
-            *)
+        if eza_version=$(curl -sS https://api.github.com/repos/eza-community/eza/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | tr -d 'v') && [[ -n "$eza_version" ]]; then
+            local eza_arch
+            case "$(uname -m)" in
+                x86_64) eza_arch="x86_64" ;;
+                aarch64|arm64) eza_arch="aarch64" ;;
+                *) eza_arch="x86_64" ;;
+            esac
+            if curl -fsSL "https://github.com/eza-community/eza/releases/download/v${eza_version}/eza_${eza_arch}-unknown-linux-gnu.tar.gz" | sudo tar -xz -C /usr/local/bin 2>/dev/null; then
+                success "eza ${eza_version} installed"
+            else
                 failed_tools+=("eza")
-                ;;
-        esac
-        command_exists eza && success "eza installed"
+            fi
+        else
+            failed_tools+=("eza")
+        fi
     fi
 
     # bat

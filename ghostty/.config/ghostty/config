@@ -2,7 +2,7 @@ background-blur                    = 1
 background-opacity                 = 0.7
 confirm-close-surface              = false
 font-family                        = "JetBrainsMono Nerd Font Mono"
-font-size                          = 18
+font-size                          = 16
 keybind                            = "global:ctrl+grave_accent=toggle_quick_terminal"
 keybind                            = "shift+cmd+k=scroll_page_lines:5"
 keybind                            = "shift+cmd+j=scroll_page_lines:-5"
@@ -14,7 +14,7 @@ quick-terminal-position            = top
 quick-terminal-size                = 100%,100%
 shell-integration                  = "none"
 term                               = "xterm-256color"
-theme                              = "Dracula"
+theme                              = "dracula"
 title                              = "Ghostty"
 window-save-state                  = "always"
 window-padding-x                   = 0

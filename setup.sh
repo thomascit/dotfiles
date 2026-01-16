@@ -493,16 +493,16 @@ install_wm_linux() {
             info "Installing i3 window manager..."
             case "$DISTRO" in
                 debian|ubuntu|mint|kali|parrotos)
-                    sudo apt install -y i3 i3status i3lock 2>/dev/null && success "i3 installed" || warn "i3 installation failed"
+                    sudo apt install -y i3 i3status i3lock rofi 2>/dev/null && success "i3 installed" || warn "i3 installation failed"
                     ;;
                 fedora|asahi)
-                    sudo dnf install -y i3 i3status i3lock 2>/dev/null && success "i3 installed" || warn "i3 installation failed"
+                    sudo dnf install -y i3 i3status i3lock rofi 2>/dev/null && success "i3 installed" || warn "i3 installation failed"
                     ;;
                 opensuse*)
-                    sudo zypper install -y i3 i3status i3lock 2>/dev/null && success "i3 installed" || warn "i3 installation failed"
+                    sudo zypper install -y i3 i3status i3lock rofi 2>/dev/null && success "i3 installed" || warn "i3 installation failed"
                     ;;
                 arch|steamos|cachyos|bazzite)
-                    sudo pacman -S --noconfirm i3-wm i3status i3lock 2>/dev/null && success "i3 installed" || warn "i3 installation failed"
+                    sudo pacman -S --noconfirm i3-wm i3status i3lock rofi 2>/dev/null && success "i3 installed" || warn "i3 installation failed"
                     ;;
                 *)
                     warn "Cannot install i3: unknown distro"

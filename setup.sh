@@ -24,14 +24,14 @@ fi
 
 # Stow packages by category
 # Terminal: shell, prompt, multiplexer, editors, file managers, utilities
-PACKAGES_TERM="bash zsh fish starship tmux vim nvim bat btop eza lazygit yazi"
+PACKAGES_CLI="bash zsh fish starship tmux vim nvim bat btop eza lazygit yazi"
 
-# Platform-specific packages
-PACKAGES_MACOS="aerospace alacritty ghostty kitty"
-PACKAGES_LINUX="alacritty ghostty kitty hypr i3 polybar waybar"
+# Platform-specific packages (installed separately via menu options)
+PACKAGES_TERMINALS="alacritty ghostty kitty"
+PACKAGES_WM_MACOS="aerospace"
+PACKAGES_WM_LINUX="hypr i3 polybar waybar"
 
-# Combined full packages (built dynamically based on OS)
-PACKAGES_FULL=""
+
 
 # Wrapper files to copy to $HOME
 WRAPPER_FILES=".bashrc .zshrc .vimrc"
@@ -362,7 +362,11 @@ install_additional_linux_tools() {
     success "Additional Linux tools complete"
 }
 
-install_kitty() {
+# ─────────────────────────────────────────────────────────────────────────────
+# Terminal Emulator Installation
+# ─────────────────────────────────────────────────────────────────────────────
+
+install_kitty_linux() {
     if command_exists kitty; then
         success "Kitty terminal already installed"
         return
@@ -388,6 +392,246 @@ install_kitty() {
         "$HOME/.local/share/applications/kitty.desktop"
 
     success "Kitty terminal installed to ~/.local/kitty.app"
+}
+
+install_terminal_linux() {
+    local terminal="$1"
+
+    case "$terminal" in
+        kitty)
+            install_kitty_linux
+            ;;
+        alacritty)
+            info "Installing Alacritty..."
+            case "$DISTRO" in
+                debian|ubuntu|mint|kali|parrotos)
+                    sudo apt install -y alacritty 2>/dev/null && success "Alacritty installed" || warn "Alacritty not available in repos"
+                    ;;
+                fedora|asahi)
+                    sudo dnf install -y alacritty 2>/dev/null && success "Alacritty installed" || warn "Alacritty not available in repos"
+                    ;;
+                opensuse*)
+                    sudo zypper install -y alacritty 2>/dev/null && success "Alacritty installed" || warn "Alacritty not available in repos"
+                    ;;
+                arch|steamos|cachyos|bazzite)
+                    sudo pacman -S --noconfirm alacritty 2>/dev/null && success "Alacritty installed" || warn "Alacritty not available in repos"
+                    ;;
+                *)
+                    warn "Cannot install Alacritty: unknown distro"
+                    ;;
+            esac
+            ;;
+        ghostty)
+            info "Installing Ghostty..."
+            case "$DISTRO" in
+                arch|steamos|cachyos|bazzite)
+                    sudo pacman -S --noconfirm ghostty 2>/dev/null && success "Ghostty installed" || warn "Ghostty not available in repos"
+                    ;;
+                *)
+                    warn "Ghostty may require manual installation on $DISTRO"
+                    warn "See: https://ghostty.org/docs/install"
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+install_terminals() {
+    echo ""
+    echo -e "${CYAN}Available terminal emulators:${NC}"
+    echo "  1) Alacritty"
+    echo "  2) Ghostty"
+    echo "  3) Kitty"
+    echo "  4) All terminals"
+    echo "  5) Cancel"
+    echo ""
+    prompt "Select terminal(s) to install [1-5]:"
+    read_input terminal_choice
+
+    local selected_terminals=""
+
+    case "$terminal_choice" in
+        1) selected_terminals="alacritty" ;;
+        2) selected_terminals="ghostty" ;;
+        3) selected_terminals="kitty" ;;
+        4) selected_terminals="alacritty ghostty kitty" ;;
+        5) info "Cancelled"; return ;;
+        *) warn "Invalid option"; return ;;
+    esac
+
+    create_xdg_dirs
+    clone_dotfiles
+
+    if [[ "$OS" == "macos" ]]; then
+        install_xcode_cli
+        install_homebrew
+        for terminal in $selected_terminals; do
+            info "Installing $terminal via Homebrew..."
+            brew install --cask "$terminal" 2>/dev/null && success "$terminal installed" || warn "Failed to install $terminal"
+        done
+    elif [[ "$OS" == "linux" ]]; then
+        for terminal in $selected_terminals; do
+            install_terminal_linux "$terminal"
+        done
+    fi
+
+    # Stow configs for selected terminals
+    stow_packages "$selected_terminals"
+
+    success "Terminal emulator installation complete!"
+}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Window Manager Installation
+# ─────────────────────────────────────────────────────────────────────────────
+
+install_wm_linux() {
+    local wm="$1"
+
+    case "$wm" in
+        i3)
+            info "Installing i3 window manager..."
+            case "$DISTRO" in
+                debian|ubuntu|mint|kali|parrotos)
+                    sudo apt install -y i3 i3status i3lock 2>/dev/null && success "i3 installed" || warn "i3 installation failed"
+                    ;;
+                fedora|asahi)
+                    sudo dnf install -y i3 i3status i3lock 2>/dev/null && success "i3 installed" || warn "i3 installation failed"
+                    ;;
+                opensuse*)
+                    sudo zypper install -y i3 i3status i3lock 2>/dev/null && success "i3 installed" || warn "i3 installation failed"
+                    ;;
+                arch|steamos|cachyos|bazzite)
+                    sudo pacman -S --noconfirm i3-wm i3status i3lock 2>/dev/null && success "i3 installed" || warn "i3 installation failed"
+                    ;;
+                *)
+                    warn "Cannot install i3: unknown distro"
+                    ;;
+            esac
+            ;;
+        hyprland)
+            info "Installing Hyprland..."
+            case "$DISTRO" in
+                fedora|asahi)
+                    sudo dnf install -y hyprland hyprpaper 2>/dev/null && success "Hyprland installed" || warn "Hyprland installation failed"
+                    ;;
+                arch|steamos|cachyos|bazzite)
+                    sudo pacman -S --noconfirm hyprland hyprpaper 2>/dev/null && success "Hyprland installed" || warn "Hyprland installation failed"
+                    ;;
+                *)
+                    warn "Hyprland may require manual installation on $DISTRO"
+                    warn "See: https://wiki.hyprland.org/Getting-Started/Installation/"
+                    ;;
+            esac
+            ;;
+        polybar)
+            info "Installing Polybar..."
+            case "$DISTRO" in
+                debian|ubuntu|mint|kali|parrotos)
+                    sudo apt install -y polybar 2>/dev/null && success "Polybar installed" || warn "Polybar installation failed"
+                    ;;
+                fedora|asahi)
+                    sudo dnf install -y polybar 2>/dev/null && success "Polybar installed" || warn "Polybar installation failed"
+                    ;;
+                arch|steamos|cachyos|bazzite)
+                    sudo pacman -S --noconfirm polybar 2>/dev/null && success "Polybar installed" || warn "Polybar installation failed"
+                    ;;
+                *)
+                    warn "Cannot install Polybar: unknown distro"
+                    ;;
+            esac
+            ;;
+        waybar)
+            info "Installing Waybar..."
+            case "$DISTRO" in
+                debian|ubuntu|mint|kali|parrotos)
+                    sudo apt install -y waybar 2>/dev/null && success "Waybar installed" || warn "Waybar installation failed"
+                    ;;
+                fedora|asahi)
+                    sudo dnf install -y waybar 2>/dev/null && success "Waybar installed" || warn "Waybar installation failed"
+                    ;;
+                arch|steamos|cachyos|bazzite)
+                    sudo pacman -S --noconfirm waybar 2>/dev/null && success "Waybar installed" || warn "Waybar installation failed"
+                    ;;
+                *)
+                    warn "Cannot install Waybar: unknown distro"
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+install_window_managers() {
+    echo ""
+
+    if [[ "$OS" == "macos" ]]; then
+        echo -e "${CYAN}Available window managers (macOS):${NC}"
+        echo "  1) Aerospace"
+        echo "  2) Cancel"
+        echo ""
+        prompt "Select window manager to install [1-2]:"
+        read_input wm_choice
+
+        case "$wm_choice" in
+            1)
+                create_xdg_dirs
+                clone_dotfiles
+                install_xcode_cli
+                install_homebrew
+                info "Installing Aerospace..."
+                brew install --cask nikitabobko/tap/aerospace 2>/dev/null && success "Aerospace installed" || warn "Aerospace installation failed"
+                stow_packages "aerospace"
+                success "Window manager installation complete!"
+                ;;
+            2)
+                info "Cancelled"
+                ;;
+            *)
+                warn "Invalid option"
+                ;;
+        esac
+
+    elif [[ "$OS" == "linux" ]]; then
+        echo -e "${CYAN}Available window managers (Linux):${NC}"
+        echo "  1) i3 (+ Polybar)"
+        echo "  2) Hyprland (+ Waybar)"
+        echo "  3) Cancel"
+        echo ""
+        prompt "Select window manager to install [1-3]:"
+        read_input wm_choice
+
+        local stow_pkgs=""
+
+        case "$wm_choice" in
+            1)
+                create_xdg_dirs
+                clone_dotfiles
+                install_wm_linux "i3"
+                install_wm_linux "polybar"
+                stow_pkgs="i3 polybar"
+                ;;
+            2)
+                create_xdg_dirs
+                clone_dotfiles
+                install_wm_linux "hyprland"
+                install_wm_linux "waybar"
+                stow_pkgs="hypr waybar"
+                ;;
+            3)
+                info "Cancelled"
+                return
+                ;;
+            *)
+                warn "Invalid option"
+                return
+                ;;
+        esac
+
+        if [[ -n "$stow_pkgs" ]]; then
+            stow_packages "$stow_pkgs"
+            success "Window manager installation complete!"
+        fi
+    fi
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -623,15 +867,14 @@ EOF
 show_menu() {
     echo ""
     echo -e "${CYAN}Installation Options:${NC}"
-    echo "  1) Full installation (terminal + platform-specific packages)"
-    echo "  2) Terminal only (shells, editors, utilities) - recommended for WSL"
-    echo "  3) Platform only (window managers, terminals, GUI apps)"
-    echo "  4) Custom installation"
-    echo "  5) Install plugin managers only"
+    echo "  1) Full installation (shells, editors, utilities)"
+    echo "  2) Custom installation (select specific packages)"
+    echo "  3) Install terminal emulators (Alacritty, Ghostty, Kitty)"
+    echo "  4) Install window managers (Aerospace, i3, Hyprland)"
+    echo "  5) Install plugin managers only (TPM, vim-plug, Zinit)"
     echo "  6) Install fonts only"
-    echo "  7) Install Kitty terminal (Linux only)"
-    echo "  8) Uninstall / remove dotfiles"
-    echo "  9) Exit"
+    echo "  7) Uninstall / remove dotfiles"
+    echo "  8) Exit"
     echo ""
 }
 
@@ -639,34 +882,31 @@ select_packages() {
     echo ""
     echo -e "${CYAN}Available packages:${NC}"
     echo ""
-    echo -e "  ${YELLOW}Terminal:${NC} $PACKAGES_TERM"
+    echo -e "  ${YELLOW}CLI:${NC} $PACKAGES_CLI"
+    echo ""
+    echo -e "  ${YELLOW}Terminals:${NC} $PACKAGES_TERMINALS (use option 3 from main menu)"
     echo ""
     if [[ "$OS" == "macos" ]]; then
-        echo -e "  ${YELLOW}macOS:${NC} $PACKAGES_MACOS"
+        echo -e "  ${YELLOW}Window Managers:${NC} $PACKAGES_WM_MACOS (use option 4 from main menu)"
     else
-        echo -e "  ${YELLOW}Linux:${NC} $PACKAGES_LINUX"
+        echo -e "  ${YELLOW}Window Managers:${NC} $PACKAGES_WM_LINUX (use option 4 from main menu)"
     fi
     echo ""
     prompt "Enter packages to install (space-separated):"
     read_input SELECTED_PACKAGES
 }
 
-get_platform_packages() {
+get_wm_packages() {
     if [[ "$OS" == "macos" ]]; then
-        echo "$PACKAGES_MACOS"
+        echo "$PACKAGES_WM_MACOS"
     else
-        echo "$PACKAGES_LINUX"
+        echo "$PACKAGES_WM_LINUX"
     fi
 }
 
-build_full_packages() {
-    PACKAGES_FULL="$PACKAGES_TERM $(get_platform_packages)"
-}
-
 run_full_install() {
-    info "Running full installation..."
+    info "Running full installation (terminal packages)..."
 
-    build_full_packages
     create_xdg_dirs
     clone_dotfiles
 
@@ -680,7 +920,7 @@ run_full_install() {
         install_additional_linux_tools
     fi
 
-    stow_packages "$PACKAGES_FULL"
+    stow_packages "$PACKAGES_CLI"
     copy_wrapper_files
     install_tpm
     install_vim_plug
@@ -688,56 +928,17 @@ run_full_install() {
     install_fonts
 
     success "Full installation complete!"
+    echo ""
+    info "To install terminal emulators, run this script again and select option 3"
+    info "To install window managers, run this script again and select option 4"
 }
 
-run_terminal_install() {
-    info "Running terminal installation..."
-
-    create_xdg_dirs
-    clone_dotfiles
-
-    if [[ "$OS" == "macos" ]]; then
-        install_xcode_cli
-        install_homebrew
-        brew install git stow bash zsh fish starship zoxide fzf tmux vim neovim bat btop eza lazygit yazi trash caarlos0/tap/timer terminal-notifier
-    elif [[ "$OS" == "linux" ]]; then
-        install_linux_packages
-        install_starship
-        install_additional_linux_tools
-    fi
-
-    stow_packages "$PACKAGES_TERM"
-    copy_wrapper_files
-    install_tpm
-    install_vim_plug
-    install_zinit
-
-    success "Terminal installation complete!"
+run_terminals_install() {
+    install_terminals
 }
 
-run_platform_install() {
-    info "Running platform-specific installation..."
-
-    local platform_packages
-    platform_packages="$(get_platform_packages)"
-
-    create_xdg_dirs
-    clone_dotfiles
-
-    if [[ "$OS" == "macos" ]]; then
-        install_xcode_cli
-        install_homebrew
-        brew install --cask alacritty ghostty kitty
-        # aerospace requires tap
-        brew install --cask nikitabobko/tap/aerospace 2>/dev/null || warn "Aerospace may require manual installation"
-    elif [[ "$OS" == "linux" ]]; then
-        install_linux_packages
-    fi
-
-    stow_packages "$platform_packages"
-    install_fonts
-
-    success "Platform installation complete!"
+run_wm_install() {
+    install_window_managers
 }
 
 run_custom_install() {
@@ -775,22 +976,20 @@ run_custom_install() {
 }
 
 run_stow_only() {
-    build_full_packages
-
     echo ""
     echo -e "${CYAN}Stow Options:${NC}"
-    echo "  1) Full (terminal + platform)"
-    echo "  2) Terminal only"
-    echo "  3) Platform only"
+    echo "  1) CLI packages ($PACKAGES_CLI)"
+    echo "  2) Terminal emulators ($PACKAGES_TERMINALS)"
+    echo "  3) Window managers ($(get_wm_packages))"
     echo "  4) Custom"
     echo ""
     prompt "Select packages to stow [1-4]:"
     read_input stow_choice
 
     case "$stow_choice" in
-        1) stow_packages "$PACKAGES_FULL" ;;
-        2) stow_packages "$PACKAGES_TERM" ;;
-        3) stow_packages "$(get_platform_packages)" ;;
+        1) stow_packages "$PACKAGES_CLI" ;;
+        2) stow_packages "$PACKAGES_TERMINALS" ;;
+        3) stow_packages "$(get_wm_packages)" ;;
         4) select_packages; stow_packages "$SELECTED_PACKAGES" ;;
         *) warn "Invalid option" ;;
     esac
@@ -814,20 +1013,8 @@ run_fonts_only() {
     install_fonts
 }
 
-run_kitty_install() {
-    if [[ "$OS" != "linux" ]]; then
-        warn "Kitty installer is for Linux only. On macOS, use: brew install --cask kitty"
-        return
-    fi
-
-    create_xdg_dirs
-    install_kitty
-    success "Kitty installation complete!"
-}
-
 run_uninstall() {
     info "Running uninstall..."
-    build_full_packages
 
     echo ""
     echo -e "${CYAN}Uninstall Options:${NC}"
@@ -845,7 +1032,7 @@ run_uninstall() {
             prompt "This will remove all dotfiles symlinks and plugin managers. Continue? (y/n)"
             read_input confirm
             if [[ "$confirm" =~ ^[Yy]$ ]]; then
-                unstow_packages "$PACKAGES_FULL"
+                unstow_packages "$PACKAGES_CLI $PACKAGES_TERMINALS $(get_wm_packages)"
                 remove_wrapper_files
                 remove_plugin_managers
                 success "Full uninstall complete!"
@@ -857,18 +1044,20 @@ run_uninstall() {
             echo ""
             echo -e "${CYAN}Unstow Options:${NC}"
             echo "  1) All packages"
-            echo "  2) Terminal only"
-            echo "  3) Platform only"
-            echo "  4) Custom"
+            echo "  2) Terminal packages only"
+            echo "  3) Terminal emulators only"
+            echo "  4) Window managers only"
+            echo "  5) Custom"
             echo ""
-            prompt "Select packages to unstow [1-4]:"
+            prompt "Select packages to unstow [1-5]:"
             read_input unstow_choice
 
             case "$unstow_choice" in
-                1) unstow_packages "$PACKAGES_FULL" ;;
-                2) unstow_packages "$PACKAGES_TERM" ;;
-                3) unstow_packages "$(get_platform_packages)" ;;
-                4) select_packages; unstow_packages "$SELECTED_PACKAGES" ;;
+                1) unstow_packages "$PACKAGES_CLI $PACKAGES_TERMINALS $(get_wm_packages)" ;;
+                2) unstow_packages "$PACKAGES_CLI" ;;
+                3) unstow_packages "$PACKAGES_TERMINALS" ;;
+                4) unstow_packages "$(get_wm_packages)" ;;
+                5) select_packages; unstow_packages "$SELECTED_PACKAGES" ;;
                 *) warn "Invalid option" ;;
             esac
             ;;
@@ -918,12 +1107,12 @@ main() {
             run_full_install
             exit 0
             ;;
-        --terminal|-t)
-            run_terminal_install
+        --terminals)
+            run_terminals_install
             exit 0
             ;;
-        --platform)
-            run_platform_install
+        --wm)
+            run_wm_install
             exit 0
             ;;
         --stow|-s)
@@ -938,10 +1127,6 @@ main() {
             run_fonts_only
             exit 0
             ;;
-        --kitty|-k)
-            run_kitty_install
-            exit 0
-            ;;
         --uninstall|-u)
             run_uninstall
             exit 0
@@ -950,20 +1135,20 @@ main() {
             echo "Usage: $0 [OPTION]"
             echo ""
             echo "Options:"
-            echo "  --full, -f      Full installation (terminal + platform)"
-            echo "  --terminal, -t  Terminal packages only (shells, editors, utilities)"
-            echo "  --platform      Platform-specific packages only (WM, terminals, GUI)"
+            echo "  --full, -f      Full installation (shells, editors, utilities)"
+            echo "  --terminals     Install terminal emulators (Alacritty, Ghostty, Kitty)"
+            echo "  --wm            Install window managers (Aerospace, i3, Hyprland)"
             echo "  --stow, -s      Stow packages only (no software installation)"
             echo "  --plugins, -p   Install plugin managers only"
             echo "  --fonts         Install fonts only"
-            echo "  --kitty, -k     Install Kitty terminal (Linux only)"
             echo "  --uninstall, -u Remove dotfiles symlinks and plugin managers"
             echo "  --help, -h      Show this help message"
             echo ""
             echo "Package groups:"
-            echo "  Terminal: $PACKAGES_TERM"
-            echo "  macOS:    $PACKAGES_MACOS"
-            echo "  Linux:    $PACKAGES_LINUX"
+            echo "  CLI:        $PACKAGES_CLI"
+            echo "  Emulators:  $PACKAGES_TERMINALS"
+            echo "  WM (macOS): $PACKAGES_WM_MACOS"
+            echo "  WM (Linux): $PACKAGES_WM_LINUX"
             echo ""
             echo "Without options, an interactive menu is shown."
             exit 0
@@ -973,19 +1158,18 @@ main() {
     # Interactive mode
     while true; do
         show_menu
-        prompt "Select an option [1-9]:"
+        prompt "Select an option [1-8]:"
         read_input choice
 
         case "$choice" in
             1) run_full_install; break ;;
-            2) run_terminal_install; break ;;
-            3) run_platform_install; break ;;
-            4) run_custom_install; break ;;
+            2) run_custom_install; break ;;
+            3) run_terminals_install; break ;;
+            4) run_wm_install; break ;;
             5) run_plugin_managers_only; break ;;
             6) run_fonts_only; break ;;
-            7) run_kitty_install; break ;;
-            8) run_uninstall; break ;;
-            9) info "Exiting..."; exit 0 ;;
+            7) run_uninstall; break ;;
+            8) info "Exiting..."; exit 0 ;;
             *) warn "Invalid option, please try again" ;;
         esac
     done

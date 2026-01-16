@@ -157,19 +157,28 @@ install_homebrew() {
 install_linux_packages() {
     info "Installing base packages for Linux..."
 
+    local packages=""
+    local install_cmd=""
+    local failed_packages=()
+
     case "$DISTRO" in
         debian|ubuntu|mint|kali|parrotos)
             sudo apt update
-            sudo apt install -y git stow curl zsh fish tmux vim ripgrep build-essential btop lazygit trash-cli
+            packages="git stow curl zsh fish tmux vim ripgrep build-essential btop lazygit trash-cli"
+            install_cmd="sudo apt install -y"
             ;;
         fedora|asahi)
-            sudo dnf install -y git stow curl zsh fish tmux vim ripgrep btop lazygit trash-cli
+            packages="git stow curl zsh fish tmux vim ripgrep btop lazygit trash-cli"
+            install_cmd="sudo dnf install -y"
             ;;
         opensuse*)
-            sudo zypper install -y git stow curl zsh fish tmux vim ripgrep btop lazygit trash-cli
+            packages="git stow curl zsh fish tmux vim ripgrep btop lazygit trash-cli"
+            install_cmd="sudo zypper install -y"
             ;;
         arch|steamos|cachyos|bazzite)
-            sudo pacman -Syu --noconfirm git stow curl zsh fish tmux vim ripgrep base-devel btop lazygit trash-cli
+            sudo pacman -Syu --noconfirm
+            packages="git stow curl zsh fish tmux vim ripgrep base-devel btop lazygit trash-cli"
+            install_cmd="sudo pacman -S --noconfirm"
             ;;
         *)
             warn "Unknown distribution: $DISTRO"
@@ -178,7 +187,17 @@ install_linux_packages() {
             ;;
     esac
 
-    success "Base Linux packages installed"
+    for pkg in $packages; do
+        if ! $install_cmd "$pkg" 2>/dev/null; then
+            failed_packages+=("$pkg")
+        fi
+    done
+
+    if [[ ${#failed_packages[@]} -gt 0 ]]; then
+        warn "Failed to install: ${failed_packages[*]}"
+    else
+        success "Base Linux packages installed"
+    fi
 }
 
 install_packages_from_brewfile() {
@@ -257,19 +276,19 @@ install_additional_linux_tools() {
     if ! command_exists eza; then
         case "$DISTRO" in
             debian|ubuntu|mint|kali|parrotos)
-                sudo apt install -y eza 2>/dev/null || warn "eza not available in repos, install manually"
+                sudo apt install -y eza 2>/dev/null || warn "eza: failed to install, not available in repos"
                 ;;
             fedora|asahi)
-                sudo dnf install -y eza 2>/dev/null || warn "eza not available in repos, install manually"
+                sudo dnf install -y eza 2>/dev/null || warn "eza: failed to install, not available in repos"
                 ;;
             opensuse*)
-                sudo zypper install -y eza 2>/dev/null || warn "eza not available in repos, install manually"
+                sudo zypper install -y eza 2>/dev/null || warn "eza: failed to install, not available in repos"
                 ;;
             arch|steamos|cachyos|bazzite)
-                sudo pacman -S --noconfirm eza
+                sudo pacman -S --noconfirm eza 2>/dev/null || warn "eza: failed to install"
                 ;;
             *)
-                warn "Please install eza manually: https://github.com/eza-community/eza"
+                warn "eza: please install manually - https://github.com/eza-community/eza"
                 ;;
         esac
     fi
@@ -278,24 +297,27 @@ install_additional_linux_tools() {
     if ! command_exists bat && ! command_exists batcat; then
         case "$DISTRO" in
             debian|ubuntu|mint|kali|parrotos)
-                sudo apt install -y bat
-                # Create symlink if installed as batcat
-                if command_exists batcat && ! command_exists bat; then
-                    mkdir -p "$HOME/.local/bin"
-                    ln -sf /usr/bin/batcat "$HOME/.local/bin/bat"
+                if sudo apt install -y bat 2>/dev/null; then
+                    # Create symlink if installed as batcat
+                    if command_exists batcat && ! command_exists bat; then
+                        mkdir -p "$HOME/.local/bin"
+                        ln -sf /usr/bin/batcat "$HOME/.local/bin/bat"
+                    fi
+                else
+                    warn "bat: failed to install"
                 fi
                 ;;
             fedora|asahi)
-                sudo dnf install -y bat
+                sudo dnf install -y bat 2>/dev/null || warn "bat: failed to install"
                 ;;
             opensuse*)
-                sudo zypper install -y bat
+                sudo zypper install -y bat 2>/dev/null || warn "bat: failed to install"
                 ;;
             arch|steamos|cachyos|bazzite)
-                sudo pacman -S --noconfirm bat
+                sudo pacman -S --noconfirm bat 2>/dev/null || warn "bat: failed to install"
                 ;;
             *)
-                warn "Please install bat manually"
+                warn "bat: please install manually"
                 ;;
         esac
     fi

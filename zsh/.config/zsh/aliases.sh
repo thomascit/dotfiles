@@ -2,15 +2,15 @@
 # Clipboard (OS-specific)
 # ─────────────────────────────────────────────
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    alias c="pbcopy"
+  alias c="pbcopy"
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    if grep -qiE "(microsoft|wsl)" /proc/version 2>/dev/null; then
-        alias c="clip.exe"
-    elif [[ -n "$WAYLAND_DISPLAY" ]]; then
-        alias c="wl-copy"
-    else
-        alias c="xclip -i -selection clipboard"
-    fi
+  if grep -qiE "(microsoft|wsl)" /proc/version 2>/dev/null; then
+    alias c="clip.exe"
+  elif [[ -n "$WAYLAND_DISPLAY" ]]; then
+    alias c="wl-copy"
+  else
+    alias c="xclip -i -selection clipboard"
+  fi
 fi
 
 # ─────────────────────────────────────────────
@@ -50,12 +50,11 @@ alias gs="git status"
 # ─────────────────────────────────────────────
 alias ba="brew autoremove"
 alias bc="brew cleanup"
-alias be="$EDITOR $HOME/Brewfile"
-alias bi="brew install"
-alias bs="brew search"
-alias bu="brew update"
-alias br="brew remove"
-alias bup="brew upgrade -g"
+alias bi="brew formulae | fzf --multi --preview 'brew info {1}' | xargs -ro brew install"
+alias bic="brew casks | fzf --multi --preview 'brew info --cask {1}' | xargs -ro brew install --cask"
+alias bu="brew leaves | fzf --multi --preview 'brew info {1}' | xargs -ro brew uninstall"
+alias buc="brew list --cask | fzf --multi --preview 'brew info --cask {1}' | xargs -ro brew uninstall --cask"
+alias bup="brew update && brew upgrade -g"
 
 # ─────────────────────────────────────────────
 # Pacman (Arch)

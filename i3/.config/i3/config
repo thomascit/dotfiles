@@ -101,7 +101,7 @@ bindsym $mod+e layout toggle split
 bindsym $mod+Shift+space floating toggle
 
 # change focus between tiling / floating windows
-bindsym $mod+space focus mode_toggle
+bindsym $mod+Tab focus mode_toggle
 
 # focus the parent container
 bindsym $mod+a focus parent
@@ -188,7 +188,7 @@ gaps inner 10px
 gaps outer 5px
 
 # Set background
-exec --no-startup-id feh --recursive --bg-fill $HOME/Pictures/rmwp.jpg
+exec --no-startup-id feh --bg-fill $HOME/.local/share/wallpaper/wp.png
 
 # Status Bar
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
@@ -209,7 +209,7 @@ bindsym $mod+Shift+n exec obsidian
 bindsym $mod+Shift+d exec discord
 bindsym $mod+Shift+g exec steam
 bindsym $mod+i exec ~/.config/i3/lock.sh
-bindsym Mod1+space exec rofi -show drun
+bindsym $mod+space exec rofi -show drun
 
 # Dracula Colors
 # class                 border  bground text    indicator child_border

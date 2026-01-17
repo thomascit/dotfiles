@@ -164,20 +164,20 @@ install_linux_packages() {
     case "$DISTRO" in
         debian|ubuntu|mint|kali|parrotos)
             sudo apt update
-            packages="git stow curl zsh fish tmux vim ripgrep build-essential btop lazygit trash-cli"
+            packages="git stow curl zsh fish tmux vim ripgrep fd-find unzip build-essential btop lazygit trash-cli"
             install_cmd="sudo apt install -y"
             ;;
         fedora|asahi)
-            packages="git stow curl zsh fish tmux vim ripgrep btop lazygit trash-cli"
+            packages="git stow curl zsh fish tmux vim ripgrep fd-find unzip btop lazygit trash-cli"
             install_cmd="sudo dnf install -y"
             ;;
         opensuse*)
-            packages="git stow curl zsh fish tmux vim ripgrep btop lazygit trash-cli"
+            packages="git stow curl zsh fish tmux vim ripgrep fd unzip btop lazygit trash-cli"
             install_cmd="sudo zypper install -y"
             ;;
         arch|steamos|cachyos|bazzite)
             sudo pacman -Syu --noconfirm
-            packages="git stow curl zsh fish tmux vim ripgrep base-devel btop lazygit trash-cli"
+            packages="git stow curl zsh fish tmux vim ripgrep fd unzip base-devel btop lazygit trash-cli"
             install_cmd="sudo pacman -S --noconfirm"
             ;;
         *)
@@ -493,16 +493,16 @@ install_wm_linux() {
             info "Installing i3 window manager..."
             case "$DISTRO" in
                 debian|ubuntu|mint|kali|parrotos)
-                    sudo apt install -y i3 i3status i3lock rofi 2>/dev/null && success "i3 installed" || warn "i3 installation failed"
+                    sudo apt install -y i3 i3status i3lock rofi feh picom kitty pavucontrol 2>/dev/null && success "i3 installed" || warn "i3 installation failed"
                     ;;
                 fedora|asahi)
-                    sudo dnf install -y i3 i3status i3lock rofi 2>/dev/null && success "i3 installed" || warn "i3 installation failed"
+                    sudo dnf install -y i3 i3status i3lock rofi feh picom kitty pavucontrol 2>/dev/null && success "i3 installed" || warn "i3 installation failed"
                     ;;
                 opensuse*)
-                    sudo zypper install -y i3 i3status i3lock rofi 2>/dev/null && success "i3 installed" || warn "i3 installation failed"
+                    sudo zypper install -y i3 i3status i3lock rofi feh picom kitty pavucontrol 2>/dev/null && success "i3 installed" || warn "i3 installation failed"
                     ;;
                 arch|steamos|cachyos|bazzite)
-                    sudo pacman -S --noconfirm i3-wm i3status i3lock rofi 2>/dev/null && success "i3 installed" || warn "i3 installation failed"
+                    sudo pacman -S --noconfirm i3-wm i3status i3lock rofi feh picom kitty pavucontrol 2>/dev/null && success "i3 installed" || warn "i3 installation failed"
                     ;;
                 *)
                     warn "Cannot install i3: unknown distro"
@@ -513,10 +513,10 @@ install_wm_linux() {
             info "Installing Hyprland..."
             case "$DISTRO" in
                 fedora|asahi)
-                    sudo dnf install -y hyprland hyprpaper 2>/dev/null && success "Hyprland installed" || warn "Hyprland installation failed"
+                    sudo dnf install -y hyprland hyprpaper wofi kitty brightnessctl playerctl pavucontrol blueman network-manager-applet 2>/dev/null && success "Hyprland installed" || warn "Hyprland installation failed"
                     ;;
                 arch|steamos|cachyos|bazzite)
-                    sudo pacman -S --noconfirm hyprland hyprpaper 2>/dev/null && success "Hyprland installed" || warn "Hyprland installation failed"
+                    sudo pacman -S --noconfirm hyprland hyprpaper wofi kitty brightnessctl playerctl pavucontrol blueman network-manager-applet 2>/dev/null && success "Hyprland installed" || warn "Hyprland installation failed"
                     ;;
                 *)
                     warn "Hyprland may require manual installation on $DISTRO"
@@ -608,14 +608,14 @@ install_window_managers() {
                 clone_dotfiles
                 install_wm_linux "i3"
                 install_wm_linux "polybar"
-                stow_pkgs="i3 polybar"
+                stow_pkgs="i3 polybar wallpaper"
                 ;;
             2)
                 create_xdg_dirs
                 clone_dotfiles
                 install_wm_linux "hyprland"
                 install_wm_linux "waybar"
-                stow_pkgs="hypr waybar"
+                stow_pkgs="hypr waybar wallpaper"
                 ;;
             3)
                 info "Cancelled"

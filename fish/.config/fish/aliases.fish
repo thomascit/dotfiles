@@ -78,6 +78,9 @@ alias du "dnf list installed | tail -n +2 | cut -d' ' -f1 | fzf --multi --previe
 # ─────────────────────────────────────────────
 # LS/FS
 # ─────────────────────────────────────────────
+if command -q fdfind
+    alias fd fdfind
+end
 alias cat "bat"
 alias icat "kitten icat"
 alias ls "eza --icons=always --sort=type --header -l --git"

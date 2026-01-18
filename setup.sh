@@ -497,8 +497,8 @@ install_wm_linux() {
     info "Installing i3 window manager..."
     case "$DISTRO" in
     debian | ubuntu | mint | kali | parrotos)
-      # Install base packages
-      sudo apt install -y xorg i3 i3status xautolock rofi feh picom kitty pavucontrol dex xss-lock network-manager-applet x11-xserver-utils imagemagick 2>/dev/null
+      # Install base packages (kitty removed - install separately via terminals menu)
+      sudo apt install -y xorg i3 i3status xautolock rofi feh picom pavucontrol dex xss-lock network-manager-applet x11-xserver-utils imagemagick 2>/dev/null
       # Try i3lock-color from repos, fallback to building from source if not available
       if ! sudo apt install -y i3lock-color 2>/dev/null; then
         warn "i3lock-color not in repos, installing regular i3lock (limited features)"
@@ -507,8 +507,8 @@ install_wm_linux() {
       success "i3 installed"
       ;;
     fedora | fedora-asahi-remix)
-      # Install base packages
-      sudo dnf install -y xorg-x11-server-Xorg xorg-x11-xinit i3 i3status xautolock rofi feh picom kitty pavucontrol dex xss-lock network-manager-applet xorg-x11-server-utils ImageMagick 2>/dev/null
+      # Install base packages (kitty removed - install separately via terminals menu)
+      sudo dnf install -y xorg-x11-server-Xorg xorg-x11-xinit i3 i3status xautolock rofi feh picom pavucontrol dex xss-lock network-manager-applet xorg-x11-server-utils ImageMagick 2>/dev/null
       # Try i3lock-color from repos, fallback to building from source if not available
       if ! sudo dnf install -y i3lock-color 2>/dev/null; then
         warn "i3lock-color not in repos, installing regular i3lock (limited features)"
@@ -517,7 +517,8 @@ install_wm_linux() {
       success "i3 installed"
       ;;
     opensuse*)
-      sudo zypper install -y xorg-x11-server i3 i3status xautolock rofi feh picom kitty pavucontrol dex xss-lock network-manager-applet xrandr ImageMagick 2>/dev/null
+      # Install base packages (kitty removed - install separately via terminals menu)
+      sudo zypper install -y xorg-x11-server i3 i3status xautolock rofi feh picom pavucontrol dex xss-lock network-manager-applet xrandr ImageMagick 2>/dev/null
       # Try i3lock-color, fallback to regular i3lock
       if ! sudo zypper install -y i3lock-color 2>/dev/null; then
         warn "i3lock-color not in repos, installing regular i3lock (limited features)"
@@ -527,7 +528,8 @@ install_wm_linux() {
       ;;
     arch | steamos | cachyos | bazzite)
       # Arch has i3lock-color in the AUR, install it if yay/paru is available
-      sudo pacman -S --noconfirm xorg-server xorg-xinit i3-wm i3status xautolock rofi feh picom kitty pavucontrol dex xss-lock network-manager-applet xorg-xrandr imagemagick 2>/dev/null
+      # (kitty removed - install separately via terminals menu)
+      sudo pacman -S --noconfirm xorg-server xorg-xinit i3-wm i3status xautolock rofi feh picom pavucontrol dex xss-lock network-manager-applet xorg-xrandr imagemagick 2>/dev/null
       if command -v yay &>/dev/null; then
         yay -S --noconfirm i3lock-color 2>/dev/null && success "i3lock-color installed" || {
           warn "i3lock-color failed, installing regular i3lock"
@@ -555,13 +557,15 @@ install_wm_linux() {
     case "$DISTRO" in
     fedora | fedora-asahi-remix)
       # Install core Hyprland with all required dependencies from config
-      sudo dnf install -y hyprland wofi kitty brightnessctl playerctl pavucontrol blueman \
+      # (kitty removed - install separately via terminals menu)
+      sudo dnf install -y hyprland wofi brightnessctl playerctl pavucontrol blueman \
         network-manager-applet swaybg pipewire-utils wireplumber btop hyprlock 2>/dev/null && \
         success "Hyprland installed" || warn "Hyprland installation failed"
       ;;
     arch | steamos | cachyos | bazzite)
       # Install core Hyprland with all required dependencies from config
-      sudo pacman -S --noconfirm hyprland wofi kitty brightnessctl playerctl pavucontrol blueman \
+      # (kitty removed - install separately via terminals menu)
+      sudo pacman -S --noconfirm hyprland wofi brightnessctl playerctl pavucontrol blueman \
         network-manager-applet swaybg pipewire-utils wireplumber btop hyprlock 2>/dev/null && \
         success "Hyprland installed" || warn "Hyprland installation failed"
       ;;

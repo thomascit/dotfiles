@@ -617,18 +617,44 @@ install_wm_linux() {
     info "Installing Hyprland..."
     case "$DISTRO" in
     fedora | fedora-asahi-remix)
-      # Install core Hyprland with all required dependencies from config
-      # (kitty removed - install separately via terminals menu)
-      sudo dnf install -y hyprland wofi brightnessctl playerctl pavucontrol blueman \
-        network-manager-applet swaybg pipewire-utils wireplumber btop hyprlock 2>/dev/null && \
-        success "Hyprland installed" || warn "Hyprland installation failed"
+      # Install packages individually to avoid failures stopping entire installation
+      local hypr_packages="hyprland wofi brightnessctl playerctl pavucontrol blueman network-manager-applet swaybg pipewire-utils wireplumber btop hyprlock"
+      local failed_packages=()
+      
+      info "Installing core Hyprland packages..."
+      for pkg in $hypr_packages; do
+        if sudo dnf install -y "$pkg" 2>/dev/null; then
+          success "Installed $pkg"
+        else
+          warn "Failed to install $pkg"
+          failed_packages+=("$pkg")
+        fi
+      done
+      
+      if [[ ${#failed_packages[@]} -gt 0 ]]; then
+        warn "Some packages failed to install: ${failed_packages[*]}"
+      fi
+      success "Hyprland installation complete"
       ;;
     arch | steamos | cachyos | bazzite)
-      # Install core Hyprland with all required dependencies from config
-      # (kitty removed - install separately via terminals menu)
-      sudo pacman -S --noconfirm hyprland wofi brightnessctl playerctl pavucontrol blueman \
-        network-manager-applet swaybg pipewire-utils wireplumber btop hyprlock 2>/dev/null && \
-        success "Hyprland installed" || warn "Hyprland installation failed"
+      # Install packages individually to avoid failures stopping entire installation
+      local hypr_packages="hyprland wofi brightnessctl playerctl pavucontrol blueman network-manager-applet swaybg pipewire-utils wireplumber btop hyprlock"
+      local failed_packages=()
+      
+      info "Installing core Hyprland packages..."
+      for pkg in $hypr_packages; do
+        if sudo pacman -S --noconfirm "$pkg" 2>/dev/null; then
+          success "Installed $pkg"
+        else
+          warn "Failed to install $pkg"
+          failed_packages+=("$pkg")
+        fi
+      done
+      
+      if [[ ${#failed_packages[@]} -gt 0 ]]; then
+        warn "Some packages failed to install: ${failed_packages[*]}"
+      fi
+      success "Hyprland installation complete"
       ;;
     *)
       warn "Hyprland may require manual installation on $DISTRO"

@@ -1,35 +1,18 @@
 #!/bin/sh
+# Simple i3lock script using standard i3lock (not i3lock-color)
+# Scales wallpaper to screen resolution before locking
 
-BLANK='#00000000'
-CLEAR='#00000000'
-DEFAULT='#6272A4'
-TEXT='#8BE9FD'
-WRONG='#FF5555'
-VERIFYING='#FF79C6'
-RIGHT='#50FA7B'
+WALLPAPER="$HOME/.local/share/wallpaper/wp.png"
+LOCKSCREEN="/tmp/lockscreen.png"
 
-i3lock \
-  --insidever-color=$CLEAR \
-  --ringver-color=$VERIFYING \
-  \
-  --insidewrong-color=$CLEAR \
-  --ringwrong-color=$WRONG \
-  \
-  --inside-color=$BLANK \
-  --ring-color=$DEFAULT \
-  --line-color=$BLANK \
-  --separator-color=$DEFAULT \
-  \
-  --verif-color=$TEXT \
-  --wrong-color=$TEXT \
-  --time-color=$TEXT \
-  --date-color=$TEXT \
-  --keyhl-color=$RIGHT \
-  --bshl-color=$WRONG \
-  \
-  --screen 1 \
-  --blur 5 \
-  --clock \
-  --indicator \
-  --time-str="%I:%M %p" \
-  --date-str="%m-%d-%Y"
+# Get screen resolution
+RESOLUTION=$(xdpyinfo | grep dimensions | awk '{print $2}')
+
+# Scale wallpaper to fit screen resolution (requires imagemagick)
+if command -v convert >/dev/null 2>&1; then
+    convert "$WALLPAPER" -resize "$RESOLUTION^" -gravity center -extent "$RESOLUTION" "$LOCKSCREEN"
+    i3lock -i "$LOCKSCREEN"
+else
+    # Fallback to solid color if imagemagick not installed
+    i3lock -c 282A36
+fi

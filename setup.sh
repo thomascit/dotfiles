@@ -511,10 +511,12 @@ install_wm_linux() {
         fi
       done
       
-      # Try i3lock-color from repos, fallback to building from source if not available
-      if ! sudo apt install -y i3lock-color 2>/dev/null; then
-        warn "i3lock-color not in repos, installing regular i3lock (limited features)"
-        sudo apt install -y i3lock 2>/dev/null || failed_packages+=("i3lock")
+      # Install i3lock
+      if sudo apt install -y i3lock 2>/dev/null; then
+        success "Installed i3lock"
+      else
+        warn "Failed to install i3lock"
+        failed_packages+=("i3lock")
       fi
       
       if [[ ${#failed_packages[@]} -gt 0 ]]; then
@@ -537,10 +539,12 @@ install_wm_linux() {
         fi
       done
       
-      # Try i3lock-color from repos, fallback to building from source if not available
-      if ! sudo dnf install -y i3lock-color 2>/dev/null; then
-        warn "i3lock-color not in repos, installing regular i3lock (limited features)"
-        sudo dnf install -y i3lock 2>/dev/null || failed_packages+=("i3lock")
+      # Install i3lock
+      if sudo dnf install -y i3lock 2>/dev/null; then
+        success "Installed i3lock"
+      else
+        warn "Failed to install i3lock"
+        failed_packages+=("i3lock")
       fi
       
       if [[ ${#failed_packages[@]} -gt 0 ]]; then
@@ -563,10 +567,12 @@ install_wm_linux() {
         fi
       done
       
-      # Try i3lock-color, fallback to regular i3lock
-      if ! sudo zypper install -y i3lock-color 2>/dev/null; then
-        warn "i3lock-color not in repos, installing regular i3lock (limited features)"
-        sudo zypper install -y i3lock 2>/dev/null || failed_packages+=("i3lock")
+      # Install i3lock
+      if sudo zypper install -y i3lock 2>/dev/null; then
+        success "Installed i3lock"
+      else
+        warn "Failed to install i3lock"
+        failed_packages+=("i3lock")
       fi
       
       if [[ ${#failed_packages[@]} -gt 0 ]]; then
@@ -589,21 +595,12 @@ install_wm_linux() {
         fi
       done
       
-      # Arch has i3lock-color in the AUR, install it if yay/paru is available
-      if command -v yay &>/dev/null; then
-        yay -S --noconfirm i3lock-color 2>/dev/null && success "i3lock-color installed" || {
-          warn "i3lock-color failed, installing regular i3lock"
-          sudo pacman -S --noconfirm i3lock 2>/dev/null || failed_packages+=("i3lock")
-        }
-      elif command -v paru &>/dev/null; then
-        paru -S --noconfirm i3lock-color 2>/dev/null && success "i3lock-color installed" || {
-          warn "i3lock-color failed, installing regular i3lock"
-          sudo pacman -S --noconfirm i3lock 2>/dev/null || failed_packages+=("i3lock")
-        }
+      # Install i3lock
+      if sudo pacman -S --noconfirm i3lock 2>/dev/null; then
+        success "Installed i3lock"
       else
-        warn "AUR helper (yay/paru) not found, installing regular i3lock (limited features)"
-        warn "Install i3lock-color manually from AUR for full lock screen features"
-        sudo pacman -S --noconfirm i3lock 2>/dev/null || failed_packages+=("i3lock")
+        warn "Failed to install i3lock"
+        failed_packages+=("i3lock")
       fi
       
       if [[ ${#failed_packages[@]} -gt 0 ]]; then

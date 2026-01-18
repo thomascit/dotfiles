@@ -497,16 +497,53 @@ install_wm_linux() {
     info "Installing i3 window manager..."
     case "$DISTRO" in
     debian | ubuntu | mint | kali | parrotos)
-      sudo apt install -y i3 i3status i3lock rofi feh picom kitty pavucontrol 2>/dev/null && success "i3 installed" || warn "i3 installation failed"
+      # Install base packages
+      sudo apt install -y xorg i3 i3status xautolock rofi feh picom kitty pavucontrol dex xss-lock network-manager-applet x11-xserver-utils imagemagick 2>/dev/null
+      # Try i3lock-color from repos, fallback to building from source if not available
+      if ! sudo apt install -y i3lock-color 2>/dev/null; then
+        warn "i3lock-color not in repos, installing regular i3lock (limited features)"
+        sudo apt install -y i3lock 2>/dev/null
+      fi
+      success "i3 installed"
       ;;
     fedora | fedora-asahi-remix)
-      sudo dnf install -y i3 i3status i3lock rofi feh picom kitty pavucontrol 2>/dev/null && success "i3 installed" || warn "i3 installation failed"
+      # Install base packages
+      sudo dnf install -y xorg-x11-server-Xorg xorg-x11-xinit i3 i3status xautolock rofi feh picom kitty pavucontrol dex xss-lock network-manager-applet xorg-x11-server-utils ImageMagick 2>/dev/null
+      # Try i3lock-color from repos, fallback to building from source if not available
+      if ! sudo dnf install -y i3lock-color 2>/dev/null; then
+        warn "i3lock-color not in repos, installing regular i3lock (limited features)"
+        sudo dnf install -y i3lock 2>/dev/null
+      fi
+      success "i3 installed"
       ;;
     opensuse*)
-      sudo zypper install -y i3 i3status i3lock rofi feh picom kitty pavucontrol 2>/dev/null && success "i3 installed" || warn "i3 installation failed"
+      sudo zypper install -y xorg-x11-server i3 i3status xautolock rofi feh picom kitty pavucontrol dex xss-lock network-manager-applet xrandr ImageMagick 2>/dev/null
+      # Try i3lock-color, fallback to regular i3lock
+      if ! sudo zypper install -y i3lock-color 2>/dev/null; then
+        warn "i3lock-color not in repos, installing regular i3lock (limited features)"
+        sudo zypper install -y i3lock 2>/dev/null
+      fi
+      success "i3 installed"
       ;;
     arch | steamos | cachyos | bazzite)
-      sudo pacman -S --noconfirm i3-wm i3status i3lock rofi feh picom kitty pavucontrol 2>/dev/null && success "i3 installed" || warn "i3 installation failed"
+      # Arch has i3lock-color in the AUR, install it if yay/paru is available
+      sudo pacman -S --noconfirm xorg-server xorg-xinit i3-wm i3status xautolock rofi feh picom kitty pavucontrol dex xss-lock network-manager-applet xorg-xrandr imagemagick 2>/dev/null
+      if command -v yay &>/dev/null; then
+        yay -S --noconfirm i3lock-color 2>/dev/null && success "i3lock-color installed" || {
+          warn "i3lock-color failed, installing regular i3lock"
+          sudo pacman -S --noconfirm i3lock 2>/dev/null
+        }
+      elif command -v paru &>/dev/null; then
+        paru -S --noconfirm i3lock-color 2>/dev/null && success "i3lock-color installed" || {
+          warn "i3lock-color failed, installing regular i3lock"
+          sudo pacman -S --noconfirm i3lock 2>/dev/null
+        }
+      else
+        warn "AUR helper (yay/paru) not found, installing regular i3lock (limited features)"
+        warn "Install i3lock-color manually from AUR for full lock screen features"
+        sudo pacman -S --noconfirm i3lock 2>/dev/null
+      fi
+      success "i3 installed"
       ;;
     *)
       warn "Cannot install i3: unknown distro"

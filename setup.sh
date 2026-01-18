@@ -497,55 +497,119 @@ install_wm_linux() {
     info "Installing i3 window manager..."
     case "$DISTRO" in
     debian | ubuntu | mint | kali | parrotos)
-      # Install base packages (kitty removed - install separately via terminals menu)
-      sudo apt install -y xorg i3 i3status xautolock rofi feh picom pavucontrol dex xss-lock network-manager-applet x11-xserver-utils imagemagick 2>/dev/null
+      # Install packages individually to avoid failures stopping entire installation
+      local i3_packages="xorg i3 i3status xautolock rofi feh picom pavucontrol dex xss-lock network-manager-applet x11-xserver-utils imagemagick"
+      local failed_packages=()
+      
+      info "Installing core i3 packages..."
+      for pkg in $i3_packages; do
+        if sudo apt install -y "$pkg" 2>/dev/null; then
+          success "Installed $pkg"
+        else
+          warn "Failed to install $pkg"
+          failed_packages+=("$pkg")
+        fi
+      done
+      
       # Try i3lock-color from repos, fallback to building from source if not available
       if ! sudo apt install -y i3lock-color 2>/dev/null; then
         warn "i3lock-color not in repos, installing regular i3lock (limited features)"
-        sudo apt install -y i3lock 2>/dev/null
+        sudo apt install -y i3lock 2>/dev/null || failed_packages+=("i3lock")
       fi
-      success "i3 installed"
+      
+      if [[ ${#failed_packages[@]} -gt 0 ]]; then
+        warn "Some packages failed to install: ${failed_packages[*]}"
+      fi
+      success "i3 installation complete"
       ;;
     fedora | fedora-asahi-remix)
-      # Install base packages (kitty removed - install separately via terminals menu)
-      sudo dnf install -y xorg-x11-server-Xorg xorg-x11-xinit i3 i3status xautolock rofi feh picom pavucontrol dex xss-lock network-manager-applet xorg-x11-server-utils ImageMagick 2>/dev/null
+      # Install packages individually to avoid failures stopping entire installation
+      local i3_packages="xorg-x11-server-Xorg xorg-x11-xinit i3 i3status xautolock rofi feh picom pavucontrol dex xss-lock network-manager-applet xorg-x11-server-utils ImageMagick"
+      local failed_packages=()
+      
+      info "Installing core i3 packages..."
+      for pkg in $i3_packages; do
+        if sudo dnf install -y "$pkg" 2>/dev/null; then
+          success "Installed $pkg"
+        else
+          warn "Failed to install $pkg"
+          failed_packages+=("$pkg")
+        fi
+      done
+      
       # Try i3lock-color from repos, fallback to building from source if not available
       if ! sudo dnf install -y i3lock-color 2>/dev/null; then
         warn "i3lock-color not in repos, installing regular i3lock (limited features)"
-        sudo dnf install -y i3lock 2>/dev/null
+        sudo dnf install -y i3lock 2>/dev/null || failed_packages+=("i3lock")
       fi
-      success "i3 installed"
+      
+      if [[ ${#failed_packages[@]} -gt 0 ]]; then
+        warn "Some packages failed to install: ${failed_packages[*]}"
+      fi
+      success "i3 installation complete"
       ;;
     opensuse*)
-      # Install base packages (kitty removed - install separately via terminals menu)
-      sudo zypper install -y xorg-x11-server i3 i3status xautolock rofi feh picom pavucontrol dex xss-lock network-manager-applet xrandr ImageMagick 2>/dev/null
+      # Install packages individually to avoid failures stopping entire installation
+      local i3_packages="xorg-x11-server i3 i3status xautolock rofi feh picom pavucontrol dex xss-lock network-manager-applet xrandr ImageMagick"
+      local failed_packages=()
+      
+      info "Installing core i3 packages..."
+      for pkg in $i3_packages; do
+        if sudo zypper install -y "$pkg" 2>/dev/null; then
+          success "Installed $pkg"
+        else
+          warn "Failed to install $pkg"
+          failed_packages+=("$pkg")
+        fi
+      done
+      
       # Try i3lock-color, fallback to regular i3lock
       if ! sudo zypper install -y i3lock-color 2>/dev/null; then
         warn "i3lock-color not in repos, installing regular i3lock (limited features)"
-        sudo zypper install -y i3lock 2>/dev/null
+        sudo zypper install -y i3lock 2>/dev/null || failed_packages+=("i3lock")
       fi
-      success "i3 installed"
+      
+      if [[ ${#failed_packages[@]} -gt 0 ]]; then
+        warn "Some packages failed to install: ${failed_packages[*]}"
+      fi
+      success "i3 installation complete"
       ;;
     arch | steamos | cachyos | bazzite)
+      # Install packages individually to avoid failures stopping entire installation
+      local i3_packages="xorg-server xorg-xinit i3-wm i3status xautolock rofi feh picom pavucontrol dex xss-lock network-manager-applet xorg-xrandr imagemagick"
+      local failed_packages=()
+      
+      info "Installing core i3 packages..."
+      for pkg in $i3_packages; do
+        if sudo pacman -S --noconfirm "$pkg" 2>/dev/null; then
+          success "Installed $pkg"
+        else
+          warn "Failed to install $pkg"
+          failed_packages+=("$pkg")
+        fi
+      done
+      
       # Arch has i3lock-color in the AUR, install it if yay/paru is available
-      # (kitty removed - install separately via terminals menu)
-      sudo pacman -S --noconfirm xorg-server xorg-xinit i3-wm i3status xautolock rofi feh picom pavucontrol dex xss-lock network-manager-applet xorg-xrandr imagemagick 2>/dev/null
       if command -v yay &>/dev/null; then
         yay -S --noconfirm i3lock-color 2>/dev/null && success "i3lock-color installed" || {
           warn "i3lock-color failed, installing regular i3lock"
-          sudo pacman -S --noconfirm i3lock 2>/dev/null
+          sudo pacman -S --noconfirm i3lock 2>/dev/null || failed_packages+=("i3lock")
         }
       elif command -v paru &>/dev/null; then
         paru -S --noconfirm i3lock-color 2>/dev/null && success "i3lock-color installed" || {
           warn "i3lock-color failed, installing regular i3lock"
-          sudo pacman -S --noconfirm i3lock 2>/dev/null
+          sudo pacman -S --noconfirm i3lock 2>/dev/null || failed_packages+=("i3lock")
         }
       else
         warn "AUR helper (yay/paru) not found, installing regular i3lock (limited features)"
         warn "Install i3lock-color manually from AUR for full lock screen features"
-        sudo pacman -S --noconfirm i3lock 2>/dev/null
+        sudo pacman -S --noconfirm i3lock 2>/dev/null || failed_packages+=("i3lock")
       fi
-      success "i3 installed"
+      
+      if [[ ${#failed_packages[@]} -gt 0 ]]; then
+        warn "Some packages failed to install: ${failed_packages[*]}"
+      fi
+      success "i3 installation complete"
       ;;
     *)
       warn "Cannot install i3: unknown distro"

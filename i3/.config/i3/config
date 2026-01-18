@@ -13,7 +13,7 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:monospace 8
+font pango:monospace 12
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -150,8 +150,8 @@ bindsym $mod+Shift+0 move container to workspace number $ws10
 bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
-# exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+# exit i3 (logs you out of your X session without confirmation)
+bindsym $mod+Shift+e exec "i3-msg exit"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -187,29 +187,29 @@ bindsym $mod+r mode "resize"
 gaps inner 10px
 gaps outer 5px
 
-# Set background
+# Load Xresources for DPI scaling
+exec --no-startup-id xrdb -merge ~/.Xresources
+
+# Auto-detect and configure monitors
+exec --no-startup-id ~/.config/i3/monitor-setup.sh
+
+# Set background first
 exec --no-startup-id feh --bg-fill $HOME/.local/share/wallpaper/wp.png
 
-# Status Bar
-exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+# Enable transparency (compositor)
+exec --no-startup-id picom --backend glx -b
 
-# Enable transparency
-exec --no-startup-id picom -c
+# Status Bar (with delay to let wallpaper load)
+exec_always --no-startup-id sleep 1 && $HOME/.config/polybar/launch.sh
 
 # Enable custom i3lock Script after inactivity
 exec xautolock -time 15 -locker '~/.config/i3/lock.sh'
 
 # Custom shortcuts
 bindsym $mod+t exec kitty
-bindsym $mod+Shift+t exec ghostty
 bindsym $mod+Shift+b exec zen-browser
-bindsym $mod+Shift+f exec nemo
-bindsym $mod+Shift+m exec spotify
-bindsym $mod+Shift+n exec obsidian
-bindsym $mod+Shift+d exec discord
-bindsym $mod+Shift+g exec steam
 bindsym $mod+i exec ~/.config/i3/lock.sh
-bindsym $mod+space exec rofi -show drun
+bindsym $mod+space exec --no-startup-id rofi -show drun
 
 # Dracula Colors
 # class                 border  bground text    indicator child_border
@@ -220,4 +220,4 @@ client.urgent           #44475A #FF5555 #F8F8F2 #FF5555   #FF5555
 client.placeholder      #282A36 #282A36 #F8F8F2 #282A36   #282A36
 client.background       #F8F8F2
 
-for_window [class=".*"] border normal 1
+for_window [class=".*"] border pixel 5

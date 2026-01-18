@@ -554,10 +554,16 @@ install_wm_linux() {
     info "Installing Hyprland..."
     case "$DISTRO" in
     fedora | fedora-asahi-remix)
-      sudo dnf install -y hyprland hyprpaper wofi kitty brightnessctl playerctl pavucontrol blueman network-manager-applet 2>/dev/null && success "Hyprland installed" || warn "Hyprland installation failed"
+      # Install core Hyprland with all required dependencies from config
+      sudo dnf install -y hyprland wofi kitty brightnessctl playerctl pavucontrol blueman \
+        network-manager-applet swaybg pipewire-utils wireplumber btop hyprlock 2>/dev/null && \
+        success "Hyprland installed" || warn "Hyprland installation failed"
       ;;
     arch | steamos | cachyos | bazzite)
-      sudo pacman -S --noconfirm hyprland hyprpaper wofi kitty brightnessctl playerctl pavucontrol blueman network-manager-applet 2>/dev/null && success "Hyprland installed" || warn "Hyprland installation failed"
+      # Install core Hyprland with all required dependencies from config
+      sudo pacman -S --noconfirm hyprland wofi kitty brightnessctl playerctl pavucontrol blueman \
+        network-manager-applet swaybg pipewire-utils wireplumber btop hyprlock 2>/dev/null && \
+        success "Hyprland installed" || warn "Hyprland installation failed"
       ;;
     *)
       warn "Hyprland may require manual installation on $DISTRO"
@@ -649,14 +655,14 @@ install_window_managers() {
       clone_dotfiles
       install_wm_linux "i3"
       install_wm_linux "polybar"
-      stow_pkgs="i3 polybar wallpaper"
+      stow_pkgs="i3 polybar rofi wallpaper"
       ;;
     2)
       create_xdg_dirs
       clone_dotfiles
       install_wm_linux "hyprland"
       install_wm_linux "waybar"
-      stow_pkgs="hypr waybar wallpaper"
+      stow_pkgs="hypr waybar wofi wallpaper"
       ;;
     3)
       info "Cancelled"

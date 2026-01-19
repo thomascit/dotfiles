@@ -21,6 +21,7 @@ export GROFF_NO_SGR=1                  # for konsole
 
 # PATH
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.opencode/bin:$PATH"
 
 # Fzf
 export FZF_DEFAULT_COMMAND='rg --files --hidden'

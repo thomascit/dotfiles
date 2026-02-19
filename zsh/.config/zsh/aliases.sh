@@ -61,7 +61,9 @@ alias bup="brew update && brew upgrade -g"
 # Pacman (Arch)
 # ─────────────────────────────────────────────
 alias pi="pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S"
+alias yi="yay -Slq | fzf --multi --preview 'yay -Si {1}' | xargs -ro yay -S"
 alias pu="pacman -Qq | fzf --multi --preview 'pacman -Qi {1}' | xargs -ro sudo pacman -Rns"
+alias yu="yay -Qq | fzf --multi --preview 'yay -Qi {1}' | xargs -ro yay -Rns"
 
 # ─────────────────────────────────────────────
 # APT (Debian/Ubuntu)

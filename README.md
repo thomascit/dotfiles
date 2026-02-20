@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="reference/face.png" width="120" />
+
 <pre>
  ██████╗  ██████╗ ████████╗███████╗██╗██╗     ███████╗███████╗
  ██╔══██╗██╔═══██╗╚══██╔══╝██╔════╝██║██║     ██╔════╝██╔════╝
@@ -11,138 +13,130 @@
 
 ### Personal Development Environment Configuration
 
-> _Meticulously crafted dotfiles for macOS & Linux developers who appreciate clean configs, powerful tools, and the Dracula aesthetic._
+> _Dotfiles for Linux developers who appreciate clean configs, powerful tools, and the Dracula aesthetic._
 
 [![Theme: Dracula](https://img.shields.io/badge/Theme-Dracula-bd93f9?style=flat-square)](https://draculatheme.com)
-[![Platform: macOS](https://img.shields.io/badge/Platform-macOS-999999?style=flat-square&logo=apple)](https://www.apple.com/macos/)
 [![Platform: Linux](https://img.shields.io/badge/Platform-Linux-FCC624?style=flat-square&logo=linux&logoColor=black)](https://www.linux.org/)
 [![Manager: GNU Stow](https://img.shields.io/badge/Manager-GNU_Stow-4EAA25?style=flat-square)](https://www.gnu.org/software/stow/)
 
-**Managed with GNU Stow** • **XDG Base Directory Compliant** • **Modular & Portable**
+</div>
 
 ---
 
-</div>
+## Prerequisites
+
+Install these before running the setup script:
+
+- `git`
+- `gnu stow`
+
+All other tools (nvim, tmux, zsh, etc.) should be installed separately beforehand. The setup script only manages config files, not package installation.
 
 ## Quick Start
 
 ```sh
-# One-liner installation
-bash <(curl -fsSL https://raw.githubusercontent.com/thomascit/dotfiles/main/setup.sh)
-
-# Or clone first, then run setup
-git clone https://github.com/thomascit/dotfiles.git ~/dotfiles
-cd ~/dotfiles
-./setup.sh
+git clone git@github.com:thomascit/dotfiles.git ~/dotfiles
+~/dotfiles/setup.sh
 ```
-
-> **Note**: The setup script auto-detects its location. Clone the repo wherever you like and run `./setup.sh` from there.
 
 ## Setup Script
 
-The setup script handles OS detection, package installation, stowing configs, and plugin manager setup.
-
-### Installation Options
-
-| Option | Description |
-|--------|-------------|
-| **Full** | Terminal + platform-specific packages |
-| **Terminal** | Shells, editors, utilities (recommended for WSL) |
-| **Platform** | Window managers, terminal emulators, GUI apps |
-| **Custom** | Choose specific packages |
-
-### Command Line
+The setup script stows configs, installs plugin managers, and copies fonts. It does not install packages.
 
 ```sh
-./setup.sh --full       # Full install (terminal + platform)
-./setup.sh --terminal   # Terminal packages only
-./setup.sh --platform   # Platform-specific packages only
-./setup.sh --stow       # Stow packages only (no software install)
-./setup.sh --plugins    # Install plugin managers only
-./setup.sh --fonts      # Install fonts only
-./setup.sh --uninstall  # Remove dotfiles symlinks and plugins
+./setup.sh --full       # Stow all CLI configs + plugin managers + fonts
+./setup.sh --custom     # Select specific packages to stow
+./setup.sh --plugins    # Install plugin managers only (TPM, vim-plug, Zinit)
+./setup.sh --fonts      # Install fonts from reference/fonts/
+./setup.sh --uninstall  # Remove dotfile symlinks and plugin managers
 ./setup.sh --help       # Show help and package lists
 ```
-
-### Package Groups
-
-| Group | Packages |
-|-------|----------|
-| **Terminal** | bash, zsh, fish, starship, tmux, vim, nvim, bat, btop, eza, lazygit, yazi |
-| **macOS** | aerospace, alacritty, ghostty, kitty |
-| **Linux** | alacritty, ghostty, kitty, hypr, i3, polybar, waybar |
 
 ## What's Inside
 
 | Package | Description |
 |---------|-------------|
-| `aerospace` | Tiling window manager for macOS |
 | `alacritty` | Terminal emulator with Dracula theme |
-| `bash`/`zsh`/`fish` | Shells with VI mode, Starship prompt, Zoxide, shared aliases |
+| `bash` / `zsh` / `fish` | Shells with VI mode, Starship prompt, Zoxide, shared aliases |
 | `bat` | Cat replacement with syntax highlighting |
-| `btop` | Resource monitor with customizable interface |
+| `btop` | Resource monitor |
 | `eza` | Modern ls replacement with icons and Git status |
 | `ghostty` | Fast GPU-accelerated terminal |
-| `hypr` | Hyprland compositor configuration (Linux) |
-| `i3` | Tiling window manager (Linux) |
+| `hypr` | Hyprland compositor |
 | `kitty` | GPU-based terminal emulator |
 | `lazygit` | Terminal UI for Git |
+| `noctalia` | Hyprland shell — bar, launcher, dock, lock screen, notifications, control center |
 | `nvim` | Neovim with LazyVim configuration |
-| `polybar` | Status bar for i3 (Linux) |
+| `rofi` | Application launcher (X11) |
 | `starship` | Fast, customizable shell prompt |
 | `tmux` | Terminal multiplexer with TPM plugins |
 | `vim` | Editor with vim-plug and Dracula theme |
-| `waybar` | Wayland status bar (Linux) |
+| `wofi` | Application launcher (Wayland) |
 | `yazi` | Terminal file manager with plugins |
 
 ### Reference Files (not stowed)
 
 | File | Description |
 |------|-------------|
-| `reference/Brewfile` | Homebrew packages for macOS |
 | `reference/fonts/` | JetBrainsMono Nerd Font |
 | `reference/vimium/` | Vimium browser extension settings |
 
 ## Theme
 
-Dracula is the preferred theme across these dotfiles. Many configs default to a Dracula theme or variant (Vim, Fish, tmux, terminals). For more details, see https://draculatheme.com.
+Dracula across the board — vim, fish, tmux, terminals, rofi, wofi, yazi, noctalia. See https://draculatheme.com.
 
 ## Fonts
 
-JetBrainsMono Nerd Font is included at `reference/fonts/`. The setup script installs fonts automatically. Terminal configs (alacritty, ghostty, kitty) are pre-configured to use this font.
+JetBrainsMono Nerd Font is included at `reference/fonts/`. Install with:
+
+```sh
+./setup.sh --fonts
+```
+
+Terminal configs (alacritty, ghostty, kitty) and noctalia are pre-configured to use this font.
 
 ## Plugin Managers
 
-The setup script installs all plugin managers automatically, or they bootstrap themselves on first use:
-
-- **Vim**: uses `vim-plug` - auto-installs and runs `PlugInstall` on first run
-- **Zsh**: uses `zinit` - bootstraps automatically if missing
-- **Tmux**: uses `TPM` - requires `<prefix> + I` to install plugins after setup
+| Tool | Manager | Notes |
+|------|---------|-------|
+| Vim | vim-plug | Run `:PlugInstall` on first launch |
+| Zsh | zinit | Bootstraps automatically |
+| Tmux | TPM | Press `<prefix>+I` to install plugins |
 
 ## Uninstall
-
-To remove dotfiles symlinks and plugin managers:
 
 ```sh
 ./setup.sh --uninstall
 ```
 
 Options:
-- **Full uninstall**: Unstow all packages, remove wrapper files, remove plugin managers
-- **Unstow only**: Remove symlinks (keeps software installed)
+- **Full**: Unstow all packages + remove wrapper files + remove plugin managers
+- **Unstow only**: Remove symlinks only
 - **Remove plugins only**: Remove TPM, vim-plug, Zinit
 - **Remove wrappers only**: Remove `.bashrc`, `.zshrc`, `.vimrc` from `$HOME`
 
 ## Troubleshooting
 
-**Stow conflicts?** Run `stow -D <package>` to unstow first, then `stow -R <package>`.
+**Stow conflicts with existing files?**
+Stow will refuse to create a symlink if a real file already exists at the target. Back it up and remove it first:
+```sh
+mv ~/.config/nvim ~/.config/nvim.bak
+stow -R nvim
+```
 
-**Fonts not working?** Ensure JetBrainsMono Nerd Font is installed via `./setup.sh --fonts`.
+**Stow conflicts with existing symlinks pointing elsewhere?**
+Unstow the package first to clean up, then restow:
+```sh
+stow -D nvim && stow nvim
+```
 
-**TPM plugins not loading?** In tmux, press `Ctrl+Space` then `I` to install plugins.
+**Fonts not showing in terminals?**
+Run `./setup.sh --fonts` then restart the terminal. On Linux, `fc-cache -f` is run automatically but you may need to restart the application.
+
+**TPM plugins not loading?**
+Start tmux and press `<prefix>+I` to install plugins. If `<prefix>` is not set, it defaults to `Ctrl+b`.
 
 ## Notes
 
 - `.stowrc` targets `$HOME` and ignores `reference/`. Run stow from the repo root.
-- Wrapper dotfiles (`.bashrc`, `.zshrc`, `.vimrc`) live in the repo root and source configs from `~/.config/*`.
-- macOS Homebrew: shell configs detect `/opt/homebrew` (Apple Silicon) or `/usr/local` (Intel) automatically.
+- Wrapper files (`.bashrc`, `.zshrc`, `.vimrc`) live in the repo root and source the actual configs from `~/.config/`.

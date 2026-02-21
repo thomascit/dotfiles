@@ -19,3 +19,13 @@ nvim/.config/nvim/.netrwhist
 nvim/.config/nvim/plugin/
 nvim/.config/nvim/lazy-lock.json
 
+# Secrets / sensitive files
+*.env
+*.pem
+*.key
+id_rsa
+id_ed25519
+.netrc
+*_secret*
+*credentials*
+

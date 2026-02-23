@@ -39,8 +39,8 @@
     "bar": {
         "autoHideDelay": 500,
         "autoShowDelay": 150,
-        "backgroundOpacity": 0.93,
-        "barType": "framed",
+        "backgroundOpacity": 0.5,
+        "barType": "simple",
         "capsuleColorKey": "none",
         "capsuleOpacity": 1,
         "density": "spacious",
@@ -57,37 +57,29 @@
         "position": "top",
         "screenOverrides": [
         ],
-        "showCapsule": true,
+        "showCapsule": false,
         "showOutline": false,
-        "useSeparateOpacity": false,
+        "useSeparateOpacity": true,
         "widgets": {
             "center": [
                 {
-                    "hideWhenZero": false,
-                    "hideWhenZeroUnread": false,
-                    "iconColor": "none",
-                    "id": "NotificationHistory",
-                    "showUnreadBadge": true,
-                    "unreadBadgeColor": "primary"
-                },
-                {
                     "characterCount": 2,
-                    "colorizeIcons": false,
+                    "colorizeIcons": true,
                     "emptyColor": "secondary",
-                    "enableScrollWheel": true,
+                    "enableScrollWheel": false,
                     "focusedColor": "primary",
                     "followFocusedScreen": false,
-                    "groupedBorderOpacity": 1,
+                    "groupedBorderOpacity": 0,
                     "hideUnoccupied": false,
-                    "iconScale": 0.8,
+                    "iconScale": 1,
                     "id": "Workspace",
                     "labelMode": "index",
-                    "occupiedColor": "secondary",
+                    "occupiedColor": "tertiary",
                     "pillSize": 0.6,
-                    "showApplications": false,
+                    "showApplications": true,
                     "showBadge": true,
-                    "showLabelsOnlyWhenOccupied": true,
-                    "unfocusedIconsOpacity": 1
+                    "showLabelsOnlyWhenOccupied": false,
+                    "unfocusedIconsOpacity": 0.5
                 },
                 {
                     "blacklist": [
@@ -103,9 +95,12 @@
             ],
             "left": [
                 {
-                    "icon": "rocket",
+                    "hideWhenZero": false,
+                    "hideWhenZeroUnread": false,
                     "iconColor": "none",
-                    "id": "Launcher"
+                    "id": "NotificationHistory",
+                    "showUnreadBadge": true,
+                    "unreadBadgeColor": "primary"
                 },
                 {
                     "clockColor": "none",
@@ -384,10 +379,10 @@
         "lockScreenMonitors": [
         ],
         "lockScreenTint": 0,
-        "radiusRatio": 1,
+        "radiusRatio": 0,
         "reverseScroll": false,
         "scaleRatio": 1,
-        "screenRadiusRatio": 1,
+        "screenRadiusRatio": 0,
         "shadowDirection": "bottom_right",
         "shadowOffsetX": 2,
         "shadowOffsetY": 3,
@@ -577,7 +572,7 @@
         "fontFixed": "JetBrainsMono Nerd Font Mono",
         "fontFixedScale": 1,
         "networkPanelView": "wifi",
-        "panelBackgroundOpacity": 0.9,
+        "panelBackgroundOpacity": 1,
         "panelsAttachedToBar": true,
         "settingsPanelMode": "attached",
         "tooltipsEnabled": true,

@@ -55,3 +55,5 @@ export ZVM_CLIPBOARD_PASTE_CMD='pbpaste'
 
 # LAZYGIT Settings
 export LAZYGIT_NEW_DIR_FILE=$HOME/.lazygit/newdir
+
+[ -f "$HOME/.zenv" ] && source "$HOME/.zenv"

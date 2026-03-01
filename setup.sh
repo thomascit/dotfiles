@@ -214,7 +214,7 @@ install_yazi_plugins() {
   fi
 
   info "Installing yazi plugins and flavors..."
-  ya pkg install --yes
+  ya pkg install
   success "Yazi plugins installed"
 }
 

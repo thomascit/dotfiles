@@ -20,6 +20,7 @@ nvim/.config/nvim/plugin/
 nvim/.config/nvim/lazy-lock.json
 
 # Secrets / sensitive files
+.zenv
 *.env
 *.pem
 *.key

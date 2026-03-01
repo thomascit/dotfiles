@@ -207,6 +207,17 @@ install_zinit() {
   success "Zinit installed"
 }
 
+install_yazi_plugins() {
+  if ! command_exists ya; then
+    warn "ya not found, skipping yazi plugin install"
+    return
+  fi
+
+  info "Installing yazi plugins and flavors..."
+  ya pkg install --yes
+  success "Yazi plugins installed"
+}
+
 remove_plugin_managers() {
   info "Removing plugin managers..."
 
@@ -266,6 +277,7 @@ run_full_install() {
   install_tpm
   install_vim_plug
   install_zinit
+  install_yazi_plugins
   install_fonts
 
   echo ""
@@ -316,6 +328,7 @@ run_plugin_managers_only() {
   install_tpm
   install_vim_plug
   install_zinit
+  install_yazi_plugins
   success "Plugin managers installed!"
 }
 
@@ -405,7 +418,7 @@ show_menu() {
   echo -e "${CYAN}Options:${NC}"
   echo "  1) Full install (CLI + wrappers + plugin managers + fonts)"
   echo "  2) Custom install (select packages)"
-  echo "  3) Install plugin managers only (TPM, vim-plug, Zinit)"
+  echo "  3) Install plugin managers only (TPM, vim-plug, Zinit, yazi plugins)"
   echo "  4) Install fonts only"
   echo "  5) Uninstall"
   echo "  6) Exit"
@@ -458,7 +471,7 @@ main() {
     echo "Options:"
     echo "  --full, -f      Stow all CLI configs + plugin managers + fonts"
     echo "  --custom, -c    Select specific packages to stow"
-    echo "  --plugins, -p   Install plugin managers only (TPM, vim-plug, Zinit)"
+    echo "  --plugins, -p   Install plugin managers only (TPM, vim-plug, Zinit, yazi plugins)"
     echo "  --fonts         Install fonts from reference/fonts/"
     echo "  --uninstall, -u Remove dotfile symlinks and plugin managers"
     echo "  --help, -h      Show this help message"

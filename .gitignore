@@ -19,6 +19,12 @@ nvim/.config/nvim/.netrwhist
 nvim/.config/nvim/plugin/
 nvim/.config/nvim/lazy-lock.json
 
+# Yazi plugins and flavors (managed by ya pkg, tracked via package.toml)
+yazi/.config/yazi/plugins/*
+!yazi/.config/yazi/plugins/.gitkeep
+yazi/.config/yazi/flavors/*
+!yazi/.config/yazi/flavors/.gitkeep
+
 # Secrets / sensitive files
 .zenv
 *.env

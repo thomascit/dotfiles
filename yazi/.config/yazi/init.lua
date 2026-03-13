@@ -1,13 +1,20 @@
 -- Plugins
+require("folder-rules"):setup()
 
+require("git"):setup({
+	-- Order of status signs showing in the linemode
+	order = 1500,
+})
+require("smart-enter"):setup({
+	open_multi = true,
+})
 require("full-border"):setup({
 	-- Available values: ui.Border.PLAIN, ui.Border.ROUNDED
 	type = ui.Border.PLAIN,
 })
 
-require("git"):setup()
-
 local dracula_theme = require("yatline-dracula"):setup()
+
 require("yatline"):setup({
 	theme = dracula_theme,
 	-- Theme Overrides
@@ -73,3 +80,18 @@ require("yatline"):setup({
 		},
 	},
 })
+
+-- Show user/group of files in status bar
+Status:children_add(function()
+	local h = cx.active.current.hovered
+	if not h or ya.target_family() ~= "unix" then
+		return ""
+	end
+
+	return ui.Line({
+		ui.Span(ya.user_name(h.cha.uid) or tostring(h.cha.uid)):fg("magenta"),
+		":",
+		ui.Span(ya.group_name(h.cha.gid) or tostring(h.cha.gid)):fg("magenta"),
+		" ",
+	})
+end, 500, Status.RIGHT)

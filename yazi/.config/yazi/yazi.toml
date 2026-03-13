@@ -8,6 +8,7 @@ linemode = "mtime"
 [preview]
 wrap = "yes"
 tab_size = 4
+image_delay = 100
 
 [plugin]
 
@@ -17,6 +18,7 @@ prepend_previewers = [
   { name = "*.rst", run = "rich-preview" },   # for restructured text (.rst) files
   { name = "*.ipynb", run = "rich-preview" }, # for jupyter notebooks (.ipynb)
   { name = "*.json", run = "rich-preview" },  # for json (.json) files
+  { name = "*.icns", run = "rich-preview" },  # for json (.json) files
   #    { name = "*.lang_type", run = "rich-preview"} # for particular language files eg. .py, .go., .lua, etc.
 ]
 

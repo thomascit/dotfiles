@@ -21,6 +21,7 @@ set -gx GROFF_NO_SGR 1                 # for konsole
 
 # PATH
 fish_add_path "$HOME/.local/bin"
+fish_add_path "$HOME/.opencode/bin"
 
 # FZF
 set -gx FZF_DEFAULT_COMMAND 'rg --files --hidden'

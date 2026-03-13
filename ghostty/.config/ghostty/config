@@ -3,8 +3,6 @@ background-opacity                 = 0.7
 confirm-close-surface              = false
 font-family                        = "JetBrainsMono Nerd Font Mono"
 font-size                          = 16
-keybind                            = "shift+cmd+k=scroll_page_lines:5"
-keybind                            = "shift+cmd+j=scroll_page_lines:-5"
 macos-option-as-alt                = true
 macos-titlebar-style               = hidden
 mouse-hide-while-typing            = true
@@ -16,3 +14,4 @@ window-save-state                  = "always"
 window-padding-x                   = 0
 window-padding-y                   = 0
 window-padding-balance             = true
+keybind                            = ctrl+grave_accent=toggle_quick_terminal

@@ -5,6 +5,7 @@ fi
 
 # Environment variables (from .zprofile for non-login shells)
 [ -f "$HOME/.config/zsh/.zprofile" ] && source "$HOME/.config/zsh/.zprofile"
+[ -f "$HOME/.zenv" ] && source "$HOME/.zenv"
 
 # Aliases
 [ -f "$HOME/.config/zsh/aliases.sh" ] && source "$HOME/.config/zsh/aliases.sh"
@@ -28,6 +29,8 @@ autoload -Uz _zinit
 
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
+ZVM_SYSTEM_CLIPBOARD_ENABLED=true
+
 zinit light-mode for \
     zdharma-continuum/fast-syntax-highlighting \
     zsh-users/zsh-autosuggestions \

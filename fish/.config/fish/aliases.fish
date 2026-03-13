@@ -17,12 +17,11 @@ end
 # Edit Config Files
 # ─────────────────────────────────────────────
 alias ac "$EDITOR $HOME/.config/alacritty/alacritty.toml"
-alias aec "$EDITOR $HOME/.config/aerospace/aerospace.toml"
-alias als "$EDITOR $HOME/.config/zsh/aliases.*"
+alias als "$EDITOR $HOME/.config/fish/aliases.*"
 alias brc "$EDITOR $HOME/.config/bash/bashrc"
 alias fc "$EDITOR $HOME/.config/fish/config.fish"
 alias gc "$EDITOR $HOME/.config/ghostty/config"
-alias i3c "$EDITOR $HOME/.config/i3/config"
+alias hyc "$EDITOR $HOME/.config/hypr/hyprland.conf"
 alias kc "$EDITOR $HOME/.config/kitty/kitty.conf"
 alias sc "$EDITOR $HOME/.config/starship/starship.toml"
 alias sshc "$EDITOR $HOME/.ssh/config"
@@ -50,18 +49,21 @@ alias gs "git status"
 # ─────────────────────────────────────────────
 alias ba "brew autoremove"
 alias bc "brew cleanup"
-alias be "$EDITOR $HOME/Brewfile"
-alias bi "brew install"
-alias bs "brew search"
-alias bu "brew update"
-alias br "brew remove"
-alias bup "brew upgrade -g"
+alias bi "brew formulae | fzf --multi --preview 'brew info {1}' | xargs -ro brew install"
+alias bic "brew casks | fzf --multi --preview 'brew info --cask {1}' | xargs -ro brew install --cask"
+alias bu "brew leaves | fzf --multi --preview 'brew info {1}' | xargs -ro brew uninstall"
+alias buc "brew list --cask | fzf --multi --preview 'brew info --cask {1}' | xargs -ro brew uninstall --cask"
+alias bup "brew update && brew upgrade -g"
 
 # ─────────────────────────────────────────────
 # Pacman (Arch)
 # ─────────────────────────────────────────────
 alias pi "pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S"
+alias yi "yay -Slq | fzf --multi --preview 'yay -Si {1}' | xargs -ro yay -S"
+alias pri "paru -Slq 2>/dev/null | grep -a '^[a-zA-Z0-9._+-]*\$' | fzf --multi --preview 'paru -Si {1}' | xargs -ro paru -S"
 alias pu "pacman -Qq | fzf --multi --preview 'pacman -Qi {1}' | xargs -ro sudo pacman -Rns"
+alias yu "yay -Qq | fzf --multi --preview 'yay -Qi {1}' | xargs -ro yay -Rns"
+alias pru "paru -Qq | fzf --multi --preview 'paru -Qi {1}' | xargs -ro paru -Rns"
 
 # ─────────────────────────────────────────────
 # APT (Debian/Ubuntu)
@@ -81,7 +83,7 @@ alias du "dnf repoquery --installed --qf '%{name}\n' 2>/dev/null | fzf --multi -
 if command -q fdfind
     alias fd fdfind
 end
-alias cat "bat"
+alias cat bat
 alias icat "kitten icat"
 alias ls "eza --icons=always --sort=type --header -l --git"
 alias lst "eza --icons=always --sort=type --header -l --git --tree"
@@ -90,9 +92,7 @@ alias rm trash
 # ─────────────────────────────────────────────
 # Source Shells
 # ─────────────────────────────────────────────
-alias sb "source $HOME/.config/bash/bashrc"
 alias sf "source $HOME/.config/fish/config.fish"
-alias sz "source $HOME/.config/zsh/zshrc"
 
 # ─────────────────────────────────────────────
 # Terminal

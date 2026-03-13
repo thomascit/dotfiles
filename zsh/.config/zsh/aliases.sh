@@ -62,7 +62,7 @@ alias bup="brew update && brew upgrade -g"
 # ─────────────────────────────────────────────
 alias pi="pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S"
 alias yi="yay -Slq | fzf --multi --preview 'yay -Si {1}' | xargs -ro yay -S"
-alias pri="paru -Slq | fzf --multi --preview 'paru -Si {1}' | xargs -ro paru -S"
+alias pri="paru -Slq | grep -a '^[a-zA-Z0-9._+-]*\$' | fzf --multi --preview 'paru -Si {1}' | xargs -ro paru -S"
 alias pu="pacman -Qq | fzf --multi --preview 'pacman -Qi {1}' | xargs -ro sudo pacman -Rns"
 alias yu="yay -Qq | fzf --multi --preview 'yay -Qi {1}' | xargs -ro yay -Rns"
 alias pru="paru -Qq | fzf --multi --preview 'paru -Qi {1}' | xargs -ro paru -Rns"
@@ -92,7 +92,6 @@ alias rm="trash"
 # ─────────────────────────────────────────────
 # Source Shells
 # ─────────────────────────────────────────────
-alias sb="source $HOME/.config/bash/bashrc"
 alias sz="source $HOME/.config/zsh/zshrc"
 
 # ─────────────────────────────────────────────

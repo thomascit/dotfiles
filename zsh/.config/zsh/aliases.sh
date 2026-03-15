@@ -17,12 +17,10 @@ fi
 # Edit Config Files
 # ─────────────────────────────────────────────
 alias ac="$EDITOR $HOME/.config/alacritty/alacritty.toml"
-alias aec="$EDITOR $HOME/.config/aerospace/aerospace.toml"
 alias als="$EDITOR $HOME/.config/zsh/aliases.*"
 alias brc="$EDITOR $HOME/.config/bash/bashrc"
 alias fc="$EDITOR $HOME/.config/fish/config.fish"
 alias gc="$EDITOR $HOME/.config/ghostty/config"
-alias i3c="$EDITOR $HOME/.config/i3/config"
 alias hyc="$EDITOR $HOME/.config/hypr/hyprland.conf"
 alias kc="$EDITOR $HOME/.config/kitty/kitty.conf"
 alias sc="$EDITOR $HOME/.config/starship/starship.toml"
@@ -110,7 +108,7 @@ alias oc="opencode"
 # ─────────────────────────────────────────────
 # Tmux
 # ─────────────────────────────────────────────
-alias t="tmux new-session -A -s MAIN"
+alias t="tmux new-session -A -s default"
 alias ta="tmux attach-session -t"
 alias tn="tmux new-window -c "#{pane_current_path}" $EDITOR ."
 alias tr="tmux rename-session"

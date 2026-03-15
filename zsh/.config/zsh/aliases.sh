@@ -98,6 +98,7 @@ alias sz="source $HOME/.config/zsh/zshrc"
 # Terminal
 # ─────────────────────────────────────────────
 alias bashc="clear && bash"
+alias e="exit"
 alias ff="fastfetch"
 alias fishc="clear && fish"
 alias l="clear"

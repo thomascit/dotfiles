@@ -14,4 +14,3 @@ window-save-state                  = "always"
 window-padding-x                   = 0
 window-padding-y                   = 0
 window-padding-balance             = true
-keybind                            = ctrl+grave_accent=toggle_quick_terminal

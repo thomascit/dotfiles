@@ -24,24 +24,33 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.opencode/bin:$PATH"
 
 # Fzf
-export FZF_DEFAULT_COMMAND='rg --files --hidden'
+# Exclude container storage — subdirs are owned by uid 100000 (Podman rootless
+# user namespace mapping) and are not accessible as the normal user, causing
+# rg to emit permission errors when traversing them.
+export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.local/share/containers"'
 # Default theme/colors (Dracula)
-export FZF_DEFAULT_OPTS='--color=fg:#f8f8f2,bg:#282a36,hl:#bd93f9 --color=fg+:#f8f8f2,bg+:#44475a,hl+:#bd93f9 --color=info:#ffb86c,prompt:#50fa7b,pointer:#ff79c6 --color=marker:#ff79c6,spinner:#ffb86c,header:#6272a4 --layout=reverse'
+export FZF_DEFAULT_OPTS=' --preview-window="border-block" --color=border:#44475a --color=fg:#f8f8f2,bg:#282a36,hl:#bd93f9 --color=fg+:#f8f8f2,bg+:#44475a,hl+:#bd93f9 --color=info:#ffb86c,prompt:#50fa7b,pointer:#ff79c6 --color=marker:#ff79c6,spinner:#ffb86c,header:#6272a4 --layout=reverse'
 # ctrl-t: file completion with preview via bat
+export FZF_CTRL_T_COMMAND='rg --files --hidden --glob "!.local/share/containers"'
 export FZF_CTRL_T_OPTS="
   --multi
   --reverse
   --walker-skip .git
+  --height=100%
+  --preview-window='right:55%:border-block'
   --preview 'bat -n --color=always {}'
-  --bind 'ctrl-/:change-preview-window(down|hidden|)'"
+  --bind 'ctrl-/:change-preview-window(down|hidden|)'
+  --bind 'ctrl-e:execute($EDITOR {})'"
 # ctrl-r: history search
 export FZF_CTRL_R_OPTS="
   --multi
-  --reverse"
+  --reverse
+  --tmux center"
 # alt-c: cd into directories
 export FZF_ALT_C_OPTS="
   --multi
-  --reverse"
+  --reverse
+  --tmux center"
  
 # ZSH-VI Settings
 export ZVM_VI_ESCAPE_BINDKEY=jk

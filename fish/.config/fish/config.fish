@@ -12,6 +12,11 @@ if test -f $HOME/.config/fish/variables.fish
     source $HOME/.config/fish/variables.fish
 end
 
+# Local Env
+if test -f $HOME/.fishenv
+    source $HOME/.fishenv
+end
+
 # Aliases
 if test -f $HOME/.config/fish/aliases.fish
     source $HOME/.config/fish/aliases.fish

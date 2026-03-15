@@ -3,8 +3,13 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || /usr/local/bin/brew shellenv 2>/dev/null)"
 fi
 
+# Start ssh-agent if not already running
+[ -f "$HOME/.config/zsh/ssh-agent.sh" ] && source "$HOME/.config/zsh/ssh-agent.sh"
+
 # Environment variables (from .zprofile for non-login shells)
 [ -f "$HOME/.config/zsh/.zprofile" ] && source "$HOME/.config/zsh/.zprofile"
+
+# Local Env
 [ -f "$HOME/.zenv" ] && source "$HOME/.zenv"
 
 # Aliases

@@ -7,6 +7,11 @@ if [ (uname) = Darwin ]
     end
 end
 
+# SSH Agent
+if test -f $HOME/.config/fish/ssh-agent.fish
+    source $HOME/.config/fish/ssh-agent.fish
+end
+
 # Variables / Environment
 if test -f $HOME/.config/fish/variables.fish
     source $HOME/.config/fish/variables.fish

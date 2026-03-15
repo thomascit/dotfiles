@@ -110,7 +110,7 @@ alias oc opencode
 # ─────────────────────────────────────────────
 # Tmux
 # ─────────────────────────────────────────────
-alias t "tmux new-session -A -s MAIN"
+alias t "tmux new-session -A -s default"
 alias ta "tmux attach-session -t"
 alias tn "tmux new-window -c \"#{pane_current_path}\" $EDITOR ."
 alias tr "tmux rename-session"

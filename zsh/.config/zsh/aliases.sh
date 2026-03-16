@@ -13,6 +13,9 @@ elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
   fi
 fi
 
+# Reload config
+alias u="$HOME/Projects/dotfiles/setup.sh"
+
 # ─────────────────────────────────────────────
 # Edit Config Files
 # ─────────────────────────────────────────────

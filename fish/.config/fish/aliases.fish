@@ -13,6 +13,8 @@ else
     end
 end
 
+# Reload Config
+alias u "$HOME/Projects/dotfiles/setup.sh"
 # ─────────────────────────────────────────────
 # Edit Config Files
 # ─────────────────────────────────────────────

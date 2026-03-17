@@ -11,7 +11,21 @@ return{
             configure = false
         },
         bigfile = { enabled = true },
-        dashboard = { enabled = true },
+        dashboard = {
+            enabled = true,
+            preset = {
+                keys = {
+                    { icon = " ", key = "p", desc = "Projects",         action = ":lua require('telescope.builtin').find_files({ cwd = '~/Projects', prompt_title = 'Projects' })" },
+                    { icon = " ", key = "f", desc = "Find File",        action = ":lua require('telescope.builtin').find_files()" },
+                    { icon = " ", key = "n", desc = "New File",         action = ":ene | startinsert" },
+                    { icon = " ", key = "g", desc = "Find Text",        action = ":lua require('telescope.builtin').live_grep()" },
+                    { icon = " ", key = "r", desc = "Recent Files",     action = ":lua require('telescope.builtin').oldfiles()" },
+                    { icon = " ", key = "c", desc = "Config",           action = ":lua require('telescope.builtin').find_files({ cwd = '~/.config', hidden = true, follow = true, prompt_title = 'Config Files' })" },
+                    { icon = " ", key = "s", desc = "Restore Session",  section = "session" },
+                    { icon = " ", key = "q", desc = "Quit",             action = ":qa" },
+                },
+            },
+        },
         explorer = { enabled = false },
         indent = { enabled = true },
         input = { enabled = true },

@@ -127,6 +127,12 @@ alias dcd="docker compose down"
 alias dcl="docker compose logs -f --tail=100"
 alias dcb="docker compose build --no-cache"
 # ─────────────────────────────────────────────
+# Ansible
+# ─────────────────────────────────────────────
+alias ap="ansible-playbook -i $LAB_INVENTORY"
+alias aph="ansible-playbook -i $LAB_INVENTORY $LAB_PLAYBOOKS"
+
+# ─────────────────────────────────────────────
 # Pomodoro
 # ─────────────────────────────────────────────
 alias p50="work 50m && rest 10m"

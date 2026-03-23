@@ -44,23 +44,20 @@ export FZF_CTRL_T_OPTS="
 # ctrl-r: history search
 export FZF_CTRL_R_OPTS="
   --multi
-  --reverse
-  --tmux center"
+  --reverse"
 # alt-c: cd into directories
 export FZF_ALT_C_OPTS="
   --multi
-  --reverse
-  --tmux center"
- 
+  --reverse"
 # ZSH-VI Settings
 export ZVM_VI_ESCAPE_BINDKEY=jk
 export ZVM_SYSTEM_CLIPBOARD_ENABLED=true
 # (MAC)
-export ZVM_CLIPBOARD_COPY_CMD='pbcopy'
-export ZVM_CLIPBOARD_PASTE_CMD='pbpaste'
+# export ZVM_CLIPBOARD_COPY_CMD='pbcopy'
+# export ZVM_CLIPBOARD_PASTE_CMD='pbpaste'
 # (LINUX)
-# ZVM_CLIPBOARD_COPY_CMD='xclip -selection clipboard'
-# ZVM_CLIPBOARD_PASTE_CMD='xclip -selection clipboard -o'
+ZVM_CLIPBOARD_COPY_CMD='xclip -selection clipboard'
+ZVM_CLIPBOARD_PASTE_CMD='xclip -selection clipboard -o'
 
 # LAZYGIT Settings
 export LAZYGIT_NEW_DIR_FILE=$HOME/.lazygit/newdir

@@ -20,7 +20,8 @@ alias u="$HOME/Projects/dotfiles/setup.sh"
 # Edit Config Files
 # ─────────────────────────────────────────────
 alias ac="$EDITOR $HOME/.config/alacritty/alacritty.toml"
-alias als="$EDITOR $HOME/.config/zsh/aliases.*"
+alias als="$EDITOR $HOME/.config/zsh/aliases.sh"
+alias alsf="$EDITOR $HOME/.config/fish/aliases.fish"
 alias brc="$EDITOR $HOME/.config/bash/bashrc"
 alias fc="$EDITOR $HOME/.config/fish/config.fish"
 alias gc="$EDITOR $HOME/.config/ghostty/config"
@@ -32,6 +33,8 @@ alias tc="$EDITOR $HOME/.config/tmux/tmux.conf"
 alias vrc="$EDITOR $HOME/.config/vim/vimrc"
 alias nvrc="yazi $HOME/.config/nvim"
 alias zrc="$EDITOR $HOME/.config/zsh/zshrc"
+alias zpc="$EDITOR $HOME/.config/zsh/.zprofile"
+alias vc="$EDITOR $HOME/.config/fish/variables.fish"
 alias yc="$EDITOR $HOME/.config/yazi/yazi.toml"
 alias df="yazi $HOME/.config"
 
@@ -94,6 +97,7 @@ alias rm="trash"
 # Source Shells
 # ─────────────────────────────────────────────
 alias sz="source $HOME/.config/zsh/zshrc"
+alias sa="source $HOME/.config/zsh/ssh-agent.sh"
 
 # ─────────────────────────────────────────────
 # Terminal
@@ -111,9 +115,10 @@ alias oc="opencode"
 # ─────────────────────────────────────────────
 # Tmux
 # ─────────────────────────────────────────────
-alias t="tmux new-session -A -s default"
+alias t='() { local n=1; while tmux has-session -t "$n" 2>/dev/null; do (( n++ )); done; tmux new-session -s "$n" }'
 alias ta="tmux attach-session -t"
-alias tn="tmux new-window -c "#{pane_current_path}" $EDITOR ."
+alias tn='tmux new-window -c "#{pane_current_path}" $EDITOR .'
+alias tk='tmux kill-server'
 alias tr="tmux rename-session"
 alias tt='tmux new-session -A -s "${PWD##*/}" -c "$PWD"'
 alias tts='if [ -n "$TMUX" ]; then tmux switch-client -t "${PWD##*/}" 2>/dev/null || tmux new-session -d -s "${PWD##*/}" -c "$PWD" && tmux switch-client -t "${PWD##*/}"; else tmux new-session -A -s "${PWD##*/}" -c "$PWD"; fi'
@@ -126,11 +131,6 @@ alias dcu="docker compose up -d"
 alias dcd="docker compose down"
 alias dcl="docker compose logs -f --tail=100"
 alias dcb="docker compose build --no-cache"
-# ─────────────────────────────────────────────
-# Ansible
-# ─────────────────────────────────────────────
-alias ap="ansible-playbook -i $LAB_INVENTORY"
-alias aph="ansible-playbook -i $LAB_INVENTORY $LAB_PLAYBOOKS"
 
 # ─────────────────────────────────────────────
 # Pomodoro

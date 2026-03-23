@@ -63,3 +63,5 @@ set -gx ZVM_CLIPBOARD_PASTE_CMD 'xclip -selection clipboard -o'
 
 # LAZYGIT Settings
 set -gx LAZYGIT_NEW_DIR_FILE "$HOME/.lazygit/newdir"
+
+test -f "$HOME/.fenv" && source "$HOME/.fenv"

@@ -29,8 +29,8 @@ opt.smartcase = true                 -- Override ignorecase if uppercase used
 opt.hlsearch = true                  -- Highlight search matches
 
 -- Clipboard
-opt.clipboard = "unnamed"            -- Use system clipboard (macOS)
--- opt.clipboard = "unnamedplus"     -- Use system clipboard (Linux)
+-- opt.clipboard = "unnamed"            -- Use system clipboard (macOS)
+opt.clipboard = "unnamedplus"     -- Use system clipboard (Linux)
 
 -- Performance
 opt.ttyfast = true                   -- Faster scrolling

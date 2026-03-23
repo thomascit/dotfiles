@@ -19,7 +19,8 @@ alias u "$HOME/Projects/dotfiles/setup.sh"
 # Edit Config Files
 # ─────────────────────────────────────────────
 alias ac "$EDITOR $HOME/.config/alacritty/alacritty.toml"
-alias als "$EDITOR $HOME/.config/fish/aliases.*"
+alias als "$EDITOR $HOME/.config/zsh/aliases.sh"
+alias alsf "$EDITOR $HOME/.config/fish/aliases.fish"
 alias brc "$EDITOR $HOME/.config/bash/bashrc"
 alias fc "$EDITOR $HOME/.config/fish/config.fish"
 alias gc "$EDITOR $HOME/.config/ghostty/config"
@@ -31,6 +32,8 @@ alias tc "$EDITOR $HOME/.config/tmux/tmux.conf"
 alias vrc "$EDITOR $HOME/.config/vim/vimrc"
 alias nvrc "yazi $HOME/.config/nvim"
 alias zrc "$EDITOR $HOME/.config/zsh/zshrc"
+alias zpc "$EDITOR $HOME/.config/zsh/.zprofile"
+alias vc "$EDITOR $HOME/.config/fish/variables.fish"
 alias yc "$EDITOR $HOME/.config/yazi/yazi.toml"
 alias df "yazi $HOME/.config"
 
@@ -95,6 +98,7 @@ alias rm trash
 # Source Shells
 # ─────────────────────────────────────────────
 alias sf "source $HOME/.config/fish/config.fish"
+alias sa "source $HOME/.config/fish/ssh-agent.fish"
 
 # ─────────────────────────────────────────────
 # Terminal
@@ -112,7 +116,15 @@ alias oc opencode
 # ─────────────────────────────────────────────
 # Tmux
 # ─────────────────────────────────────────────
-alias t "tmux new-session -A -s default"
+function t
+    set name (tmux list-sessions -F "#{session_name}" 2>/dev/null | fzf)
+    test -z "$name"; and return
+    if test -n "$TMUX"
+        tmux switch-client -t $name
+    else
+        tmux attach-session -t $name
+    end
+end
 alias ta "tmux attach-session -t"
 alias tn "tmux new-window -c \"#{pane_current_path}\" $EDITOR ."
 alias tr "tmux rename-session"

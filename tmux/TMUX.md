@@ -8,12 +8,13 @@
 
 | Binding | Description |
 |---|---|
-| `prefix + C-f` | SSH host picker |
-| `prefix + C-v` | File picker → open in `$EDITOR` |
-| `prefix + C-s` | Session switcher (fzf) |
-| `prefix + C-r` | Popup terminal |
-| `prefix + C-d` | New session from `~/Projects` picker |
-| `prefix + C-c` | Config file picker (`~/.config`) |
+| `prefix + F` | SSH host picker (fzf from `~/.ssh/config`) |
+| `prefix + v` | File picker (fzf) → open in `$EDITOR` |
+| `prefix + s` | Session switcher (fzf) |
+| `prefix + r` | Popup terminal in current path |
+| `prefix + S` | New session from `~/Projects` picker |
+| `prefix + C-c` | Config file picker (`~/.config`, bat preview) |
+| `prefix + ?` | Key bindings reference popup |
 
 ---
 
@@ -23,7 +24,7 @@
 |---|---|
 | `prefix + c` | New window (current path) |
 | `prefix + C` | New named window (prompt) |
-| `prefix + N` | Neovim (`nvim .`) |
+| `prefix + N` | Neovim (`nvim`) |
 | `prefix + O` | OpenCode (continue last session) |
 | `prefix + f` | Yazi file manager |
 | `prefix + g` | Lazygit |
@@ -61,7 +62,7 @@
 | `M-l` | Next window |
 | `S-Left` | Swap window left |
 | `S-Right` | Swap window right |
-| `prefix + W` | Rename window to cwd |
+| `prefix + C-w` | Rename window to cwd |
 
 ---
 
@@ -69,7 +70,7 @@
 
 | Binding | Description |
 |---|---|
-| `prefix + S` | Rename session to cwd |
+| `prefix + C-S` | Rename session to cwd |
 
 ---
 
@@ -99,7 +100,7 @@
 | `prefix + Space` | Enter copy mode |
 | `v` | Begin selection |
 | `y` | Yank selection |
-| `r` | Toggle rectangle selection |
+| `r` | Rectangle toggle |
 
 ---
 
@@ -116,9 +117,10 @@
 
 | Alias | Description |
 |---|---|
-| `t` | fzf through existing tmux sessions and attach/switch |
+| `t` | Create a new numbered tmux session |
 | `ta` | Attach to a session by name (`tmux attach-session -t`) |
 | `tn` | New window opening `$EDITOR` in current path |
+| `tk` | Kill the tmux server (`tmux kill-server`) |
 | `tr` | Rename current session |
 | `tt` | New/attach session named after cwd |
 | `tts` | New/switch session named after cwd (switch-client if inside tmux) |

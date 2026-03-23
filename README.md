@@ -46,7 +46,7 @@ The setup script stows configs, installs plugin managers, and copies fonts. It d
 ```sh
 ./setup.sh --full       # Stow all CLI configs + plugin managers + fonts
 ./setup.sh --custom     # Select specific packages to stow
-./setup.sh --plugins    # Install plugin managers only (TPM, vim-plug, Zinit)
+./setup.sh --plugins    # Install plugin managers only (TPM, vim-plug, Zinit, yazi plugins)
 ./setup.sh --fonts      # Install fonts from reference/fonts/
 ./setup.sh --uninstall  # Remove dotfile symlinks and plugin managers
 ./setup.sh --help       # Show help and package lists
@@ -62,15 +62,15 @@ The setup script stows configs, installs plugin managers, and copies fonts. It d
 | `btop` | Resource monitor |
 | `eza` | Modern ls replacement with icons and Git status |
 | `ghostty` | Fast GPU-accelerated terminal |
-| `hypr` | Hyprland compositor |
+| `hypr` | Hyprland compositor — `kitty` terminal, `firefox` browser, `nemo` file manager |
 | `kitty` | GPU-based terminal emulator |
 | `lazygit` | Terminal UI for Git |
 | `noctalia` | Hyprland shell — bar, launcher, dock, lock screen, notifications, control center |
-| `nvim` | Neovim with LazyVim configuration |
+| `nvim` | Neovim with LazyVim + lazy.nvim configuration |
 | `rofi` | Application launcher (X11) |
 | `starship` | Fast, customizable shell prompt |
-| `tmux` | Terminal multiplexer with TPM plugins |
-| `vim` | Editor with vim-plug and Dracula theme |
+| `tmux` | Terminal multiplexer with TPM plugins and Dracula theme |
+| `vim` | Vim with vim-plug and Dracula theme |
 | `wofi` | Application launcher (Wayland) |
 | `yazi` | Terminal file manager with plugins |
 
@@ -79,11 +79,12 @@ The setup script stows configs, installs plugin managers, and copies fonts. It d
 | File | Description |
 |------|-------------|
 | `reference/fonts/` | JetBrainsMono Nerd Font |
-| `reference/vimium/` | Vimium browser extension settings |
+| `reference/vimium/` | Vimium browser extension settings (Dracula theme + custom keymaps) |
+| `reference/Brewfile` | macOS Homebrew package list |
 
 ## Theme
 
-Dracula across the board — vim, fish, tmux, terminals, rofi, wofi, yazi, noctalia. See https://draculatheme.com.
+Dracula across the board — vim, nvim, fish, tmux, terminals, rofi, wofi, yazi, noctalia. See https://draculatheme.com.
 
 ## Fonts
 
@@ -100,8 +101,18 @@ Terminal configs (alacritty, ghostty, kitty) and noctalia are pre-configured to 
 | Tool | Manager | Notes |
 |------|---------|-------|
 | Vim | vim-plug | Run `:PlugInstall` on first launch |
-| Zsh | zinit | Bootstraps automatically |
-| Tmux | TPM | Press `<prefix>+I` to install plugins |
+| Neovim | lazy.nvim (LazyVim) | Auto-bootstraps on first launch |
+| Zsh | Zinit | Bootstraps automatically on first shell start |
+| Tmux | TPM | Press `<prefix>+I` to install plugins after first launch |
+| Yazi | ya pkg | Run `ya pkg install` or use `./setup.sh --plugins` |
+
+## Keybindings
+
+See [`KEYBINDINGS.md`](KEYBINDINGS.md) for a full reference of all custom keybindings across every tool.
+
+Quick per-tool references:
+- [`tmux/TMUX.md`](tmux/TMUX.md) — Tmux prefix bindings and shell aliases
+- [`zsh/ZSH.md`](zsh/ZSH.md) — Zsh aliases, functions, and plugins
 
 ## Uninstall
 
@@ -134,7 +145,10 @@ stow -D nvim && stow nvim
 Run `./setup.sh --fonts` then restart the terminal. On Linux, `fc-cache -f` is run automatically but you may need to restart the application.
 
 **TPM plugins not loading?**
-Start tmux and press `<prefix>+I` to install plugins. If `<prefix>` is not set, it defaults to `Ctrl+b`.
+Start tmux and press `<prefix>+I` to install plugins. The prefix is `Ctrl+Space`.
+
+**Neovim plugins not loading?**
+lazy.nvim auto-bootstraps on first launch. If plugins are missing, open Neovim and run `:Lazy sync`.
 
 ## Notes
 

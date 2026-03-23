@@ -7,9 +7,12 @@
 | Alias | Opens |
 |---|---|
 | `zrc` | `~/.config/zsh/zshrc` |
-| `als` | `~/.config/zsh/aliases.*` |
+| `zpc` | `~/.config/zsh/.zprofile` |
+| `als` | `~/.config/zsh/aliases.sh` |
+| `alsf` | `~/.config/fish/aliases.fish` |
 | `brc` | `~/.config/bash/bashrc` |
 | `fc` | `~/.config/fish/config.fish` |
+| `vc` | `~/.config/fish/variables.fish` |
 | `ac` | `~/.config/alacritty/alacritty.toml` |
 | `gc` | `~/.config/ghostty/config` |
 | `kc` | `~/.config/kitty/kitty.conf` |
@@ -43,9 +46,10 @@
 
 | Alias | Description |
 |---|---|
-| `t` | fzf through existing sessions → attach or switch |
+| `t` | Create a new numbered tmux session |
 | `ta` | Attach to session by name |
 | `tn` | New window opening `$EDITOR` in current path |
+| `tk` | Kill the tmux server |
 | `tr` | Rename current session |
 | `tt` | New/attach session named after cwd |
 | `tts` | New/switch session named after cwd (switch-client if inside tmux) |
@@ -118,6 +122,7 @@
 | `r` | `reset` |
 | `e` | `exit` |
 | `sz` | Re-source zshrc |
+| `sa` | Re-source ssh-agent |
 | `u` | Run `setup.sh` (reload/install dotfiles) |
 | `c` | Copy to clipboard (OS-aware: `wl-copy` / `pbcopy` / `clip.exe` / `xclip`) |
 | `bashc` | Clear + launch bash |

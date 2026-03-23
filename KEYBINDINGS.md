@@ -29,27 +29,35 @@
 
 | Keybinding | Description |
 |---|---|
-| `<prefix> Ctrl+f` | SSH picker (fzf popup) |
-| `<prefix> Ctrl+t` | Terminal popup in current path |
-| `<prefix> Ctrl+v` | Open file in editor (fzf file picker) |
-| `<prefix> Ctrl+s` | Session switcher (fzf popup) |
-| `<prefix> Ctrl+g` | Lazygit popup |
-| `<prefix> Ctrl+o` | OpenCode AI popup (`--continue`) |
-| `<prefix> Ctrl+d` | New session from directory picker (fd + fzf) |
+| `<prefix> F` | SSH picker (fzf popup from `~/.ssh/config`) |
+| `<prefix> v` | File picker (fzf) → open in `$EDITOR` new window |
+| `<prefix> s` | Session switcher (fzf popup) |
+| `<prefix> r` | Popup terminal in current path |
+| `<prefix> S` | New session from `~/Projects` picker |
+| `<prefix> C-c` | Config file picker (`~/.config`, bat preview) |
+| `<prefix> ?` | Key bindings reference popup |
 
-### Windows & Panes
+### New Windows
 
 | Keybinding | Description |
 |---|---|
 | `<prefix> c` | New window in current path |
 | `<prefix> C` | New named window (prompts for name) |
-| `<prefix> -` | Split pane vertically (current path) |
-| `<prefix> _` | Split pane horizontally (current path) |
-| `<prefix> t` | Split pane vertically — 25% height (current path) |
-| `<prefix> o` | Split pane horizontally — 40% width, opens OpenCode |
+| `<prefix> N` | New window with Neovim (`nvim`) |
+| `<prefix> O` | New window with OpenCode (`--continue`) |
 | `<prefix> f` | New window with Yazi file manager |
 | `<prefix> g` | New window with Lazygit |
+| `<prefix> p` | New window with btop |
 | `<prefix> a` | New window with cmatrix screensaver |
+
+### Pane Splits
+
+| Keybinding | Description |
+|---|---|
+| `<prefix> -` | Split pane horizontally (current path) |
+| `<prefix> _` | Split pane vertically (current path) |
+| `<prefix> o` | Split pane vertically — 40% width, opens OpenCode |
+| `<prefix> t` | Split pane horizontally — 25% height (current path) |
 
 ### Navigation
 
@@ -74,15 +82,12 @@
 | `<prefix> K` (repeatable) | Resize pane up 5 rows |
 | `<prefix> L` (repeatable) | Resize pane right 5 cols |
 
-### Sessions
+### Rename
 
 | Keybinding | Description |
 |---|---|
-| `<prefix> N` | New session named after current directory |
-| `<prefix> W` | Rename window to current directory |
-| `<prefix> S` | Rename session to current directory |
-| `<prefix> Alt+s` | Save tmux session (tmux-resurrect) |
-| `<prefix> Alt+r` | Restore tmux session (tmux-resurrect) |
+| `<prefix> C-w` | Rename window to current directory |
+| `<prefix> C-S` | Rename session to current directory |
 
 ### Kill / Close
 
@@ -97,7 +102,7 @@
 |---|---|
 | `<prefix> Space` | Enter copy mode |
 | `v` | Begin selection |
-| `y` | Copy selection |
+| `y` | Copy selection (yank) |
 | `r` | Toggle rectangle selection |
 
 ### Status Bar & UI
@@ -108,6 +113,13 @@
 | `<prefix> B` | Toggle pane border status |
 | `<prefix> T` | Toggle status bar position (top ↔ bottom) |
 
+### Session Persistence (tmux-resurrect)
+
+| Keybinding | Description |
+|---|---|
+| `Alt+s` | Save tmux session |
+| `Alt+r` | Restore tmux session |
+
 ---
 
 ## Neovim / Vim
@@ -115,13 +127,25 @@
 > Sources:
 > - `nvim/.config/nvim/lua/config/keymaps.lua`
 > - `nvim/.config/nvim/lua/plugins/vim-tmux-navigator.lua`
+> - `nvim/.config/nvim/lua/plugins/telescope.lua`
+> - `nvim/.config/nvim/lua/plugins/flash.lua`
+> - `nvim/.config/nvim/lua/plugins/yazi.lua`
+> - `nvim/.config/nvim/lua/plugins/trouble.lua`
+> - `nvim/.config/nvim/lua/plugins/todo-comments.lua`
+> - `nvim/.config/nvim/lua/plugins/grug-far.lua`
 > - `vim/.config/vim/vimrc`
 
-### Insert Mode
+**Leader key:** `Space`
+
+### General
 
 | Keybinding | Mode | Description |
 |---|---|---|
-| `jk` | Insert | Exit insert mode (maps to `<Esc>`) |
+| `jk` | Insert | Exit insert mode |
+| `Ctrl+s` | Insert / Normal / Visual | Save file |
+| `<leader>qq` | Normal | Quit all |
+| `<leader>l` | Normal | Open Lazy plugin manager |
+| `<leader>fn` | Normal | New file |
 
 ### Pane / Split Navigation (vim-tmux-navigator)
 
@@ -135,16 +159,107 @@ Shared between Neovim and Tmux — navigate seamlessly across both.
 | `Ctrl+l` | Normal | Navigate right |
 | `Ctrl+\` | Normal | Navigate to previous pane |
 
+### Toggle
+
+| Keybinding | Mode | Description |
+|---|---|---|
+| `<leader>tw` | Normal | Toggle line wrap |
+| `<leader>tc` | Normal | Toggle 80-column colorcolumn |
+
+### Git (Snacks + Telescope)
+
+| Keybinding | Mode | Description |
+|---|---|---|
+| `<leader>gg` | Normal | Lazygit (root dir) |
+| `<leader>gG` | Normal | Lazygit (cwd) |
+| `<leader>gl` | Normal | Git log |
+| `<leader>gL` | Normal | Git log (cwd) |
+| `<leader>gb` | Normal | Git blame line |
+| `<leader>gf` | Normal | Current file git history |
+| `<leader>gB` | Normal / Visual | Git browse (open in browser) |
+| `<leader>gY` | Normal / Visual | Git browse (copy URL) |
+
+### Telescope (File/Find)
+
+| Keybinding | Mode | Description |
+|---|---|---|
+| `<leader>ff` | Normal | Find files |
+| `<leader>fg` | Normal | Live grep |
+| `<leader>fb` | Normal | Buffers |
+| `<leader>fh` | Normal | Help tags |
+| `<leader>fr` | Normal | Recent files |
+| `<leader>f:` | Normal | Commands |
+| `<leader>fd` | Normal | Diagnostics |
+| `<leader>fs` | Normal | Document symbols (LSP) |
+| `<leader>f/` | Normal | Fuzzy find in current buffer |
+| `<leader>fp` | Normal | Find files in `~/Projects` |
+| `<leader>fP` | Normal | Live grep in `~/Projects` |
+| `<leader>fc` | Normal | Find files in `~/.config` |
+| `<leader>fC` | Normal | Live grep in `~/.config` |
+
+### Flash (Motion)
+
+| Keybinding | Mode | Description |
+|---|---|---|
+| `s` | Normal / Visual / Operator | Flash jump |
+| `S` | Normal / Visual / Operator | Flash treesitter |
+| `r` | Operator | Remote flash |
+| `R` | Operator / Visual | Treesitter search |
+| `Ctrl+s` | Command | Toggle flash search |
+
+### Yazi (File Manager)
+
+| Keybinding | Mode | Description |
+|---|---|---|
+| `<leader>-` | Normal / Visual | Open Yazi at current file |
+| `<leader>cw` | Normal | Open Yazi in Neovim's cwd |
+| `Ctrl+Up` | Normal | Resume last Yazi session |
+
+### Trouble (Diagnostics)
+
+| Keybinding | Mode | Description |
+|---|---|---|
+| `<leader>xx` | Normal | Toggle diagnostics (Trouble) |
+| `<leader>xX` | Normal | Toggle buffer diagnostics (Trouble) |
+| `<leader>cs` | Normal | Symbols (Trouble) |
+| `<leader>cS` | Normal | LSP references/definitions (Trouble) |
+| `<leader>xL` | Normal | Location list (Trouble) |
+| `<leader>xQ` | Normal | Quickfix list (Trouble) |
+| `[q` | Normal | Previous trouble/quickfix item |
+| `]q` | Normal | Next trouble/quickfix item |
+
+### Todo Comments
+
+| Keybinding | Mode | Description |
+|---|---|---|
+| `]t` | Normal | Next TODO comment |
+| `[t` | Normal | Previous TODO comment |
+| `<leader>xt` | Normal | Todo list (Trouble) |
+| `<leader>xT` | Normal | Todo/Fix/Fixme (Trouble) |
+| `<leader>st` | Normal | Todo (Telescope) |
+| `<leader>sT` | Normal | Todo/Fix/Fixme (Telescope) |
+
+### Search & Replace
+
+| Keybinding | Mode | Description |
+|---|---|---|
+| `<leader>sr` | Normal / Visual | Search and replace (grug-far) |
+
+### Which-Key
+
+| Keybinding | Mode | Description |
+|---|---|---|
+| `<leader>?` | Normal | Show buffer keymaps (which-key) |
+| `Ctrl+w Space` | Normal | Window hydra mode (which-key) |
+
 ### Plugin: cutlass.nvim
 
-Separates the "cut" and "delete" operations so that `d`, `D`, `c`, `C`, `x`, `X` no longer yank to the default register. Use `m` (move) to cut explicitly. Refer to the [cutlass.nvim docs](https://github.com/gbprod/cutlass.nvim) for full details.
+Separates "cut" and "delete": `d`, `D`, `c`, `C`, `x`, `X` no longer yank to the default register. Use `m` (move) to cut explicitly. See [cutlass.nvim docs](https://github.com/gbprod/cutlass.nvim).
 
 ### LazyVim Defaults
 
 This config is based on [LazyVim](https://www.lazyvim.org/). All default LazyVim keymaps apply unless overridden above.  
 Reference: https://www.lazyvim.org/keymaps
-
-**Key leader key:** `Space`
 
 ---
 
@@ -166,7 +281,7 @@ These are the built-in fzf shell keybindings enabled via `source <(fzf --zsh)` (
 
 | In-widget binding | Description |
 |---|---|
-| `Ctrl+/` | Cycle preview window position (right → down → hidden) |
+| `Ctrl+/` | Cycle preview window position (down → hidden → right) |
 | `Ctrl+E` | Open selected file in `$EDITOR` |
 
 ### fzf-powered Shell Aliases
@@ -216,6 +331,7 @@ These aliases use fzf for interactive selection:
 | Setting | Value | Description |
 |---|---|---|
 | `ZVM_VI_ESCAPE_BINDKEY` | `jk` | Exit insert mode with `jk` chord |
+| `ZVM_SYSTEM_CLIPBOARD_ENABLED` | `true` | System clipboard integration |
 
 Standard vi-mode bindings apply in both normal and insert modes. The `zsh-history-substring-search` plugin is also active.
 
@@ -267,7 +383,7 @@ These prepend (override with higher priority) the default Yazi keymaps.
 | Keybinding | Description |
 |---|---|
 | `Super+Shift+T` | Launch terminal (kitty) |
-| `Super+Shift+B` | Launch browser (chromium) |
+| `Super+Shift+B` | Launch browser (firefox) |
 | `Super+Shift+F` | Launch file manager (nemo) |
 | `Super+Space` | Toggle app launcher (Noctalia) |
 | `Super+S` | Toggle control center (Noctalia) |
@@ -327,14 +443,14 @@ These prepend (override with higher priority) the default Yazi keymaps.
 
 | Keybinding | Description |
 |---|---|
-| `XF86AudioRaiseVolume` | Increase volume |
-| `XF86AudioLowerVolume` | Decrease volume |
-| `XF86AudioMute` | Mute audio output |
+| `XF86AudioRaiseVolume` | Increase volume (Noctalia IPC) |
+| `XF86AudioLowerVolume` | Decrease volume (Noctalia IPC) |
+| `XF86AudioMute` | Mute audio output (Noctalia IPC) |
 | `XF86AudioNext` | Next track (playerctl) |
 | `XF86AudioPrev` | Previous track (playerctl) |
 | `XF86AudioPlay/Pause` | Play/pause (playerctl) |
-| `XF86MonBrightnessUp` | Increase screen brightness |
-| `XF86MonBrightnessDown` | Decrease screen brightness |
+| `XF86MonBrightnessUp` | Increase screen brightness (Noctalia IPC) |
+| `XF86MonBrightnessDown` | Decrease screen brightness (Noctalia IPC) |
 | `Super+XF86MonBrightnessUp` | Increase keyboard backlight +20% |
 | `Super+XF86MonBrightnessDown` | Decrease keyboard backlight -20% |
 
@@ -356,8 +472,8 @@ Custom mappings on top of Vimium defaults:
 
 | Keybinding | Description |
 |---|---|
-| `K` | Go to previous tab |
-| `J` | Go to next tab |
+| `K` | Previous tab |
+| `J` | Next tab |
 
 ### Custom Search Engines
 
@@ -378,4 +494,4 @@ All standard Vimium keybindings apply. See [Vimium docs](https://vimium.github.i
 
 ---
 
-*Last updated: 2026-03-15*
+*Last updated: 2026-03-23*

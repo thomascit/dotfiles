@@ -10,6 +10,7 @@ brew "git"
 brew "stow"
 
 # Shell & Prompt
+brew "atuin"
 brew "bash"
 brew "zsh"
 brew "fish"

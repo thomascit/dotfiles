@@ -21,7 +21,7 @@ else
 fi
 
 # Stow package groups
-PACKAGES_CLI="bash bat btop eza fish lazygit nvim starship tmux vim yazi zsh"
+PACKAGES_CLI="atuin bash bat btop eza fish lazygit nvim starship tmux vim yazi zsh"
 PACKAGES_TERMINALS="alacritty ghostty kitty"
 PACKAGES_WM_LINUX="hypr noctalia rofi wofi"
 
@@ -207,6 +207,21 @@ install_zinit() {
   success "Zinit installed"
 }
 
+install_atuin() {
+  if command_exists atuin; then
+    success "Atuin already installed"
+    return
+  fi
+
+  info "Installing Atuin..."
+  if [[ "$OS" == "macos" ]]; then
+    brew install atuin
+    success "Atuin installed"
+  else
+    warn "Please install atuin manually: https://atuin.sh/docs/install"
+  fi
+}
+
 install_yazi_plugins() {
   if ! command_exists ya; then
     warn "ya not found, skipping yazi plugin install"
@@ -274,6 +289,7 @@ run_full_install() {
   clone_dotfiles
   stow_packages "$PACKAGES_CLI"
   copy_wrapper_files
+  install_atuin
   install_tpm
   install_vim_plug
   install_zinit
@@ -325,6 +341,7 @@ run_custom_install() {
 run_plugin_managers_only() {
   info "Installing plugin managers..."
   create_xdg_dirs
+  install_atuin
   install_tpm
   install_vim_plug
   install_zinit

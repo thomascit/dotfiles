@@ -36,7 +36,6 @@ ZVM_SYSTEM_CLIPBOARD_ENABLED=true
 zinit light-mode for \
     zdharma-continuum/fast-syntax-highlighting \
     zsh-users/zsh-autosuggestions \
-    zsh-users/zsh-history-substring-search \
     zsh-users/zsh-completions \
     jeffreytse/zsh-vi-mode \
     hlissner/zsh-autopair  \
@@ -46,6 +45,9 @@ eval "$(zoxide init zsh)"
 
 # Fzf
 source <(fzf --zsh)
+
+# Atuin
+eval "$(atuin init zsh)"
 
 # Enable: Starship (after plugins to avoid conflicts)
 eval "$(starship init zsh)"

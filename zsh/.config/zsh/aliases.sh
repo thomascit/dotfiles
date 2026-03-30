@@ -133,6 +133,11 @@ alias dcl="docker compose logs -f --tail=100"
 alias dcb="docker compose build --no-cache"
 
 # ─────────────────────────────────────────────
+# SSH
+# ─────────────────────────────────────────────
+alias sskg="ssh-keygen -o -a 100 -t ed25519 -C"
+
+# ─────────────────────────────────────────────
 # Pomodoro
 # ─────────────────────────────────────────────
 alias p50="work 50m && rest 10m"

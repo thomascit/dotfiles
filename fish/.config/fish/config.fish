@@ -54,5 +54,14 @@ zoxide init fish | source
 # Fzf
 fzf --fish | source
 
+# Atuin
+if command -q atuin
+    atuin init fish | source
+    bind -M insert \cr _atuin_search
+    bind \cr _atuin_search
+    bind -M insert \e\[A _atuin_bind_up
+    bind \e\[A _atuin_bind_up
+end
+
 # Enable: Starship
 starship init fish | source

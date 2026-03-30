@@ -4,16 +4,6 @@ run = "plugin relative-motions"
 desc = "Trigger a new relative motion"
 
 [[mgr.prepend_keymap]]
-on   = [ "T", "P" ]
-run  = "plugin toggle-pane min-preview"
-desc = "Show or hide the preview pane"
-
-[[mgr.prepend_keymap]]
-on   = [ "T", "p" ]
-run  = "plugin toggle-pane max-preview"
-desc = "Maximize or restore the preview pane"
-
-[[mgr.prepend_keymap]]
 on   = "!"
 for  = "unix"
 run  = 'shell "$SHELL" --block'
@@ -27,19 +17,14 @@ run  = 'shell "powershell.exe" --block'
 desc = "Open PowerShell here"
 
 [[mgr.prepend_keymap]]
-on   = "l"
-run  = "plugin smart-enter"
-desc = "Enter the child directory, or open the file"
+on   = "L"
+run  = "plugin toggle-pane max-preview"
+desc = "Maximize or restore the preview pane"
 
 [[mgr.prepend_keymap]]
 on   = "p"
 run  = "plugin smart-paste"
 desc = "Paste into the hovered directory or CWD"
-
-[[mgr.prepend_keymap]]
-on   = [ "t", "t" ]
-run  = "plugin smart-tab"
-desc = "Create a tab and enter the hovered directory"
 
 [[mgr.prepend_keymap]]
 on   = "2"

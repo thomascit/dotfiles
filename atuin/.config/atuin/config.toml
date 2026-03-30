@@ -1,0 +1,18 @@
+# ─────────────────────────────────────────────
+# Atuin — Shell History
+# ─────────────────────────────────────────────
+
+[sync]
+records = true
+
+[network]
+# Set this to your self-hosted server URL
+# e.g. https://atuin.example.com
+sync_address = "***REMOVED***"
+
+[history]
+filter_mode = "global"
+filter_mode_shell_up_key_binding = "session"
+
+[keys]
+up_cursor_search = true

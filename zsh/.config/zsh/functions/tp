@@ -1,0 +1,13 @@
+# Tmux project picker — fzf select a ~/Projects dir as session
+local dir name
+name=$(fd . "$HOME/Projects" -t d -d 1 --exec basename | fzf) || return
+[[ -z "$name" ]] && return
+dir="$HOME/Projects/$name"
+if [[ -n "$TMUX" ]]; then
+  tmux switch-client -t "$name" 2>/dev/null || {
+    tmux new-session -d -s "$name" -c "$dir"
+    tmux switch-client -t "$name"
+  }
+else
+  tmux new-session -A -s "$name" -c "$dir"
+fi

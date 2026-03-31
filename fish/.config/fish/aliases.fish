@@ -116,6 +116,10 @@ alias oc opencode
 # ─────────────────────────────────────────────
 # Tmux
 # ─────────────────────────────────────────────
+alias ta "tmux attach-session -t"
+alias tn "tmux new-window -c \"#{pane_current_path}\" $EDITOR ."
+alias tr "tmux rename-session"
+
 function t
     set name (tmux list-sessions -F "#{session_name}" 2>/dev/null | fzf)
     test -z "$name"; and return
@@ -125,9 +129,7 @@ function t
         tmux attach-session -t $name
     end
 end
-alias ta "tmux attach-session -t"
-alias tn "tmux new-window -c \"#{pane_current_path}\" $EDITOR ."
-alias tr "tmux rename-session"
+
 function tt
     tmux new-session -A -s (basename $PWD) -c $PWD
 end
@@ -140,6 +142,20 @@ function tts
         end
     else
         tmux new-session -A -s (basename $PWD) -c $PWD
+    end
+end
+
+function tp
+    set name (fd . $HOME/Projects -t d -d 1 --exec basename | fzf)
+    test -z "$name"; and return
+    set dir "$HOME/Projects/$name"
+    if test -n "$TMUX"
+        tmux switch-client -t $name 2>/dev/null; or begin
+            tmux new-session -d -s $name -c $dir
+            tmux switch-client -t $name
+        end
+    else
+        tmux new-session -A -s $name -c $dir
     end
 end
 

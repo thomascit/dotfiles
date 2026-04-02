@@ -13,10 +13,11 @@
 
 ### Personal Development Environment Configuration
 
-> _Dotfiles for Linux developers who appreciate clean configs, powerful tools, and the Dracula aesthetic._
+> _Dotfiles for developers who appreciate clean configs, powerful tools, and the Dracula aesthetic._
 
 [![Theme: Dracula](https://img.shields.io/badge/Theme-Dracula-bd93f9?style=flat-square)](https://draculatheme.com)
 [![Platform: Linux](https://img.shields.io/badge/Platform-Linux-FCC624?style=flat-square&logo=linux&logoColor=black)](https://www.linux.org/)
+[![Platform: macOS](https://img.shields.io/badge/Platform-macOS-000000?style=flat-square&logo=apple&logoColor=white)](https://www.apple.com/macos/)
 [![Manager: GNU Stow](https://img.shields.io/badge/Manager-GNU_Stow-4EAA25?style=flat-square)](https://www.gnu.org/software/stow/)
 
 </div>
@@ -35,8 +36,8 @@ All other tools (nvim, tmux, zsh, etc.) should be installed separately beforehan
 ## Quick Start
 
 ```sh
-git clone git@github.com:thomascit/dotfiles.git ~/dotfiles
-~/dotfiles/setup.sh
+git clone git@github.com:thomascit/dotfiles.git ~/Projects/dotfiles
+~/Projects/dotfiles/setup.sh
 ```
 
 ## Setup Script
@@ -57,6 +58,7 @@ The setup script stows configs, installs plugin managers, and copies fonts. It d
 | Package | Description |
 |---------|-------------|
 | `alacritty` | Terminal emulator with Dracula theme |
+| `atuin` | Shell history sync and search |
 | `bash` / `zsh` / `fish` | Shells with VI mode, Starship prompt, Zoxide, shared aliases |
 | `bat` | Cat replacement with syntax highlighting |
 | `btop` | Resource monitor |
@@ -80,7 +82,7 @@ The setup script stows configs, installs plugin managers, and copies fonts. It d
 |------|-------------|
 | `reference/fonts/` | JetBrainsMono Nerd Font |
 | `reference/vimium/` | Vimium browser extension settings (Dracula theme + custom keymaps) |
-| `reference/Brewfile` | macOS Homebrew package list |
+
 
 ## Theme
 

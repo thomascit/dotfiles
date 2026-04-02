@@ -6,9 +6,9 @@
 records = true
 
 [network]
-# Set this to your self-hosted server URL
-# e.g. https://atuin.example.com
-sync_address = "***REMOVED***"
+# Sync address is set via ATUIN_SYNC_ADDRESS env var
+# in ~/.zenv (zsh/bash) or ~/.fenv (fish)
+# to avoid exposing the hostname in the public repo
 
 [history]
 filter_mode = "global"

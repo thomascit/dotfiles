@@ -47,7 +47,7 @@ opt.undofile = true                  -- Enable persistent undo across sessions
 opt.encoding = "utf-8"               -- Set encoding
 
 -- Wrapping
-opt.wrap = false                     -- Disable line wrapping
+opt.wrap = true                     -- Disable line wrapping
 
 -- Terminal
 opt.termguicolors = true             -- Enable 24-bit RGB colors

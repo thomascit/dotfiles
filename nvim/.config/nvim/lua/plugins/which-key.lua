@@ -15,6 +15,7 @@ return
                     { "<leader>dp", group = "profiler" },
                     { "<leader>f", group = "file/find" },
                     { "<leader>g", group = "git" },
+                    { "<leader>o", group = "opencode" },
                     { "<leader>gh", group = "hunks" },
                     { "<leader>q", group = "quit/session" },
                     { "<leader>s", group = "search" },

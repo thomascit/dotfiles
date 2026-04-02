@@ -29,8 +29,8 @@ opt.smartcase = true                 -- Override ignorecase if uppercase used
 opt.hlsearch = true                  -- Highlight search matches
 
 -- Clipboard
--- opt.clipboard = "unnamed"            -- Use system clipboard (macOS)
-opt.clipboard = "unnamedplus"     -- Use system clipboard (Linux)
+opt.clipboard = "unnamed"            -- Use system clipboard (macOS)
+-- opt.clipboard = "unnamedplus"     -- Use system clipboard (Linux)
 
 -- Performance
 opt.ttyfast = true                   -- Faster scrolling
@@ -47,7 +47,7 @@ opt.undofile = true                  -- Enable persistent undo across sessions
 opt.encoding = "utf-8"               -- Set encoding
 
 -- Wrapping
-opt.wrap = true                     -- Disable line wrapping
+opt.wrap = true                      -- Enable line wrapping
 
 -- Terminal
 opt.termguicolors = true             -- Enable 24-bit RGB colors

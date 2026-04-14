@@ -1,5 +1,8 @@
 local opt = vim.opt
 
+-- Ensure Homebrew binaries are in PATH (for formatters, LSPs, etc.)
+vim.env.PATH = "/opt/homebrew/bin:/opt/homebrew/sbin:" .. vim.env.PATH
+
 -- Line numbers
 opt.number = true                    -- Show absolute line number on current line
 opt.relativenumber = true            -- Show relative line numbers on other lines

@@ -2,6 +2,9 @@ return{
     "folke/snacks.nvim",
     priority = 1000,
     lazy = false,
+    keys = {
+        { "<leader>z", function() Snacks.zen() end, desc = "Toggle Zen Mode" },
+    },
     ---@type snacks.Config
     opts = {
         -- your configuration comes here
@@ -33,7 +36,19 @@ return{
         notifier = { enabled = true },
         quickfile = { enabled = true },
         scope = { enabled = true },
+        toggle = { enabled = true },
         scroll = { enabled = false },
+        zen = {
+            enabled = true,
+            toggles = {
+                dim = true,
+                git_signs = false,
+                diagnostics = false,
+            },
+            win = {
+                width = 80,
+            },
+        },
         statuscolumn = { enabled = true },
         words = { enabled = true },
     },

@@ -51,3 +51,12 @@ end, { desc = "Git Browse (copy)" })
 map("n", "<leader>cF", function()
   vim.lsp.buf.format({ async = true })
 end, { desc = "Format (LSP only)" })
+
+-- Clear search highlights
+map("n", "<Esc>", "<cmd>nohlsearch<cr>", { desc = "Clear search highlights" })
+
+-- Centered scrolling
+map("n", "<C-d>", "<C-d>zz", { desc = "Scroll down (centered)" })
+map("n", "<C-u>", "<C-u>zz", { desc = "Scroll up (centered)" })
+map("n", "n", "nzzzv", { desc = "Next search result (centered)" })
+map("n", "N", "Nzzzv", { desc = "Prev search result (centered)" })

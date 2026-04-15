@@ -21,6 +21,7 @@ return {
       sh = { "shfmt" },
       bash = { "shfmt" },
       python = { "ruff_format", "ruff_organize_imports" },
+      rust = { "rustfmt" },
       javascript = { "prettierd", "prettier", stop_after_first = true },
       typescript = { "prettierd", "prettier", stop_after_first = true },
     },

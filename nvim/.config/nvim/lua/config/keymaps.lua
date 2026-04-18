@@ -55,6 +55,10 @@ end, { desc = "Format (LSP only)" })
 -- Clear search highlights
 map("n", "<Esc>", "<cmd>nohlsearch<cr>", { desc = "Clear search highlights" })
 
+-- Buffer navigation
+map("n", "H", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
+map("n", "L", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+
 -- Centered scrolling
 map("n", "<C-d>", "<C-d>zz", { desc = "Scroll down (centered)" })
 map("n", "<C-u>", "<C-u>zz", { desc = "Scroll up (centered)" })

@@ -58,6 +58,7 @@ map("n", "<Esc>", "<cmd>nohlsearch<cr>", { desc = "Clear search highlights" })
 -- Buffer navigation
 map("n", "H", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
 map("n", "L", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+map("n", "<leader>bd", function() Snacks.bufdelete() end, { desc = "Delete Buffer" })
 
 -- Centered scrolling
 map("n", "<C-d>", "<C-d>zz", { desc = "Scroll down (centered)" })

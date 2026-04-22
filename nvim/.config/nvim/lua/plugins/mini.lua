@@ -4,5 +4,6 @@ return {
   config = function()
         require('mini.ai').setup()
         require('mini.pairs').setup()
+        require('mini.trailspace').setup()
   end
 }

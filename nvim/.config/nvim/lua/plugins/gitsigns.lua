@@ -40,6 +40,20 @@ return {
       map("n", "<leader>ghb", gs.blame_line, "Blame Line")
       map("n", "<leader>ghd", gs.diffthis, "Diff This")
       map("n", "<leader>ghD", function() gs.diffthis("~") end, "Diff This ~")
+
+      -- Combined inline diff toggle
+      local inline_diff_active = false
+      map("n", "<leader>tg", function()
+        inline_diff_active = not inline_diff_active
+        gs.toggle_deleted()
+        gs.toggle_word_diff()
+        gs.toggle_linehl()
+        if inline_diff_active then
+          vim.notify("Inline diff ON", vim.log.levels.INFO)
+        else
+          vim.notify("Inline diff OFF", vim.log.levels.INFO)
+        end
+      end, "Toggle Git Inline Diff")
     end,
   },
 }

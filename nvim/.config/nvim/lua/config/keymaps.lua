@@ -22,6 +22,9 @@ end, { desc = "Colorcolumn" })
 
 -- Quit
 map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit All" })
+map("n", "<leader>qb", function() Snacks.bufdelete() end, { desc = "Quit Buffer" })
+map("n", "<leader>qo", function() Snacks.bufdelete.other() end, { desc = "Quit Other Buffers" })
+map("n", "<leader>qa", function() Snacks.bufdelete.all() end, { desc = "Quit All Buffers" })
 
 -- Save
 map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })

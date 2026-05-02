@@ -31,6 +31,8 @@ Install these before running the setup script:
 
 All other tools (nvim, tmux, zsh, etc.) should be installed separately beforehand. The setup script only manages config files, not package installation.
 
+**Current shell:** `zsh`
+
 ## Quick Start
 
 ```sh

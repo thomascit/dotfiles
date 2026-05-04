@@ -2,15 +2,15 @@
 # Clipboard (OS-specific)
 # ─────────────────────────────────────────────
 if [[ "$OSTYPE" == "darwin"* ]]; then
-  alias c="pbcopy"
+    alias c="pbcopy"
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-  if grep -qiE "(microsoft|wsl)" /proc/version 2>/dev/null; then
-    alias c="clip.exe"
-  elif [[ -n "$WAYLAND_DISPLAY" ]]; then
-    alias c="wl-copy"
-  else
-    alias c="xclip -i -selection clipboard"
-  fi
+    if grep -qiE "(microsoft|wsl)" /proc/version 2>/dev/null; then
+        alias c="clip.exe"
+    elif [[ -n "$WAYLAND_DISPLAY" ]]; then
+        alias c="wl-copy"
+    else
+        alias c="xclip -i -selection clipboard"
+    fi
 fi
 
 # Reload config
@@ -140,5 +140,5 @@ alias sskg="ssh-keygen -o -a 100 -t ed25519 -C"
 # ─────────────────────────────────────────────
 # Pomodoro
 # ─────────────────────────────────────────────
-alias p50="work 50m && rest 10m"
+alias p40="work 40m && rest 20m"
 alias p20="work 20m && rest 10m"

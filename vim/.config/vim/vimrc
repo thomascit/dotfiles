@@ -62,6 +62,38 @@ let mapleader = " "           " Set leader key to space
 " Key mappings
 inoremap jk <Esc>
 
+" Visual yank keeps highlight
+vnoremap y ygv
+
+" Toggle wrap
+nnoremap <leader>tw :set wrap! linebreak! breakindent!<CR>
+
+" Toggle colorcolumn
+nnoremap <leader>tc :let &colorcolumn = &colorcolumn == "" ? "80" : ""<CR>
+
+" Quit all
+nnoremap <leader>qq :qa<CR>
+
+" Save file
+nnoremap <C-s> :w<CR>
+inoremap <C-s> <Esc>:w<CR>a
+
+" New file
+nnoremap <leader>fn :enew<CR>
+
+" Clear search highlights
+nnoremap <Esc> :nohlsearch<CR>
+
+" Buffer navigation
+nnoremap H :bprevious<CR>
+nnoremap L :bnext<CR>
+
+" Centered scrolling
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
 " Cursor shape in terminal (Ghostty/xterm DECSCUSR)
 " - Normal/Visual: solid block
 " - Insert: vertical bar (I-beam)

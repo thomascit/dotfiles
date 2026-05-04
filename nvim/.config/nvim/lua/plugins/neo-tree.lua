@@ -7,6 +7,7 @@ return {
     "nvim-tree/nvim-web-devicons",
     "MunifTanjim/nui.nvim",
   },
+  lazy = false,
   keys = {
     {
       "<leader>e",
@@ -22,6 +23,7 @@ return {
   opts = {
     close_if_last_window = true,
     filesystem = {
+      hijack_netrw_behavior = "open_current",
       follow_current_file = {
         enabled = true,
       },

@@ -88,6 +88,9 @@ nnoremap <Esc> :nohlsearch<CR>
 nnoremap H :bprevious<CR>
 nnoremap L :bnext<CR>
 
+" Close buffer
+nnoremap <C-q> :bd<CR>
+
 " Centered scrolling
 nnoremap <C-d> <C-d>zz
 nnoremap <C-u> <C-u>zz

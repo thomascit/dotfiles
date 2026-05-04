@@ -93,6 +93,9 @@ map("n", "L", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 map("n", "<leader>bd", function()
   Snacks.bufdelete()
 end, { desc = "Delete Buffer" })
+map("n", "<C-q>", function()
+  Snacks.bufdelete()
+end, { desc = "Close Buffer" })
 
 -- Centered scrolling
 map("n", "<C-d>", "<C-d>zz", { desc = "Scroll down (centered)" })

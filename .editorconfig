@@ -1,0 +1,55 @@
+# EditorConfig — https://editorconfig.org
+# Top-level for the dotfiles repo.
+
+root = true
+
+# Defaults for everything
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+# Shell scripts (sh, bash, zsh)
+[*.{sh,bash,zsh}]
+indent_size = 2
+shell_variant = bash
+
+# Fish
+[*.fish]
+indent_size = 4
+
+# Lua (Neovim configs use stylua's defaults: 2-space)
+[*.lua]
+indent_size = 2
+
+# TOML
+[*.toml]
+indent_size = 4
+
+# YAML
+[*.{yml,yaml}]
+indent_size = 2
+
+# JSON / JSONC
+[*.{json,jsonc}]
+indent_size = 4
+
+# Markdown — preserve trailing whitespace (used for hard line breaks)
+[*.md]
+trim_trailing_whitespace = false
+indent_size = 2
+
+# Tool config files (kitty, ghostty, btop, hypr, alacritty etc.)
+[*.{conf,rasi}]
+indent_size = 2
+
+# Makefiles require tabs
+[{Makefile,*.mk}]
+indent_style = tab
+
+# Tmux
+[tmux.conf]
+indent_size = 2

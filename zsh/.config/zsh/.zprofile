@@ -52,12 +52,23 @@ export FZF_ALT_C_OPTS="
 # ZSH-VI Settings
 export ZVM_VI_ESCAPE_BINDKEY=jk
 export ZVM_SYSTEM_CLIPBOARD_ENABLED=true
-# (MAC)
-# export ZVM_CLIPBOARD_COPY_CMD='pbcopy'
-# export ZVM_CLIPBOARD_PASTE_CMD='pbpaste'
-# (LINUX)
-ZVM_CLIPBOARD_COPY_CMD='xclip -selection clipboard'
-ZVM_CLIPBOARD_PASTE_CMD='xclip -selection clipboard -o'
+
+# Clipboard commands for zsh-vi-mode (OS-conditional, mirrors aliases.sh).
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  export ZVM_CLIPBOARD_COPY_CMD='pbcopy'
+  export ZVM_CLIPBOARD_PASTE_CMD='pbpaste'
+elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  if grep -qiE "(microsoft|wsl)" /proc/version 2>/dev/null; then
+    export ZVM_CLIPBOARD_COPY_CMD='clip.exe'
+    export ZVM_CLIPBOARD_PASTE_CMD='powershell.exe -Command Get-Clipboard'
+  elif [[ -n "$WAYLAND_DISPLAY" ]]; then
+    export ZVM_CLIPBOARD_COPY_CMD='wl-copy'
+    export ZVM_CLIPBOARD_PASTE_CMD='wl-paste'
+  else
+    export ZVM_CLIPBOARD_COPY_CMD='xclip -selection clipboard'
+    export ZVM_CLIPBOARD_PASTE_CMD='xclip -selection clipboard -o'
+  fi
+fi
 
 # LAZYGIT Settings
 export LAZYGIT_NEW_DIR_FILE=$HOME/.lazygit/newdir

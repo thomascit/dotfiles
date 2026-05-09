@@ -92,7 +92,7 @@ alias cat="bat"
 alias icat="kitten icat"
 alias ls="eza --icons=always --sort=type --header -l --git"
 alias lst="eza --icons=always --sort=type --header -l --git --tree"
-alias rm="trash"
+command -v trash &>/dev/null && alias rm="trash"
 
 # ─────────────────────────────────────────────
 # Source Shells

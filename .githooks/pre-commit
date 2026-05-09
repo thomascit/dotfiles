@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+#
+# Pre-commit hook: scan staged changes for secrets using gitleaks.
+#
+# Activate per-clone with:
+#   git config core.hooksPath .githooks
+# (setup.sh does this automatically.)
+#
+# Bypass in an emergency with:
+#   git commit --no-verify
+#
+
+set -euo pipefail
+
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo "[pre-commit] gitleaks not found in PATH — skipping secret scan." >&2
+  echo "[pre-commit] Install with: brew install gitleaks  (or see https://github.com/gitleaks/gitleaks)" >&2
+  exit 0
+fi
+
+# Bail early if nothing is staged.
+if git diff --cached --quiet; then
+  exit 0
+fi
+
+# Pipe the staged diff into gitleaks stdin. This is the reliable v8 pattern
+# for pre-commit: `gitleaks git --staged` scans commit history, not the index.
+# --redact hides matched secrets in output so they don't echo into terminal scrollback.
+if ! git diff --cached -U0 | gitleaks stdin --redact --no-banner; then
+  echo "" >&2
+  echo "[pre-commit] gitleaks detected potential secrets in staged changes." >&2
+  echo "[pre-commit] Review the findings above. To bypass (NOT recommended) use: git commit --no-verify" >&2
+  exit 1
+fi
+
+exit 0

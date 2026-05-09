@@ -92,6 +92,25 @@ clone_dotfiles() {
   success "Dotfiles cloned to $DOTFILES_DIR"
 }
 
+configure_git_hooks() {
+  if [[ ! -d "$DOTFILES_DIR/.githooks" ]]; then
+    return
+  fi
+
+  info "Configuring git hooks (pre-commit secret scan)..."
+  git -C "$DOTFILES_DIR" config core.hooksPath .githooks
+  success "Git hooks enabled — pre-commit will run gitleaks on staged changes"
+
+  if ! command_exists gitleaks; then
+    warn "gitleaks is not installed — the pre-commit hook will skip scans until installed"
+    if [[ "$OS" == "macos" ]]; then
+      info "Install with: brew install gitleaks"
+    else
+      info "Install: see https://github.com/gitleaks/gitleaks#installing"
+    fi
+  fi
+}
+
 stow_packages() {
   local packages="$1"
 
@@ -287,6 +306,7 @@ run_full_install() {
 
   create_xdg_dirs
   clone_dotfiles
+  configure_git_hooks
   stow_packages "$PACKAGES_CLI"
   copy_wrapper_files
   install_atuin
@@ -312,6 +332,7 @@ run_full_install() {
 run_custom_install() {
   create_xdg_dirs
   clone_dotfiles
+  configure_git_hooks
 
   echo ""
   echo -e "${CYAN}Available packages:${NC}"

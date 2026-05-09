@@ -152,6 +152,25 @@ Start tmux and press `<prefix>+I` to install plugins. The prefix is `Ctrl+Space`
 **Neovim plugins not loading?**
 lazy.nvim auto-bootstraps on first launch. If plugins are missing, open Neovim and run `:Lazy sync`.
 
+## Secret Scanning
+
+A `pre-commit` hook in `.githooks/` runs [gitleaks](https://github.com/gitleaks/gitleaks) against staged changes to catch accidentally committed secrets.
+
+Activate the hook (the setup script does this automatically):
+
+```sh
+git config core.hooksPath .githooks
+```
+
+Install the scanner:
+
+```sh
+brew install gitleaks   # macOS
+# Linux: see https://github.com/gitleaks/gitleaks#installing
+```
+
+If `gitleaks` is not on `PATH`, the hook prints a warning and lets the commit proceed. Bypass entirely (not recommended) with `git commit --no-verify`.
+
 ## Notes
 
 - `.stowrc` targets `$HOME` and ignores `reference/`. Run stow from the repo root.

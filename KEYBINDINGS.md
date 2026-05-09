@@ -319,8 +319,8 @@ These aliases use fzf for interactive selection:
 
 | Alias | Description |
 |---|---|
-| `di` | Interactive `dnf` install |
-| `du` | Interactive `dnf` remove |
+| `dnfi` | Interactive `dnf` install |
+| `dnfu` | Interactive `dnf` remove |
 
 ---
 

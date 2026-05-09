@@ -80,8 +80,9 @@ alias au="dpkg --get-selections | grep -v deinstall | cut -f1 | fzf --multi --pr
 # ─────────────────────────────────────────────
 # DNF (Fedora/RHEL)
 # ─────────────────────────────────────────────
-alias di='dnf repoquery --available -y --qf "%{name}\n" 2>/dev/null | fzf --multi --preview "dnf info {1}" | xargs -ro sudo dnf install'
-alias du='dnf repoquery --installed --qf "%{name}\n" 2>/dev/null | fzf --multi --preview "dnf info {1}" | xargs -ro sudo dnf remove'
+alias dnfi='dnf repoquery --available -y --qf "%{name}\n" 2>/dev/null | fzf --multi --preview "dnf info {1}" | xargs -ro sudo dnf install'
+# Note: not 'du' — that shadows the disk-usage builtin.
+alias dnfu='dnf repoquery --installed --qf "%{name}\n" 2>/dev/null | fzf --multi --preview "dnf info {1}" | xargs -ro sudo dnf remove'
 
 # ─────────────────────────────────────────────
 # LS/FS

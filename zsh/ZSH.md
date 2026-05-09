@@ -92,8 +92,8 @@
 
 | Alias | Description |
 |---|---|
-| `di` | fzf install |
-| `du` | fzf uninstall |
+| `dnfi` | fzf install |
+| `dnfu` | fzf uninstall |
 
 ---
 

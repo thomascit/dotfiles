@@ -7,23 +7,29 @@ return {
     { "nvim-lua/plenary.nvim", lazy = true },
   },
   keys = {
-    -- 👇 in this section, choose your own keymappings!
+    -- Yazi keybindings under <leader>y group
     {
-      "<leader>y",
+      "<leader>yy",
       mode = { "n", "v" },
       "<cmd>Yazi<cr>",
-      desc = "Open yazi at the current file",
+      desc = "Current file",
     },
     {
-      -- Open in the current working directory
-      "<leader>cw",
+      "<leader>yw",
       "<cmd>Yazi cwd<cr>",
-      desc = "Open the file manager in nvim's working directory",
+      desc = "Working directory",
     },
     {
-      "<c-up>",
+      "<leader>yc",
+      function()
+        require("yazi").yazi({}, vim.fn.expand("~/.config"))
+      end,
+      desc = "~/.config (dotfiles)",
+    },
+    {
+      "<leader>yr",
       "<cmd>Yazi toggle<cr>",
-      desc = "Resume the last yazi session",
+      desc = "Resume last session",
     },
   },
   ---@type YaziConfig | {}

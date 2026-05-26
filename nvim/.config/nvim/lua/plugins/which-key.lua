@@ -22,6 +22,7 @@ return
                     { "<leader>t", group = "toggle" },
                     { "<leader>u", group = "ui" },
                     { "<leader>x", group = "diagnostics/quickfix" },
+                    { "<leader>y", group = "yazi" },
                     { "[", group = "prev" },
                     { "]", group = "next" },
                     { "g", group = "goto" },

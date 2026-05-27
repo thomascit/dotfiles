@@ -1,3 +1,8 @@
+" Vimwiki requirements
+set nocompatible              " Disable Vi compatibility mode
+filetype plugin on            " Enable filetype detection and plugins
+syntax on                     " Syntax Highlighting
+
 " Line numbers
 set number                    " Show absolute line number on current line
 set relativenumber            " Show relative line numbers on other lines
@@ -10,9 +15,6 @@ set showmatch                 " Show matching brackets
 set colorcolumn=80            " Highlight column 80
 set scroll=10                 " Set scroll to 10 lines
 set scrolloff=4               " Keep 4 lines visible above/below cursor
-
-" Syntax highlighting
-syntax on
 
 " Mouse
 set mouse=a                   " Enable mouse support

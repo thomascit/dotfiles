@@ -7,6 +7,9 @@ local map = vim.keymap.set
 -- Insert mode mappings
 map("i", "jk", "<Esc>", { desc = "Exit insert mode" })
 
+-- Terminal mode mappings
+map("t", "jk", "<C-\\><C-n>", { desc = "Exit terminal mode" })
+
 -- Keep highlight after yank
 map("v", "y", "ygv", { noremap = true })
 

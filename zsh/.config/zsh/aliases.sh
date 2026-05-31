@@ -2,15 +2,15 @@
 # Clipboard (OS-specific)
 # ─────────────────────────────────────────────
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    alias c="pbcopy"
+  alias c="pbcopy"
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    if grep -qiE "(microsoft|wsl)" /proc/version 2>/dev/null; then
-        alias c="clip.exe"
-    elif [[ -n "$WAYLAND_DISPLAY" ]]; then
-        alias c="wl-copy"
-    else
-        alias c="xclip -i -selection clipboard"
-    fi
+  if grep -qiE "(microsoft|wsl)" /proc/version 2>/dev/null; then
+    alias c="clip.exe"
+  elif [[ -n "$WAYLAND_DISPLAY" ]]; then
+    alias c="wl-copy"
+  else
+    alias c="xclip -i -selection clipboard"
+  fi
 fi
 
 # Reload config
@@ -37,6 +37,7 @@ alias zpc="$EDITOR $HOME/.config/zsh/.zprofile"
 alias vc="$EDITOR $HOME/.config/fish/variables.fish"
 alias yc="$EDITOR $HOME/.config/yazi/yazi.toml"
 alias df="yazi $HOME/.config"
+alias dfn="yazi $HOME/.config/nvim"
 
 # ─────────────────────────────────────────────
 # Git

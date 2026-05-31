@@ -36,6 +36,7 @@ alias zpc "$EDITOR $HOME/.config/zsh/.zprofile"
 alias vc "$EDITOR $HOME/.config/fish/variables.fish"
 alias yc "$EDITOR $HOME/.config/yazi/yazi.toml"
 alias df "yazi $HOME/.config"
+alias dfn "yazi $HOME/.config/nvim"
 
 # ─────────────────────────────────────────────
 # Git

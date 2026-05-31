@@ -207,6 +207,15 @@ Shared between Neovim and Tmux — navigate seamlessly across both.
 | `R` | Operator / Visual | Treesitter search |
 | `Ctrl+s` | Command | Toggle flash search |
 
+### Neo-tree (File Explorer)
+
+| Keybinding | Mode | Description |
+|---|---|---|
+| `<leader>ee` | Normal | Toggle Neo-tree explorer |
+| `<leader>ec` | Normal | Open ~/.config in Neo-tree |
+| `<leader>en` | Normal | Open Neovim config in Neo-tree |
+| `<leader>fe` | Normal | Reveal current file in explorer |
+
 ### Yazi (File Manager)
 
 | Keybinding | Mode | Description |

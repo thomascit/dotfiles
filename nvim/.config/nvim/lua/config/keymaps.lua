@@ -13,7 +13,7 @@ map("t", "jk", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 -- Keep highlight after yank
 map("v", "y", "ygv", { noremap = true })
 
--- Wrap mappings
+-- Toggles
 map("n", "<leader>tw", function()
   local on = vim.wo.wrap
   vim.wo.wrap = not on
@@ -21,11 +21,15 @@ map("n", "<leader>tw", function()
   vim.wo.breakindent = not on
 end, { desc = "Wrap" })
 
--- Colorcolumn
 map("n", "<leader>tc", function()
   local has_column = vim.wo.colorcolumn ~= ""
   vim.wo.colorcolumn = has_column and "" or "80"
 end, { desc = "Colorcolumn" })
+
+-- Transparency toggle (works with any theme)
+map("n", "<leader>tt", function()
+  require("config.transparency").toggle()
+end, { desc = "Transparency" })
 
 -- Quit
 map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit All" })
@@ -82,10 +86,15 @@ map({ "n", "x" }, "<leader>gY", function()
   })
 end, { desc = "Git Browse (copy)" })
 
--- Format
+-- Config
 map("n", "<leader>cF", function()
   vim.lsp.buf.format({ async = true })
 end, { desc = "Format (LSP only)" })
+
+map("n", "<leader>cr", function()
+  vim.cmd("source $MYVIMRC")
+  vim.notify("Config reloaded!", vim.log.levels.INFO)
+end, { desc = "Reload Config" })
 
 -- Clear search highlights
 map("n", "<Esc>", "<cmd>nohlsearch<cr>", { desc = "Clear search highlights" })

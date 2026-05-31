@@ -1,24 +1,20 @@
 return {
   "nvim-treesitter/nvim-treesitter",
+  branch = "main",
+  lazy = false,
   build = ":TSUpdate",
-  event = { "BufReadPost", "BufNewFile" },
-  opts = {
-    ensure_installed = {
-      "bash",
-      "comment",
-      "dockerfile",
-      "go",
-      "lua",
-      "markdown",
-      "markdown_inline",
-      "python",
-      "regex",
-      "yaml",
-    },
-    highlight = { enable = true },
-    indent = { enable = true },
-  },
-  config = function(_, opts)
-    require("nvim-treesitter.configs").setup(opts)
+  config = function()
+    require("nvim-treesitter").setup()
+
+    require("nvim-treesitter").install({
+      "bash", "comment", "dockerfile", "go", "lua",
+      "markdown", "markdown_inline", "python", "regex", "yaml",
+    })
+
+    vim.api.nvim_create_autocmd("FileType", {
+      callback = function()
+        pcall(vim.treesitter.start)
+      end,
+    })
   end,
 }

@@ -10,14 +10,24 @@ return {
   lazy = false,
   keys = {
     {
-      "<leader>e",
+      "<leader>ee",
       "<cmd>Neotree toggle<cr>",
-      desc = "Explorer (Neo-tree)",
+      desc = "Toggle explorer",
     },
     {
       "<leader>fe",
       "<cmd>Neotree reveal<cr>",
       desc = "Reveal file in explorer",
+    },
+    {
+      "<leader>en",
+      "<cmd>Neotree dir=~/.config/nvim reveal<cr>",
+      desc = "Neovim config",
+    },
+    {
+      "<leader>ec",
+      "<cmd>Neotree dir=~/.config reveal<cr>",
+      desc = "Config directory",
     },
   },
   opts = {

@@ -13,6 +13,7 @@ return
                     { "<leader>c", group = "code" },
                     { "<leader>d", group = "debug" },
                     { "<leader>dp", group = "profiler" },
+                    { "<leader>e", group = "explorer" },
                     { "<leader>f", group = "file/find" },
                     { "<leader>g", group = "git" },
                     { "<leader>o", group = "opencode" },

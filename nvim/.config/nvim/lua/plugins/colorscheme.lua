@@ -11,6 +11,7 @@ return {
     -- Load the colorscheme after setup
     vim.cmd.colorscheme("dracula")
 
-    vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#ff5555" })
+    -- Set DiagnosticOk to Dracula green (used by MiniIconsGreen)
+    vim.api.nvim_set_hl(0, "DiagnosticOk", { fg = "#50fa7b" })
   end,
 }

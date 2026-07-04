@@ -46,7 +46,7 @@
 
 | Alias | Description |
 |---|---|
-| `t` | Create a new numbered tmux session |
+| `t` | Create or join the MAIN tmux session |
 | `ta` | Attach to session by name |
 | `tn` | New window opening `$EDITOR` in current path |
 | `tk` | Kill the tmux server |

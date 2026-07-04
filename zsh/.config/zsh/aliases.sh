@@ -117,7 +117,7 @@ alias oc="opencode"
 # ─────────────────────────────────────────────
 # Tmux
 # ─────────────────────────────────────────────
-alias t='() { local n=1; while tmux has-session -t "$n" 2>/dev/null; do (( n++ )); done; tmux new-session -s "$n" }'
+alias t='tmux new-session -A -s MAIN'
 alias ta="tmux attach-session -t"
 alias tn='tmux new-window -c "#{pane_current_path}" $EDITOR .'
 alias tk='tmux kill-server'

@@ -81,8 +81,16 @@ create_xdg_dirs() {
 clone_dotfiles() {
   if [[ -d "$DOTFILES_DIR" ]]; then
     success "Dotfiles already at $DOTFILES_DIR"
-    info "Pulling latest changes..."
-    git -C "$DOTFILES_DIR" pull --rebase || warn "Could not pull latest changes"
+
+    # Skip the rebase pull if the working tree is dirty — rebase would refuse
+    # anyway, and we don't want to risk clobbering uncommitted local changes.
+    if [[ -n "$(git -C "$DOTFILES_DIR" status --porcelain 2>/dev/null)" ]]; then
+      warn "Working tree has uncommitted changes — skipping pull to protect local work"
+      info "Commit or stash your changes, then run: git -C \"$DOTFILES_DIR\" pull --rebase"
+    else
+      info "Pulling latest changes..."
+      git -C "$DOTFILES_DIR" pull --rebase || warn "Could not pull latest changes"
+    fi
     return
   fi
 
@@ -103,7 +111,7 @@ configure_git_hooks() {
 
   if ! command_exists gitleaks; then
     warn "gitleaks is not installed — the pre-commit hook will skip scans until installed"
-    if [[ "$OS" == "macos" ]]; then
+    if [[ "${OS:-}" == "macos" ]]; then
       info "Install with: brew install gitleaks"
     else
       info "Install: see https://github.com/gitleaks/gitleaks#installing"
@@ -122,8 +130,19 @@ stow_packages() {
 
   for package in $packages; do
     if [[ -d "$DOTFILES_DIR/$package" ]]; then
-      stow -v -R -d "$DOTFILES_DIR" -t "$HOME" "$package" 2>&1 | grep -v "^LINK" || true
-      success "Stowed $package"
+      local stow_output stow_status
+      # Split declaration from assignment: `local x="$(cmd)"` would mask cmd's
+      # exit code (local's own status wins). We need stow's real status.
+      stow_output="$(stow -v -R -d "$DOTFILES_DIR" -t "$HOME" "$package" 2>&1)" && stow_status=0 || stow_status=$?
+
+      # Show stow's output minus the noisy per-symlink LINK lines
+      printf '%s\n' "$stow_output" | grep -v "^LINK" || true
+
+      if [[ $stow_status -eq 0 ]]; then
+        success "Stowed $package"
+      else
+        warn "Failed to stow $package (stow exited $stow_status) — resolve conflicts above"
+      fi
     else
       warn "Package directory not found, skipping: $package"
     fi
@@ -233,7 +252,7 @@ install_atuin() {
   fi
 
   info "Installing Atuin..."
-  if [[ "$OS" == "macos" ]]; then
+  if [[ "${OS:-}" == "macos" ]]; then
     brew install atuin
     success "Atuin installed"
   else
@@ -280,17 +299,18 @@ install_fonts() {
   info "Installing fonts from $fonts_dir..."
 
   local dest
-  if [[ "$OS" == "macos" ]]; then
+  if [[ "${OS:-}" == "macos" ]]; then
     dest="$HOME/Library/Fonts"
   else
     dest="$HOME/.local/share/fonts"
   fi
 
   mkdir -p "$dest"
-  find "$fonts_dir" -name "*.ttf" -exec cp {} "$dest/" \;
-  find "$fonts_dir" -name "*.otf" -exec cp {} "$dest/" \;
+  # Single pass matching both TrueType and OpenType fonts.
+  # The `+` terminator batches files into fewer cp invocations than `\;`.
+  find "$fonts_dir" \( -name "*.ttf" -o -name "*.otf" \) -exec cp {} "$dest/" +
 
-  if [[ "$OS" == "linux" ]]; then
+  if [[ "${OS:-}" == "linux" ]]; then
     fc-cache -f >/dev/null 2>&1 && info "Font cache refreshed"
   fi
 

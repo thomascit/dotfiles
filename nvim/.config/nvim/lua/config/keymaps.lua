@@ -26,10 +26,13 @@ map("n", "<leader>tc", function()
   vim.wo.colorcolumn = has_column and "" or "80"
 end, { desc = "Colorcolumn" })
 
--- Transparency toggle (works with any theme)
-map("n", "<leader>tt", function()
-  require("config.transparency").toggle()
-end, { desc = "Transparency" })
+-- Transparency toggle (transparent.nvim, works with any theme)
+map("n", "<leader>tt", "<cmd>TransparentToggle<cr>", { desc = "Transparency" })
+
+-- Colorscheme picker (Snacks, live preview; choice is persisted)
+map("n", "<leader>uC", function()
+  Snacks.picker.colorschemes()
+end, { desc = "Colorscheme (picker)" })
 
 -- Quit
 map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit All" })

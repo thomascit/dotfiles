@@ -30,3 +30,8 @@ desc = "Paste into the hovered directory or CWD"
 on   = "2"
 run  = "plugin smart-switch 1"
 desc = "Switch or create tab 2"
+
+[[mgr.prepend_keymap]]
+on   = [ "g", "i" ]
+run  = "plugin lazygit"
+desc = "Open lazygit here"

@@ -5,6 +5,10 @@
 .netrwhist
 userstate.cbor
 todo.md
+test.md
+
+# opencode local state (node_modules, caches — not part of dotfiles)
+.opencode/
 
 # Fish-specific
 fish/.config/fish/fish_variables
@@ -31,10 +35,17 @@ yazi/.config/yazi/flavors/*
 # Secrets / sensitive files
 .zenv
 *.env
+.env.*
 *.pem
 *.key
+*.gpg
+*.p12
+*.pfx
+*.keystore
 id_rsa
 id_ed25519
+id_ecdsa
+id_dsa
 .netrc
 *_secret*
 *credentials*

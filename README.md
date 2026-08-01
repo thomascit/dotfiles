@@ -70,6 +70,7 @@ The setup script stows configs, installs plugin managers, and copies fonts. It d
 | `noctalia` | Hyprland shell — bar, launcher, dock, lock screen, notifications, control center |
 | `nvim` | Neovim with LazyVim + lazy.nvim configuration |
 | `rofi` | Application launcher (X11) |
+| `sesh` | Smart session manager for tmux (fzf-powered switcher) |
 | `starship` | Fast, customizable shell prompt |
 | `tmux` | Terminal multiplexer with TPM plugins and Dracula theme |
 | `vim` | Vim with vim-plug and Dracula theme |
@@ -144,7 +145,7 @@ stow -D nvim && stow nvim
 ```
 
 **Fonts not showing in terminals?**
-Run `./setup.sh --fonts` then restart the terminal. On Linux, `fc-cache -f` is run automatically but you may need to restart the application.
+Run `./setup.sh --fonts` then restart the terminal. Fonts install to `~/.local/share/fonts` on Linux and `~/Library/Fonts` on macOS. On Linux, `fc-cache -f` is run automatically but you may need to restart the application.
 
 **TPM plugins not loading?**
 Start tmux and press `<prefix>+I` to install plugins. The prefix is `Ctrl+Space`.

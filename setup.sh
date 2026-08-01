@@ -21,7 +21,7 @@ else
 fi
 
 # Stow package groups
-PACKAGES_CLI="atuin bash bat btop eza fish lazygit nvim starship tmux vim yazi zsh"
+PACKAGES_CLI="atuin bash bat btop eza fish lazygit nvim sesh starship tmux vim yazi zsh"
 PACKAGES_TERMINALS="alacritty ghostty kitty"
 PACKAGES_WM_LINUX="hypr noctalia rofi wofi"
 

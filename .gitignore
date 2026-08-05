@@ -7,8 +7,15 @@ userstate.cbor
 todo.md
 test.md
 
-# opencode local state (node_modules, caches — not part of dotfiles)
-.opencode/
+# opencode: share agent definitions, ignore local state.
+# Allow-list on purpose: opencode auto-populates this dir with node_modules,
+# lockfiles, caches and possibly credentials, so default to excluding
+# everything and opt files in explicitly.
+# Note: `.opencode/*` (contents), not `.opencode/` (the dir) — git cannot
+# re-include a file whose parent directory is excluded.
+# To share more (e.g. skills/), add a matching `!` line below.
+.opencode/*
+!.opencode/agents/
 
 # Fish-specific
 fish/.config/fish/fish_variables

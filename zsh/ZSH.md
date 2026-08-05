@@ -56,6 +56,14 @@
 
 ---
 
+## Sesh
+
+| Alias | Description |
+|---|---|
+| `s` | fzf picker over `sesh list` → connect to the selected session |
+
+---
+
 ## Package Managers
 
 ### Homebrew (macOS)

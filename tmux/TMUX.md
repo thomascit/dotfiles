@@ -10,7 +10,7 @@
 |---|---|
 | `prefix + F` | SSH host picker (fzf from `~/.ssh/config`) |
 | `prefix + v` | File picker (fzf) → open in `$EDITOR` |
-| `prefix + s` | Session switcher (fzf) |
+| `prefix + s` | Session switcher (sesh) |
 | `prefix + r` | Popup terminal in current path |
 | `prefix + S` | New session from `~/Projects` picker |
 | `prefix + C-c` | Config file picker (`~/.config`, bat preview) |
@@ -74,6 +74,23 @@
 
 ---
 
+## Sesh
+
+`prefix + s` opens the [sesh](https://github.com/joshmedeski/sesh) session picker in an
+fzf popup (tmux sessions listed first). These bindings work inside the picker:
+
+| Binding | Description |
+|---|---|
+| `Tab` / `S-Tab` | Move down / up |
+| `C-a` | List all sources |
+| `C-t` | List tmux sessions |
+| `C-g` | List sesh configs |
+| `C-x` | List zoxide directories |
+| `C-f` | Find directories under `~` (`fd`) |
+| `C-d` | Kill the selected tmux session |
+
+---
+
 ## Toggles
 
 | Binding | Description |
@@ -124,3 +141,4 @@
 | `tr` | Rename current session |
 | `tt` | New/attach session named after cwd |
 | `tts` | New/switch session named after cwd (switch-client if inside tmux) |
+| `s` | fzf picker over `sesh list` → connect to the selected session |

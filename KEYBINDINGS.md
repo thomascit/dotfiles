@@ -31,7 +31,7 @@
 |---|---|
 | `<prefix> F` | SSH picker (fzf popup from `~/.ssh/config`) |
 | `<prefix> v` | File picker (fzf) → open in `$EDITOR` new window |
-| `<prefix> s` | Session switcher (fzf popup) |
+| `<prefix> s` | Session switcher (sesh, fzf popup) |
 | `<prefix> r` | Popup terminal in current path |
 | `<prefix> S` | New session from `~/Projects` picker |
 | `<prefix> C-c` | Config file picker (`~/.config`, bat preview) |

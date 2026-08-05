@@ -126,6 +126,11 @@ alias tt='tmux new-session -A -s "${PWD##*/}" -c "$PWD"'
 alias tts='if [ -n "$TMUX" ]; then tmux switch-client -t "${PWD##*/}" 2>/dev/null || tmux new-session -d -s "${PWD##*/}" -c "$PWD" && tmux switch-client -t "${PWD##*/}"; else tmux new-session -A -s "${PWD##*/}" -c "$PWD"; fi'
 
 # ─────────────────────────────────────────────
+# Sesh
+# ─────────────────────────────────────────────
+alias s='_sesh=$(sesh list --icons | fzf --ansi --no-sort --height 40% --reverse --border --border-label " sesh " --prompt "⚡  ") && [ -n "$_sesh" ] && sesh connect "$_sesh"'
+
+# ─────────────────────────────────────────────
 # Docker
 # ─────────────────────────────────────────────
 alias ld="lazydocker"

@@ -164,6 +164,15 @@ function tp
 end
 
 # ─────────────────────────────────────────────
+# Sesh
+# ─────────────────────────────────────────────
+function s
+    set -l session (sesh list --icons | fzf --ansi --no-sort --height 40% --reverse --border --border-label " sesh " --prompt "⚡  ")
+    test -z "$session"; and return
+    sesh connect "$session"
+end
+
+# ─────────────────────────────────────────────
 # Docker
 # ─────────────────────────────────────────────
 alias ld lazydocker

@@ -172,6 +172,20 @@ brew install gitleaks   # macOS
 
 If `gitleaks` is not on `PATH`, the hook prints a warning and lets the commit proceed. Bypass entirely (not recommended) with `git commit --no-verify`.
 
+## Opencode Agent
+
+This repo ships an [opencode](https://opencode.ai) subagent that knows the stow layout, package groups, and commit conventions used here.
+
+| Item | Value |
+|------|-------|
+| Agent | `dotfiles-manager` |
+| Location | [`.opencode/agents/dotfiles-manager.md`](.opencode/agents/dotfiles-manager.md) |
+| Mode | `subagent` |
+
+It handles routine maintenance — adding or editing stow packages, keeping `setup.sh` and the docs in sync, and enforcing secret-safe Git hygiene. It never commits or pushes without being asked.
+
+Only the agent definition is tracked; everything else under `.opencode/` (node_modules, lockfiles, caches) is ignored.
+
 ## Notes
 
 - `.stowrc` targets `$HOME` and ignores `reference/`. Run stow from the repo root.

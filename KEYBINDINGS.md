@@ -29,11 +29,10 @@
 
 | Keybinding | Description |
 |---|---|
-| `<prefix> F` | SSH picker (fzf popup from `~/.ssh/config`) |
-| `<prefix> v` | File picker (fzf) → open in `$EDITOR` new window |
+| `<prefix> C-o` | Project picker — fzf `~/Projects` → sesh session (launches OpenCode on create) |
 | `<prefix> s` | Session switcher (sesh, fzf popup) |
-| `<prefix> r` | Popup terminal in current path |
-| `<prefix> S` | New session from `~/Projects` picker |
+| `<prefix> S` | SSH host picker (fzf popup from `~/.ssh/config`) |
+| `<prefix> r` | Run command (prompts, runs in new window) |
 | `<prefix> C-c` | Config file picker (`~/.config`, bat preview) |
 | `<prefix> ?` | Key bindings reference popup |
 
@@ -87,7 +86,7 @@
 | Keybinding | Description |
 |---|---|
 | `<prefix> C-w` | Rename window to current directory |
-| `<prefix> C-S` | Rename session to current directory |
+| `<prefix> C-s` | Rename session to current directory |
 
 ### Kill / Close
 
@@ -503,4 +502,4 @@ All standard Vimium keybindings apply. See [Vimium docs](https://vimium.github.i
 
 ---
 
-*Last updated: 2026-03-23*
+*Last updated: 2026-08-06*

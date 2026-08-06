@@ -8,11 +8,10 @@
 
 | Binding | Description |
 |---|---|
-| `prefix + F` | SSH host picker (fzf from `~/.ssh/config`) |
-| `prefix + v` | File picker (fzf) → open in `$EDITOR` |
+| `prefix + C-o` | Project picker — fzf `~/Projects` → sesh session (launches OpenCode on create) |
 | `prefix + s` | Session switcher (sesh) |
-| `prefix + r` | Popup terminal in current path |
-| `prefix + S` | New session from `~/Projects` picker |
+| `prefix + S` | SSH host picker (fzf from `~/.ssh/config`) |
+| `prefix + r` | Run command (prompts, runs in new window) |
 | `prefix + C-c` | Config file picker (`~/.config`, bat preview) |
 | `prefix + ?` | Key bindings reference popup |
 
@@ -70,7 +69,32 @@
 
 | Binding | Description |
 |---|---|
-| `prefix + C-S` | Rename session to cwd |
+| `prefix + C-s` | Rename session to cwd |
+
+---
+
+## Project Picker (`prefix + C-o`)
+
+`prefix + C-o` runs `~/.config/tmux/scripts/opencode-project.sh`, which lists the
+directories one level under `~/Projects` in an fzf popup and hands the selection to
+`sesh connect`.
+
+| Situation | What happens |
+|---|---|
+| No session for that directory yet | Creates a session named after the directory and starts OpenCode in it |
+| Session already exists | Attaches/switches to it, leaving whatever is running untouched |
+
+The create-or-attach behaviour comes from `sesh connect`, and the "only start OpenCode
+once" behaviour comes from its `--command` flag, which sesh **ignores when the session
+already exists**. So pressing `C-o` on the same project repeatedly never stacks a second
+OpenCode on top of the first.
+
+Override the search root with `PROJECTS_DIR` if needed.
+
+> **Note:** this overrides tmux's default `prefix + C-o` (`rotate-window`, which cycles
+> pane contents around the current layout). Use `prefix + {` / `prefix + }` to rearrange
+> panes instead. Because it sits behind the prefix, `C-o` still works normally inside
+> Vim and the shell.
 
 ---
 

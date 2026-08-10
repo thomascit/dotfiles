@@ -55,7 +55,7 @@ alias gs="git status"
 # Homebrew
 # ─────────────────────────────────────────────
 alias ba="brew autoremove"
-alias bc="brew cleanup"
+alias bc="brew cleanup --prune=all"
 alias bi="brew formulae | fzf --multi --preview 'brew info {1}' | xargs -ro brew install"
 alias bic="brew casks | fzf --multi --preview 'brew info --cask {1}' | xargs -ro brew install --cask"
 alias bu="brew leaves | fzf --multi --preview 'brew info {1}' | xargs -ro brew uninstall"

@@ -125,13 +125,13 @@ alias oc="opencode"
 # ─────────────────────────────────────────────
 # Tmux
 # ─────────────────────────────────────────────
-alias t='tmux new-session -A -s MAIN'
-alias ta="tmux attach-session -t"
-alias tn='tmux new-window -c "#{pane_current_path}" $EDITOR .'
-alias tk='tmux kill-server'
-alias tr="tmux rename-session"
-alias tt='tmux new-session -A -s "${PWD##*/}" -c "$PWD"'
-alias tts='if [ -n "$TMUX" ]; then tmux switch-client -t "${PWD##*/}" 2>/dev/null || tmux new-session -d -s "${PWD##*/}" -c "$PWD" && tmux switch-client -t "${PWD##*/}"; else tmux new-session -A -s "${PWD##*/}" -c "$PWD"; fi'
+alias tm='tmux new-session -A -s MAIN'
+alias tma="tmux attach-session -t"
+alias tmn='tmux new-window -c "#{pane_current_path}" $EDITOR .'
+alias tmk='tmux kill-server'
+alias tmr="tmux rename-session"
+alias tmt='tmux new-session -A -s "${PWD##*/}" -c "$PWD"'
+alias tmts='if [ -n "$TMUX" ]; then tmux switch-client -t "${PWD##*/}" 2>/dev/null || tmux new-session -d -s "${PWD##*/}" -c "$PWD" && tmux switch-client -t "${PWD##*/}"; else tmux new-session -A -s "${PWD##*/}" -c "$PWD"; fi'
 
 # ─────────────────────────────────────────────
 # Sesh

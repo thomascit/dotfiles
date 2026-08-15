@@ -45,13 +45,13 @@
 
 | Alias | Description |
 |---|---|
-| `t` | Create or join the MAIN tmux session |
-| `ta` | Attach to session by name |
-| `tn` | New window opening `$EDITOR` in current path |
-| `tk` | Kill the tmux server |
-| `tr` | Rename current session |
-| `tt` | New/attach session named after cwd |
-| `tts` | New/switch session named after cwd (switch-client if inside tmux) |
+| `tm` | Create or join the MAIN tmux session |
+| `tma` | Attach to session by name |
+| `tmn` | New window opening `$EDITOR` in current path |
+| `tmk` | Kill the tmux server |
+| `tmr` | Rename current session |
+| `tmt` | New/attach session named after cwd |
+| `tmts` | New/switch session named after cwd (switch-client if inside tmux) |
 
 ---
 

@@ -25,6 +25,29 @@ PACKAGES_CLI="atuin bash bat btop eza fish lazygit nvim sesh starship tmux vim y
 PACKAGES_TERMINALS="alacritty ghostty kitty"
 PACKAGES_WM_LINUX="hypr noctalia rofi wofi"
 
+# Headless/server subset. Shells, editor and multiplexer, plus config-only
+# packages whose tools are in the Debian/Ubuntu repos. A stowed config for a
+# tool you have not installed is just an unused symlink, so these cost nothing
+# and activate later if you install the tool.
+#
+# Deliberately excluded:
+#   nvim   — needs Neovim >= 0.9 (Debian 12 ships 0.7) and network for lazy.nvim
+#   yazi   — not packaged for Debian or Ubuntu at all
+#   sesh   — not packaged for Debian or Ubuntu at all
+#   atuin  — not in Debian 12; also expects a sync server
+# zsh is required even if unused: bash/bashrc sources ~/.config/zsh/aliases.sh.
+PACKAGES_MINIMAL="bash zsh fish tmux vim bat btop eza starship lazygit"
+
+# Packages install_apt_deps() will try. Availability is probed at runtime
+# rather than assumed, so this list is safe across Debian and Ubuntu releases:
+# whatever the host's repos do not carry is reported and skipped.
+#   ncurses-term  provides the tmux-256color terminfo entry (tmux won't start
+#                 without it, given tmux.conf's default-terminal)
+#   curl          needed by install_vim_plug
+#   xclip         clipboard over `ssh -X`
+APT_DEPS_MINIMAL="git stow tmux vim fish zsh ncurses-term bat fd-find ripgrep \
+fzf zoxide btop eza starship lazygit trash-cli xclip curl"
+
 # Wrapper files to copy (not stowed) to $HOME
 WRAPPER_FILES=".bashrc .zshrc .vimrc"
 
@@ -53,10 +76,49 @@ command_exists() { command -v "$1" &>/dev/null; }
 
 detect_os() {
   case "$OSTYPE" in
-  darwin*)     OS="macos" ;;
-  linux-gnu*)  OS="linux" ;;
-  *)           error "Unsupported OS: $OSTYPE" ;;
+  darwin*) OS="macos" ;;
+  # Match any linux-*, not just linux-gnu: musl hosts (Alpine) are still Linux
+  # and should not hard-error out of a config-only installer.
+  linux*)  OS="linux" ;;
+  *)       error "Unsupported OS: $OSTYPE" ;;
   esac
+
+  # Distro name, for reporting only. Nothing branches on it: package manager
+  # and tool availability are probed directly, so there is no distro or version
+  # table here to fall out of date.
+  DISTRO_NAME=""
+  if [[ "$OS" == "linux" && -r /etc/os-release ]]; then
+    DISTRO_NAME="$(. /etc/os-release 2>/dev/null && echo "${PRETTY_NAME:-}")"
+  fi
+}
+
+# Is this a Debian-family host with apt available?
+is_apt_host() {
+  command_exists apt-get && command_exists apt-cache
+}
+
+# Resolve how to escalate for apt. Sets SUDO to "" when already root, to "sudo"
+# when available, or fails so callers can warn instead of exploding.
+resolve_sudo() {
+  SUDO=""
+  if [[ ${EUID:-$(id -u)} -eq 0 ]]; then
+    return 0
+  fi
+  if command_exists sudo; then
+    SUDO="sudo"
+    return 0
+  fi
+  return 1
+}
+
+# True when apt has a real installation candidate for the package. This is the
+# core of "probe, don't assume": it answers whether *this* host can install the
+# package, which is what actually matters, instead of hardcoding which release
+# carries what.
+apt_candidate() {
+  local candidate
+  candidate="$(apt-cache policy "$1" 2>/dev/null | awk '/Candidate:/ {print $2; exit}')"
+  [[ -n "$candidate" && "$candidate" != "(none)" ]]
 }
 
 get_wm_packages() {
@@ -274,6 +336,58 @@ install_zinit() {
   fi
 }
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Dependencies (apt only — no third-party repos, no curl|bash installers)
+# ─────────────────────────────────────────────────────────────────────────────
+
+install_apt_deps() {
+  if ! is_apt_host; then
+    warn "Not a Debian/Ubuntu host (no apt) — skipping dependency install"
+    return
+  fi
+
+  if ! resolve_sudo; then
+    warn "Not root and sudo not available — skipping dependency install"
+    info "Install manually: $APT_DEPS_MINIMAL"
+    return
+  fi
+
+  info "Refreshing apt package lists..."
+  if ! $SUDO apt-get update -qq; then
+    warn "apt-get update failed — continuing with existing package lists"
+  fi
+
+  # Split the wanted list by what this host can actually see. A package missing
+  # here means the distro release does not carry it, which is expected on older
+  # releases (Debian 12 has no eza, starship, lazygit or atuin, for example).
+  local available=() missing=() pkg
+  for pkg in $APT_DEPS_MINIMAL; do
+    if apt_candidate "$pkg"; then
+      available+=("$pkg")
+    else
+      missing+=("$pkg")
+    fi
+  done
+
+  if ((${#available[@]})); then
+    info "Installing ${#available[@]} package(s): ${available[*]}"
+    if $SUDO apt-get install -y -qq "${available[@]}"; then
+      success "Dependencies installed"
+    else
+      warn "Some packages failed to install — see apt output above"
+    fi
+  else
+    warn "No candidate packages found — are your apt sources configured?"
+  fi
+
+  if ((${#missing[@]})); then
+    echo ""
+    warn "Not available in this host's repos: ${missing[*]}"
+    info "The stowed configs guard for these, so their absence is handled."
+    info "To get them, use a newer release or install them by another route."
+  fi
+}
+
 install_atuin() {
   if command_exists atuin; then
     success "Atuin already installed"
@@ -350,6 +464,60 @@ install_fonts() {
 # Install Flows
 # ─────────────────────────────────────────────────────────────────────────────
 
+# Report which optional tools are present, so it is obvious what will and will
+# not work after a minimal install. The configs guard for all of these, so an
+# absent tool is a missing feature rather than a broken shell.
+report_capabilities() {
+  echo ""
+  echo -e "${CYAN}Tool availability:${NC}"
+
+  local tool
+  for tool in zsh fish tmux vim starship zoxide fzf rg bat batcat eza btop lazygit trash; do
+    if command_exists "$tool"; then
+      printf "  ${GREEN}%-14s present${NC}\n" "$tool"
+    else
+      printf "  ${YELLOW}%-14s absent${NC}\n" "$tool"
+    fi
+  done
+
+  # tmux refuses to start without this terminfo entry, so call it out directly.
+  if command_exists infocmp && infocmp tmux-256color >/dev/null 2>&1; then
+    printf "  ${GREEN}%-14s present${NC}\n" "tmux-256color"
+  else
+    printf "  ${YELLOW}%-14s absent  (tmux falls back to screen-256color)${NC}\n" "tmux-256color"
+  fi
+}
+
+# Headless install: config only, no prompts, no network fetches. Safe to run
+# unattended over SSH, which the interactive flows are not — read_input() reads
+# from /dev/tty, so anything with a prompt cannot be scripted.
+run_minimal_install() {
+  info "Installing minimal (server) config set..."
+  [[ -n "${DISTRO_NAME:-}" ]] && info "Distro: $DISTRO_NAME"
+
+  create_xdg_dirs
+  clone_dotfiles
+  configure_git_hooks
+
+  if [[ "${WITH_DEPS:-0}" == "1" ]]; then
+    install_apt_deps
+  else
+    info "Skipping dependency install (pass --with-deps to install via apt)"
+  fi
+
+  stow_packages "$PACKAGES_MINIMAL"
+  copy_wrapper_files
+
+  # Deliberately skipped for a server: fonts (glyphs come from the client
+  # terminal, not the host), and TPM/vim-plug/Zinit (all require network).
+  report_capabilities
+
+  echo ""
+  success "Minimal installation complete!"
+  info "Skipped: fonts, and the TPM/vim-plug/Zinit plugin managers (network)."
+  info "To add plugin managers later on a networked host: $0 --plugins"
+}
+
 run_full_install() {
   info "Installing all configs..."
 
@@ -387,6 +555,7 @@ run_custom_install() {
   echo -e "${CYAN}Available packages:${NC}"
   echo ""
   echo -e "  ${YELLOW}CLI:${NC}       $PACKAGES_CLI"
+  echo -e "  ${YELLOW}Minimal:${NC}   $PACKAGES_MINIMAL"
   echo -e "  ${YELLOW}Terminals:${NC} $PACKAGES_TERMINALS"
   echo -e "  ${YELLOW}WM:${NC}        $PACKAGES_WM_LINUX"
   echo ""
@@ -454,19 +623,21 @@ run_uninstall() {
     echo -e "${CYAN}Unstow Options:${NC}"
     echo "  1) All packages"
     echo "  2) CLI packages"
-    echo "  3) Terminal emulators"
-    echo "  4) Window managers"
-    echo "  5) Custom"
+    echo "  3) Minimal (server) packages"
+    echo "  4) Terminal emulators"
+    echo "  5) Window managers"
+    echo "  6) Custom"
     echo ""
-    prompt "Select packages to unstow [1-5]:"
+    prompt "Select packages to unstow [1-6]:"
     read_input unstow_choice
 
     case "$unstow_choice" in
     1) unstow_packages "$PACKAGES_CLI $PACKAGES_TERMINALS $(get_wm_packages)" ;;
     2) unstow_packages "$PACKAGES_CLI" ;;
-    3) unstow_packages "$PACKAGES_TERMINALS" ;;
-    4) unstow_packages "$(get_wm_packages)" ;;
-    5)
+    3) unstow_packages "$PACKAGES_MINIMAL" ;;
+    4) unstow_packages "$PACKAGES_TERMINALS" ;;
+    5) unstow_packages "$(get_wm_packages)" ;;
+    6)
       prompt "Enter packages to unstow (space-separated):"
       read_input SELECTED_PACKAGES
       unstow_packages "$SELECTED_PACKAGES"
@@ -504,11 +675,12 @@ show_menu() {
   echo ""
   echo -e "${CYAN}Options:${NC}"
   echo "  1) Full install (CLI + wrappers + plugin managers + fonts)"
-  echo "  2) Custom install (select packages)"
-  echo "  3) Install plugin managers only (TPM, vim-plug, Zinit, yazi plugins)"
-  echo "  4) Install fonts only"
-  echo "  5) Uninstall"
-  echo "  6) Exit"
+  echo "  2) Minimal install (server/headless: shells + tmux + vim, no network)"
+  echo "  3) Custom install (select packages)"
+  echo "  4) Install plugin managers only (TPM, vim-plug, Zinit, yazi plugins)"
+  echo "  5) Install fonts only"
+  echo "  6) Uninstall"
+  echo "  7) Exit"
   echo ""
 }
 
@@ -530,45 +702,62 @@ main() {
     error "GNU Stow is required but not installed"
   fi
 
-  # CLI argument handling
-  case "${1:-}" in
-  --full | -f)
-    run_full_install
-    exit 0
-    ;;
-  --custom | -c)
-    run_custom_install
-    exit 0
-    ;;
-  --plugins | -p)
-    run_plugin_managers_only
-    exit 0
-    ;;
-  --fonts)
-    run_fonts_only
-    exit 0
-    ;;
-  --uninstall | -u)
-    run_uninstall
-    exit 0
-    ;;
-  --help | -h)
+  # CLI argument handling. A loop rather than a single `case` so modifiers like
+  # --with-deps can be combined with an action flag.
+  ACTION=""
+  WITH_DEPS=0
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+    --full | -f)      ACTION="full" ;;
+    --minimal | -m)   ACTION="minimal" ;;
+    --custom | -c)    ACTION="custom" ;;
+    --plugins | -p)   ACTION="plugins" ;;
+    --fonts)          ACTION="fonts" ;;
+    --uninstall | -u) ACTION="uninstall" ;;
+    --with-deps)      WITH_DEPS=1 ;;
+    --help | -h)      ACTION="help" ;;
+    *) warn "Unknown option: $1 (see --help)" ;;
+    esac
+    shift
+  done
+
+  if [[ "$WITH_DEPS" == "1" && "$ACTION" != "minimal" ]]; then
+    warn "--with-deps only applies to --minimal; ignoring"
+  fi
+
+  case "$ACTION" in
+  full)      run_full_install;         exit 0 ;;
+  minimal)   run_minimal_install;      exit 0 ;;
+  custom)    run_custom_install;       exit 0 ;;
+  plugins)   run_plugin_managers_only; exit 0 ;;
+  fonts)     run_fonts_only;           exit 0 ;;
+  uninstall) run_uninstall;            exit 0 ;;
+  help)
     echo "Usage: $0 [OPTION]"
     echo ""
     echo "Options:"
     echo "  --full, -f      Stow all CLI configs + plugin managers + fonts"
+    echo "  --minimal, -m   Server/headless: stow a reduced set, no prompts, no network"
     echo "  --custom, -c    Select specific packages to stow"
     echo "  --plugins, -p   Install plugin managers only (TPM, vim-plug, Zinit, yazi plugins)"
     echo "  --fonts         Install fonts from reference/fonts/"
     echo "  --uninstall, -u Remove dotfile symlinks and plugin managers"
     echo "  --help, -h      Show this help message"
     echo ""
+    echo "Modifiers:"
+    echo "  --with-deps     With --minimal, also apt-install what the host's repos"
+    echo "                  provide (needs root or sudo). Availability is probed,"
+    echo "                  so anything missing is reported and skipped."
+    echo ""
     echo "Package groups:"
     echo "  CLI:       $PACKAGES_CLI"
+    echo "  Minimal:   $PACKAGES_MINIMAL"
     echo "  Terminals: $PACKAGES_TERMINALS"
     echo "  WM:        $PACKAGES_WM_LINUX"
     echo ""
     echo "Without options, an interactive menu is shown."
+    echo "--minimal is the only flag that is fully non-interactive; every other"
+    echo "flow prompts on /dev/tty and so cannot be scripted."
     exit 0
     ;;
   esac
@@ -576,16 +765,17 @@ main() {
   # Interactive mode
   while true; do
     show_menu
-    prompt "Select an option [1-6]:"
+    prompt "Select an option [1-7]:"
     read_input choice
 
     case "$choice" in
     1) run_full_install;         break ;;
-    2) run_custom_install;       break ;;
-    3) run_plugin_managers_only; break ;;
-    4) run_fonts_only;           break ;;
-    5) run_uninstall;            break ;;
-    6) info "Exiting..."; exit 0 ;;
+    2) run_minimal_install;      break ;;
+    3) run_custom_install;       break ;;
+    4) run_plugin_managers_only; break ;;
+    5) run_fonts_only;           break ;;
+    6) run_uninstall;            break ;;
+    7) info "Exiting..."; exit 0 ;;
     *) warn "Invalid option, please try again" ;;
     esac
   done

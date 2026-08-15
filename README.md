@@ -29,7 +29,9 @@ Install these before running the setup script:
 - `git`
 - `gnu stow`
 
-All other tools (nvim, tmux, zsh, etc.) should be installed separately beforehand. The setup script only manages config files, not package installation.
+All other tools (nvim, tmux, zsh, etc.) should be installed separately beforehand. The setup script only manages config files, not package installation — the one exception is `--minimal --with-deps`, which apt-installs the server tool set on Debian/Ubuntu (see [Minimal / Server Install](#minimal--server-install)).
+
+Every config guards the optional tools it uses, so a missing tool degrades that feature rather than breaking the shell.
 
 **Current shell:** `zsh`
 
@@ -46,12 +48,73 @@ The setup script stows configs, installs plugin managers, and copies fonts. It d
 
 ```sh
 ./setup.sh --full       # Stow all CLI configs + plugin managers + fonts
+./setup.sh --minimal    # Server/headless: reduced set, no prompts, no network
 ./setup.sh --custom     # Select specific packages to stow
 ./setup.sh --plugins    # Install plugin managers only (TPM, vim-plug, Zinit, yazi plugins)
 ./setup.sh --fonts      # Install fonts from reference/fonts/
 ./setup.sh --uninstall  # Remove dotfile symlinks and plugin managers
 ./setup.sh --help       # Show help and package lists
 ```
+
+`--minimal` is the only flag that is fully non-interactive; every other flow
+prompts on `/dev/tty` and so cannot be scripted.
+
+## Minimal / Server Install
+
+For a bare Debian or Ubuntu box where you want a working shell but no desktop:
+
+```sh
+./setup.sh --minimal              # configs only
+./setup.sh --minimal --with-deps  # also apt-install what the repos provide
+```
+
+Stows `bash zsh fish tmux vim bat btop eza starship lazygit`. `zsh` is included
+even if you never run it, because `bash/bashrc` sources
+`~/.config/zsh/aliases.sh`.
+
+Excluded on purpose: `nvim` (needs Neovim ≥ 0.9 and network for lazy.nvim),
+`yazi` and `sesh` (not packaged for Debian or Ubuntu at all), `atuin` (absent
+from Debian 12, and expects a sync server), plus all terminal and window
+manager configs.
+
+Skips fonts (glyphs come from your local terminal, not the server) and the
+TPM / vim-plug / Zinit plugin managers, since all three need network access.
+Add them later on a networked host with `./setup.sh --plugins`.
+
+`--with-deps` needs root or `sudo`. It probes `apt-cache policy` for each
+package and installs only what your host's repos actually carry, reporting the
+rest — so it degrades on older releases instead of failing.
+
+### Tool availability by release
+
+Verified against the Debian and Ubuntu archives. The configs guard for every
+tool below, so an absent one is a missing feature, never a broken shell.
+
+| Tool | Debian 12 | Debian 13 | Ubuntu 24.04 | Ubuntu 26.04 |
+|---|---|---|---|---|
+| `bash` `zsh` `vim` `git` `stow` | ✅ | ✅ | ✅ | ✅ |
+| `tmux` | 3.3a | 3.5a | 3.4 | ✅ |
+| `fish` | 3.6 | 4.0 | 3.7 | 4.x |
+| `bat` (binary `batcat`) | 0.22 | 0.25 | ✅ | ✅ |
+| `fd-find` (binary `fdfind`) | 8.6 | 10.2 | ✅ | ✅ |
+| `ripgrep` | 13.0 | 14.1 | ✅ | ✅ |
+| `btop` | 1.2 | 1.3 | ✅ | ✅ |
+| `fzf` | 0.38 | 0.60 | 0.44 | ✅ |
+| `zoxide` | 0.4 | 0.9 | 0.9 | ✅ |
+| `eza` | ❌ | 0.21 | 0.18 | 0.23 |
+| `starship` | ❌ | 1.22 | ❌ | 1.22 |
+| `atuin` | ❌ | 18.6 | ❌ | ✅ |
+| `lazygit` | ❌ | 0.50 | ❌ | 0.57 |
+| `neovim` | 0.7 | 0.10 | 0.9.5 | ✅ |
+| `yazi` `sesh` | ❌ | ❌ | ❌ | ❌ |
+
+Debian 13 or Ubuntu 26.04 gives you nearly everything. On Debian 12 you lose
+`starship`, `eza` and `lazygit` — the prompt falls back to plain, `ls` and `cat`
+stay as the coreutils versions.
+
+`ncurses-term` is installed alongside: it provides the `tmux-256color` terminfo
+entry that `tmux.conf` asks for. Without it tmux would refuse to start, though
+the config also falls back to `screen-256color` as a second line of defence.
 
 ## What's Inside
 

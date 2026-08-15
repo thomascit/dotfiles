@@ -158,11 +158,12 @@ fzf popup (tmux sessions listed first). These bindings work inside the picker:
 
 | Alias | Description |
 |---|---|
-| `t` | Create or join the MAIN tmux session |
-| `ta` | Attach to a session by name (`tmux attach-session -t`) |
-| `tn` | New window opening `$EDITOR` in current path |
-| `tk` | Kill the tmux server (`tmux kill-server`) |
-| `tr` | Rename current session |
-| `tt` | New/attach session named after cwd |
-| `tts` | New/switch session named after cwd (switch-client if inside tmux) |
+| `tm` | Create or join the MAIN tmux session (zsh); fzf session picker (fish) |
+| `tma` | Attach to a session by name (`tmux attach-session -t`) |
+| `tmn` | New window opening `$EDITOR` in current path |
+| `tmk` | Kill the tmux server (`tmux kill-server`, zsh only) |
+| `tmr` | Rename current session |
+| `tmt` | New/attach session named after cwd |
+| `tmts` | New/switch session named after cwd (switch-client if inside tmux) |
+| `tms` | fzf picker over `~/Projects` → new/switch session (fish only) |
 | `s` | fzf picker over `sesh list` → connect to the selected session |

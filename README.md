@@ -30,7 +30,7 @@
 
 Both can be installed for you — see [Bootstrap without cloning](#bootstrap-without-cloning).
 
-All other tools (nvim, tmux, zsh, etc.) should be installed separately beforehand. The setup script only manages config files, not package installation — the one exception is `--minimal --with-deps`, which apt-installs the server tool set on Debian/Ubuntu (see [Minimal / Server Install](#minimal--server-install)).
+All other tools (vim, tmux, zsh, etc.) should be installed separately beforehand. The setup script only manages config files, not package installation — the one exception is `--minimal --with-deps`, which apt-installs the server tool set on Debian/Ubuntu (see [Minimal / Server Install](#minimal--server-install)).
 
 Every config guards the optional tools it uses, so a missing tool degrades that feature rather than breaking the shell.
 
@@ -120,7 +120,7 @@ Stows `bash zsh fish tmux vim bat btop eza starship lazygit`. `zsh` is included
 even if you never run it, because `bash/bashrc` sources
 `~/.config/zsh/aliases.sh`.
 
-Excluded on purpose: `nvim` (needs Neovim ≥ 0.9 and network for lazy.nvim),
+Excluded on purpose: `nvim` (discontinued — no longer stowed by any flow),
 `yazi` and `sesh` (not packaged for Debian or Ubuntu at all), `atuin` (absent
 from Debian 12, and expects a sync server), plus all terminal and window
 manager configs.
@@ -196,7 +196,7 @@ tool below, so an absent one is a missing feature, never a broken shell.
 | `starship` | ❌ | 1.22 | ❌ | 1.22 |
 | `atuin` | ❌ | 18.6 | ❌ | ✅ |
 | `lazygit` | ❌ | 0.50 | ❌ | 0.57 |
-| `neovim` | 0.7 | 0.10 | 0.9.5 | ✅ |
+| ~~`neovim`~~ (discontinued) | — | — | — | — |
 | `yazi` `sesh` | ❌ | ❌ | ❌ | ❌ |
 
 Debian 13 or Ubuntu 26.04 gives you nearly everything. On Debian 12 you lose
@@ -222,7 +222,7 @@ the config also falls back to `screen-256color` as a second line of defence.
 | `kitty` | GPU-based terminal emulator |
 | `lazygit` | Terminal UI for Git |
 | `noctalia` | Hyprland shell — bar, launcher, dock, lock screen, notifications, control center |
-| `nvim` | Neovim with LazyVim + lazy.nvim configuration |
+| ~~`nvim`~~ | **(Discontinued)** Neovim with LazyVim + lazy.nvim — no longer stowed or maintained. See note below. |
 | `rofi` | Application launcher (X11) |
 | `sesh` | Smart session manager for tmux (fzf-powered switcher) |
 | `starship` | Fast, customizable shell prompt |
@@ -230,6 +230,11 @@ the config also falls back to `screen-256color` as a second line of defence.
 | `vim` | Vim with vim-plug and Dracula theme |
 | `wofi` | Application launcher (Wayland) |
 | `yazi` | Terminal file manager with plugins |
+
+> **Discontinued:** `nvim` is no longer stowed or maintained. `vim` is now the
+> default editor (`$EDITOR`). The Neovim config still lives in `nvim/` for
+> reference and git history, but no setup flow links it. To remove a stale
+> symlink from an older install, run `stow -D nvim` from the repo root.
 
 ### Reference Files (not stowed)
 
@@ -241,7 +246,7 @@ the config also falls back to `screen-256color` as a second line of defence.
 
 ## Theme
 
-Dracula across the board — vim, nvim, fish, tmux, terminals, rofi, wofi, yazi, noctalia. See https://draculatheme.com.
+Dracula across the board — vim, fish, tmux, terminals, rofi, wofi, yazi, noctalia. See https://draculatheme.com.
 
 ## Fonts
 
@@ -258,7 +263,7 @@ Terminal configs (alacritty, ghostty, kitty) and noctalia are pre-configured to 
 | Tool | Manager | Notes |
 |------|---------|-------|
 | Vim | vim-plug | Run `:PlugInstall` on first launch |
-| Neovim | lazy.nvim (LazyVim) | Auto-bootstraps on first launch |
+| ~~Neovim~~ | ~~lazy.nvim (LazyVim)~~ | **(Discontinued)** no longer stowed or bootstrapped |
 | Zsh | Zinit | Bootstraps automatically on first shell start |
 | Tmux | TPM | Press `<prefix>+I` to install plugins after first launch |
 | Yazi | ya pkg | Run `ya pkg install` or use `./setup.sh --plugins` |
@@ -288,8 +293,8 @@ Options:
 **Stow conflicts with existing files?**
 Stow will refuse to create a symlink if a real file already exists at the target. Back it up and remove it first:
 ```sh
-mv ~/.config/nvim ~/.config/nvim.bak
-stow -R nvim
+mv ~/.config/vim ~/.config/vim.bak
+stow -R vim
 ```
 
 **Ignore rules not taking effect?**
@@ -311,7 +316,7 @@ rm ~/TMUX.md ~/ZSH.md
 **Stow conflicts with existing symlinks pointing elsewhere?**
 Unstow the package first to clean up, then restow:
 ```sh
-stow -D nvim && stow nvim
+stow -D vim && stow vim
 ```
 
 **Fonts not showing in terminals?**
@@ -319,9 +324,6 @@ Run `./setup.sh --fonts` then restart the terminal. Fonts install to `~/.local/s
 
 **TPM plugins not loading?**
 Start tmux and press `<prefix>+I` to install plugins. The prefix is `Ctrl+Space`.
-
-**Neovim plugins not loading?**
-lazy.nvim auto-bootstraps on first launch. If plugins are missing, open Neovim and run `:Lazy sync`.
 
 ## Secret Scanning
 

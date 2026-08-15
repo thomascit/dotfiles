@@ -53,14 +53,14 @@ Vendored plugin trees are managed by their own tools, not Git or submodules — 
 
 - `tmux/.config/tmux/plugins/*` — TPM
 - `yazi/.config/yazi/plugins/*` and `flavors/*` — `ya pkg`, except the two custom plugins `folder-rules.yazi/` and `smart-switch.yazi/`, which are negated back in and *are* tracked
-- `nvim/.config/nvim/lazy-lock.json` — ignored at `.gitignore:24`, so **Neovim plugin versions are not pinned in version control**. A fresh clone resolves to whatever lazy.nvim installs at that moment. Know this before debugging nvim drift between machines, and raise it with the user rather than un-ignoring it unilaterally.
+- `nvim/.config/nvim/lazy-lock.json` — ignored at `.gitignore:24`. **Neovim is discontinued** (no longer stowed or maintained), so this lock file is inert; the `nvim/` tree is kept for reference only.
 - `.opencode/*` — allow-listed; only `agents/` is shared.
 
 ## Scope — Actual Packages
 
 Grouped exactly as `setup.sh` defines them.
 
-- **CLI (`PACKAGES_CLI`, 14):** `atuin` `bash` `bat` `btop` `eza` `fish` `lazygit` `nvim` `sesh` `starship` `tmux` `vim` `yazi` `zsh`
+- **CLI (`PACKAGES_CLI`, 13):** `atuin` `bash` `bat` `btop` `eza` `fish` `lazygit` `sesh` `starship` `tmux` `vim` `yazi` `zsh` — `nvim` is **discontinued** (config kept under `nvim/` but no longer stowed; `vim` is the default `$EDITOR`)
 - **Minimal / server (`PACKAGES_MINIMAL`, 10):** `bash` `zsh` `fish` `tmux` `vim` `bat` `btop` `eza` `starship` `lazygit` — a subset of CLI, not a separate set of packages
 - **Terminals (`PACKAGES_TERMINALS`, 3):** `alacritty` `ghostty` `kitty`
 - **Linux window manager (`PACKAGES_WM_LINUX`, 4):** `hypr` `noctalia` `rofi` `wofi`
@@ -125,14 +125,14 @@ Treat a refused command as a correct outcome, not an obstacle to route around. N
 Conventional Commits with scoped prefixes, matching existing history:
 
 - Standard types: `feat:`, `fix:`, `docs:`, `chore:`, `refactor:`
-- Package-scoped prefixes are also used for single-package changes: `nvim:`, `yazi:`, `tmux:`, `zsh:`
+- Package-scoped prefixes are also used for single-package changes: `vim:`, `yazi:`, `tmux:`, `zsh:`
 
 Write an imperative, lowercase subject that says what changed and why it matters, for example:
 
 ```
 fix: harden setup.sh (stow error reporting, OS guards, dirty-tree pull guard)
 docs: document sesh session manager and font install paths
-nvim: persistent theme picker + transparent.nvim
+vim: persistent theme picker + transparent background
 ```
 
 ## Safety

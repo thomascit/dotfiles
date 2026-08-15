@@ -31,13 +31,11 @@ alias sc="$EDITOR $HOME/.config/starship/starship.toml"
 alias sshc="$EDITOR $HOME/.ssh/config"
 alias tc="$EDITOR $HOME/.config/tmux/tmux.conf"
 alias vrc="$EDITOR $HOME/.config/vim/vimrc"
-alias nvrc="yazi $HOME/.config/nvim"
 alias zrc="$EDITOR $HOME/.config/zsh/zshrc"
 alias zpc="$EDITOR $HOME/.config/zsh/.zprofile"
 alias vc="$EDITOR $HOME/.config/fish/variables.fish"
 alias yc="$EDITOR $HOME/.config/yazi/yazi.toml"
 alias df="yazi $HOME/.config"
-alias dfn="yazi $HOME/.config/nvim"
 
 # ─────────────────────────────────────────────
 # Git

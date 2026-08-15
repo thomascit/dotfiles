@@ -23,7 +23,7 @@
 |---|---|
 | `prefix + c` | New window (current path) |
 | `prefix + C` | New named window (prompt) |
-| `prefix + N` | Neovim (`nvim`) |
+| `prefix + N` | Editor (`$EDITOR`, defaults to `vim`) |
 | `prefix + O` | OpenCode (continue last session) |
 | `prefix + f` | Yazi file manager |
 | `prefix + g` | Lazygit |
@@ -47,7 +47,7 @@
 
 | Binding | Description |
 |---|---|
-| `C-h / C-l / C-k / C-j` | Move between panes (vim-style, works across nvim) |
+| `C-h / C-l / C-k / C-j` | Move between panes (vim-style, works across vim) |
 | `C-\` | Previous pane |
 | `prefix + H/J/K/L` | Resize pane (repeatable) |
 

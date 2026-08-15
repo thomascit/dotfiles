@@ -11,4 +11,10 @@
 # .stow-local-ignore / .stow-global-ignore files. So this cannot be scoped to
 # the package root; keeping it upper-case-only is what stops it from swallowing
 # ordinary .md files inside a package.
+#
+# IMPORTANT: stow reads this file from the *current working directory*, not from
+# the directory given with -d. Every rule here therefore only applies when stow
+# is invoked from the repo root. setup.sh cds into the repo before running stow
+# for exactly this reason; if you invoke stow by hand, do the same:
+#     cd ~/Projects/dotfiles && stow -R -t "$HOME" tmux
 --ignore=^[A-Z0-9]+\.md$

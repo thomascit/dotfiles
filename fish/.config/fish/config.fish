@@ -49,7 +49,9 @@ bind -M insert jk "if commandline -P; commandline -f cancel; else; set fish_bind
 fish_config theme choose Dracula
 
 # Enable: Zoxide
-zoxide init fish | source
+if command -q zoxide
+    zoxide init fish | source
+end
 
 # Atuin
 if command -q atuin
@@ -61,4 +63,6 @@ if command -q atuin
 end
 
 # Enable: Starship
-starship init fish | source
+if command -q starship
+    starship init fish | source
+end

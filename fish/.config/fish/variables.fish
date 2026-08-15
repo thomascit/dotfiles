@@ -6,7 +6,13 @@ set -gx TERMINAL "ghostty"
 set -gx EDITOR "nvim"
 set -gx HOMEBREW_NO_AUTO_UPDATE 1
 set -gx HOMEBREW_NO_ENV_HINTS 1
-set -gx GOPATH "/usr/local/share/go"
+# /usr/local/share/go is writable under Homebrew but root-owned on Linux,
+# where `go install` would fail without sudo.
+if test (uname) = Darwin
+    set -gx GOPATH "/usr/local/share/go"
+else
+    set -gx GOPATH "$HOME/go"
+end
 
 # Dracula Man Page Colors
 set -gx MANPAGER "less -s -M +Gg"
@@ -26,7 +32,16 @@ fish_add_path "$HOME/.opencode/bin"
 # FZF
 # Read by the fzf binary itself, so these apply to every fzf invocation
 # (tmux popups, sesh picker, the package-manager aliases in aliases.fish).
-set -gx FZF_DEFAULT_COMMAND 'rg --files --hidden --glob "!.local/share/containers"'
+# Falls back to fd/find so fzf still lists files without ripgrep installed.
+if command -q rg
+    set -gx FZF_DEFAULT_COMMAND 'rg --files --hidden --glob "!.local/share/containers"'
+else if command -q fdfind
+    set -gx FZF_DEFAULT_COMMAND 'fdfind --type f --hidden --exclude .git'
+else if command -q fd
+    set -gx FZF_DEFAULT_COMMAND 'fd --type f --hidden --exclude .git'
+else
+    set -gx FZF_DEFAULT_COMMAND 'find . -type f -not -path "*/.git/*"'
+end
 set -gx FZF_DEFAULT_OPTS '--color=border:#44475a --color=fg:#f8f8f2,bg:#282a36,hl:#bd93f9 --color=fg+:#f8f8f2,bg+:#44475a,hl+:#bd93f9 --color=info:#ffb86c,prompt:#50fa7b,pointer:#ff79c6 --color=marker:#ff79c6,spinner:#ffb86c,header:#6272a4 --layout=reverse'
 
 # ZSH-VI Settings (for compatibility if needed)

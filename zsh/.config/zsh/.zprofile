@@ -6,7 +6,13 @@ export TERMINAL="ghostty"
 export EDITOR="nvim"
 export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_NO_ENV_HINTS=1
-export GOPATH="/usr/local/share/go"
+# /usr/local/share/go is writable under Homebrew but root-owned on Linux,
+# where `go install` would fail without sudo.
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  export GOPATH="/usr/local/share/go"
+else
+  export GOPATH="$HOME/go"
+fi
 
 # Dracula Man Page Colors
 export MANPAGER="less -s -M +Gg"
@@ -29,7 +35,16 @@ export PATH="$HOME/.opencode/bin:$PATH"
 # Exclude container storage — subdirs are owned by uid 100000 (Podman rootless
 # user namespace mapping) and are not accessible as the normal user, causing
 # rg to emit permission errors when traversing them.
-export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.local/share/containers"'
+# Falls back to fd/find so fzf still lists files without ripgrep installed.
+if command -v rg &>/dev/null; then
+  export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.local/share/containers"'
+elif command -v fdfind &>/dev/null; then
+  export FZF_DEFAULT_COMMAND='fdfind --type f --hidden --exclude .git'
+elif command -v fd &>/dev/null; then
+  export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
+else
+  export FZF_DEFAULT_COMMAND='find . -type f -not -path "*/.git/*"'
+fi
 # Default theme/colors (Dracula)
 export FZF_DEFAULT_OPTS='--color=border:#44475a --color=fg:#f8f8f2,bg:#282a36,hl:#bd93f9 --color=fg+:#f8f8f2,bg+:#44475a,hl+:#bd93f9 --color=info:#ffb86c,prompt:#50fa7b,pointer:#ff79c6 --color=marker:#ff79c6,spinner:#ffb86c,header:#6272a4 --layout=reverse'
 # ZSH-VI Settings

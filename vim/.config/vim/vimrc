@@ -32,8 +32,13 @@ set smartcase                 " Override ignorecase if uppercase used
 set hlsearch                  " Highlight search matches
 
 " Clipboard
-" set clipboard=unnamedplus  " Use system clipboard (Linux X11/Wayland - requires wl-clipboard on Wayland)
-set clipboard=unnamed         " Use system clipboard (macOS)
+" macOS uses the * register (unnamed); Linux X11/Wayland uses + (unnamedplus,
+" and needs xclip or wl-clipboard installed).
+if has('macunix')
+  set clipboard=unnamed
+else
+  set clipboard=unnamedplus
+endif
 
 " Performance
 set ttyfast                   " Faster scrolling
@@ -107,27 +112,32 @@ let &t_SI = "\e[6 q"   " Enter Insert: I-beam
 let &t_SR = "\e[4 q"   " Enter Replace: underline
 let &t_EI = "\e[2 q"   " Exit Insert/Replace: block
 
-" Install vim-plug if not found
-if empty(glob('~/.vim/autoload/plug.vim'))
+" Install vim-plug if not found (needs curl and network access)
+if empty(glob('~/.vim/autoload/plug.vim')) && executable('curl')
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 endif
 
-" Run PlugInstall if there are missing plugins
-autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-  \ | PlugInstall --sync | source $MYVIMRC
-  \ | endif
+" Only load the plugin block if vim-plug is actually present. Without this
+" guard a failed/skipped install makes `plug#begin()` throw E117 on every
+" startup, and the g:plugs autocmd below throws E121.
+if !empty(glob('~/.vim/autoload/plug.vim'))
+  " Run PlugInstall if there are missing plugins
+  autocmd VimEnter * if exists('g:plugs') && len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+    \ | PlugInstall --sync | source $MYVIMRC
+    \ | endif
 
-" Plugin manager (vim-plug)
-call plug#begin()
+  " Plugin manager (vim-plug)
+  call plug#begin()
 
-Plug 'dracula/vim', { 'as': 'dracula' }
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'tpope/vim-surround'
-Plug 'vim-airline/vim-airline'
+  Plug 'dracula/vim', { 'as': 'dracula' }
+  Plug 'christoomey/vim-tmux-navigator'
+  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+  Plug 'tpope/vim-surround'
+  Plug 'vim-airline/vim-airline'
 
-call plug#end()
+  call plug#end()
+endif
 
 " Airline configuration (settings that don't require functions)
 let g:airline#extensions#tabline#enabled = 1           " enable airline tabline

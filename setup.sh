@@ -308,7 +308,12 @@ stow_packages() {
       local stow_output stow_status
       # Split declaration from assignment: `local x="$(cmd)"` would mask cmd's
       # exit code (local's own status wins). We need stow's real status.
-      stow_output="$(stow -v -R -d "$DOTFILES_DIR" -t "$HOME" "$package" 2>&1)" && stow_status=0 || stow_status=$?
+      #
+      # Run with the repo as cwd: stow reads .stowrc from the *current
+      # directory*, not from -d, so without the cd the repo's ignore rules are
+      # silently skipped and package docs get linked into $HOME. The subshell
+      # keeps the cd from leaking into the rest of the script.
+      stow_output="$(cd "$DOTFILES_DIR" && stow -v -R -d "$DOTFILES_DIR" -t "$HOME" "$package" 2>&1)" && stow_status=0 || stow_status=$?
 
       # Show stow's output minus the noisy per-symlink LINK lines
       printf '%s\n' "$stow_output" | grep -v "^LINK" || true
@@ -335,7 +340,8 @@ unstow_packages() {
 
   for package in $packages; do
     if [[ -d "$DOTFILES_DIR/$package" ]]; then
-      stow -v -D -d "$DOTFILES_DIR" -t "$HOME" "$package" 2>&1 || true
+      # cd for the same reason as stow_packages: .stowrc is read from cwd.
+      (cd "$DOTFILES_DIR" && stow -v -D -d "$DOTFILES_DIR" -t "$HOME" "$package" 2>&1) || true
       success "Unstowed $package"
     else
       warn "Package directory not found, skipping: $package"

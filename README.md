@@ -129,9 +129,52 @@ Skips fonts (glyphs come from your local terminal, not the server) and the
 TPM / vim-plug / Zinit plugin managers, since all three need network access.
 Add them later on a networked host with `./setup.sh --plugins`.
 
+Also skips the git pre-commit hook: a server checkout is read-only in practice,
+so a secret scan there has nothing to scan.
+
 `--with-deps` needs root or `sudo`. It probes `apt-cache policy` for each
 package and installs only what your host's repos actually carry, reporting the
 rest — so it degrades on older releases instead of failing.
+
+### Binary names differ on Debian/Ubuntu
+
+Two packages install under a different name than upstream:
+
+| apt package | binary |
+|---|---|
+| `bat` | `batcat` |
+| `fd-find` | `fdfind` |
+
+The shell configs alias around both, but an alias only exists in an interactive
+shell — scripts, tmux popups and function bodies would still fail. So `--minimal`
+also symlinks `~/.local/bin/fd` → `fdfind` when `fdfind` is present and `fd` is
+not, which is what the tmux project and session pickers need.
+
+### Updating a server install
+
+```sh
+git -C ~/Projects/dotfiles pull        # git checkout (SSH or HTTPS)
+```
+
+For a tarball install there is no `.git`, so re-run the bootstrap one-liner
+instead.
+
+**Edited files take effect immediately** — stow symlinks point *into* the
+checkout, so pulling is enough. You only need to re-run `--minimal` when a whole
+new *package* is added, since that needs a new symlink.
+
+### Read-only vs push access
+
+A keyless host falls back to an HTTPS clone, which is read-only. That is usually
+what you want on a server: edit on your workstation, pull on the server, no
+credentials stored on the box.
+
+To push from it later, add an SSH key to the host, register it with GitHub
+(a per-repo deploy key with write access keeps the blast radius small), then:
+
+```sh
+git -C ~/Projects/dotfiles remote set-url origin git@github.com:thomascit/dotfiles.git
+```
 
 ### Tool availability by release
 
@@ -247,6 +290,22 @@ Stow will refuse to create a symlink if a real file already exists at the target
 ```sh
 mv ~/.config/nvim ~/.config/nvim.bak
 stow -R nvim
+```
+
+**Ignore rules not taking effect?**
+Stow reads `.stowrc` from the **current directory**, not from the directory given
+with `-d`. Always run it from the repo root:
+```sh
+cd ~/Projects/dotfiles && stow -R -t "$HOME" tmux
+```
+`setup.sh` does this for you.
+
+**Stray `~/TMUX.md` / `~/ZSH.md`?**
+Hosts set up before those docs were added to `.stowrc`'s ignore list still have
+them symlinked into `$HOME`. Stow no longer manages ignored files, so re-running
+setup will not clean them up:
+```sh
+rm ~/TMUX.md ~/ZSH.md
 ```
 
 **Stow conflicts with existing symlinks pointing elsewhere?**

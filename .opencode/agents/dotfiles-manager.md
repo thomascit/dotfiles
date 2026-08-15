@@ -61,15 +61,24 @@ Vendored plugin trees are managed by their own tools, not Git or submodules — 
 Grouped exactly as `setup.sh` defines them.
 
 - **CLI (`PACKAGES_CLI`, 14):** `atuin` `bash` `bat` `btop` `eza` `fish` `lazygit` `nvim` `sesh` `starship` `tmux` `vim` `yazi` `zsh`
+- **Minimal / server (`PACKAGES_MINIMAL`, 10):** `bash` `zsh` `fish` `tmux` `vim` `bat` `btop` `eza` `starship` `lazygit` — a subset of CLI, not a separate set of packages
 - **Terminals (`PACKAGES_TERMINALS`, 3):** `alacritty` `ghostty` `kitty`
 - **Linux window manager (`PACKAGES_WM_LINUX`, 4):** `hypr` `noctalia` `rofi` `wofi`
 - **Not stowed:** `reference/fonts` (JetBrainsMono Nerd Font), `reference/vimium`
 
 If you change this list, update `setup.sh`, the "What's Inside" table in `README.md`, and this file together.
 
+`PACKAGES_MINIMAL` must include `zsh` even though a server may never run it: `bash/.config/bash/bashrc` sources `~/.config/zsh/aliases.sh`, so dropping `zsh` silently removes every alias from bash too.
+
 ## Platform Awareness
 
-`setup.sh` supports macOS and Linux (`detect_os()` accepts `darwin*` and `linux-gnu*`; anything else is a hard error). The WM packages are Linux-only. Do not add Linux-specific paths or commands to shared CLI configs without guarding them by OS.
+`setup.sh` supports macOS and Linux (`detect_os()` accepts `darwin*` and any `linux*`, including musl; anything else is a hard error). The WM packages are Linux-only. Do not add Linux-specific paths or commands to shared CLI configs without guarding them by OS.
+
+`DISTRO_NAME` is read from `/etc/os-release` for reporting only. **Do not branch on distro or version.** Capability is probed instead — `command -v` for tools, `apt_candidate()` for packages, `infocmp` for terminfo — so the script does not carry a release table that goes stale. Follow that pattern for anything new.
+
+Shell configs must guard every optional tool. Two failure modes to keep in mind:
+- On Debian/Ubuntu `bat` installs as **`batcat`**, and `fd` as **`fdfind`**. Aliasing `cat` or `fd` unconditionally breaks those commands shell-wide.
+- Anything fetched over the network (`git clone`, `curl`) must be tested inside an `if`, because `setup.sh` runs under `set -euo pipefail` and a bare failure aborts the whole install midway.
 
 ## Conventions
 - **Theme:** Dracula across every tool. New or updated configs should match the existing palette.

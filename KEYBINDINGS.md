@@ -9,7 +9,7 @@
 
 - [Tmux](#tmux)
 - [Neovim / Vim](#neovim--vim)
-- [fzf (Shell)](#fzf-shell)
+- [fzf (Shell Aliases)](#fzf-shell-aliases)
 - [Zsh VI Mode](#zsh-vi-mode)
 - [Fish Shell](#fish-shell)
 - [Yazi](#yazi)
@@ -271,26 +271,17 @@ Reference: https://www.lazyvim.org/keymaps
 
 ---
 
-## fzf (Shell)
+## fzf (Shell Aliases)
 
-> Source: `zsh/.config/zsh/.zprofile`
+> Source: `zsh/.config/zsh/aliases.sh`, `fish/.config/fish/aliases.fish`
 
-These are the built-in fzf shell keybindings enabled via `source <(fzf --zsh)` (zsh) and `fzf --fish | source` (fish).
+fzf's built-in shell integration (`Ctrl+T` / `Ctrl+R` / `Alt+C`) is deliberately
+not enabled — those are covered by `atuin` (history), `zoxide` (`z`) and `yazi`
+(`y`) instead. `Ctrl+R` falls through to atuin, or to the shell's builtin
+reverse-search where atuin is unavailable.
 
-### Shell Triggers
-
-| Keybinding | Description |
-|---|---|
-| `Ctrl+T` | Paste selected file path(s) into the command line |
-| `Ctrl+R` | Search command history and paste selected entry |
-| `Alt+C` | `cd` into a selected directory |
-
-### Ctrl+T Options
-
-| In-widget binding | Description |
-|---|---|
-| `Ctrl+/` | Cycle preview window position (down → hidden → right) |
-| `Ctrl+E` | Open selected file in `$EDITOR` |
+fzf itself is still used heavily for the aliases below, the tmux popups, and the
+sesh session pickers. Theming for all of those comes from `FZF_DEFAULT_OPTS`.
 
 ### fzf-powered Shell Aliases
 
@@ -356,8 +347,6 @@ Fish uses `fish_vi_key_bindings` (VI mode enabled).
 | `jk` | Insert | Exit insert mode (cancel or switch to normal mode) |
 | `Ctrl+P` | Insert | Paste from system clipboard |
 | `p` | Normal | Paste from system clipboard |
-
-**fzf bindings** (via `fzf --fish`): same as [fzf Shell](#fzf-shell) above (`Ctrl+T`, `Ctrl+R`, `Alt+C`).
 
 ---
 

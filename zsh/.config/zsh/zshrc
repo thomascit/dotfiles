@@ -43,9 +43,6 @@ zinit light-mode for \
 # Enable: Zoxide
 eval "$(zoxide init zsh)"
 
-# Fzf
-source <(fzf --zsh)
-
 # Atuin
 eval "$(atuin init zsh)"
 

@@ -189,6 +189,5 @@
 | Tool | Init |
 |---|---|
 | `zoxide` | `eval "$(zoxide init zsh)"` |
-| `fzf` | `source <(fzf --zsh)` |
 | `starship` | `eval "$(starship init zsh)"` |
 | `brew` | `eval "$(brew shellenv)"` *(macOS only)* |

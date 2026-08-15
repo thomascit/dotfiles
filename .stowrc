@@ -1,3 +1,14 @@
 --target=$HOME
 --ignore=.stowrc
---ignore=reference/*
+
+# Per-package documentation (TMUX.md, ZSH.md) lives at the root of its stow
+# package, so without this stow would symlink it into $HOME alongside the real
+# config. Matches the repo's ALL-CAPS doc naming.
+#
+# Note: --ignore patterns are matched against the *basename*, anchored at the
+# end. The `^/name` form used by stow's built-in ignore list to mean
+# "package root only" does NOT work here — it is only honoured inside
+# .stow-local-ignore / .stow-global-ignore files. So this cannot be scoped to
+# the package root; keeping it upper-case-only is what stops it from swallowing
+# ordinary .md files inside a package.
+--ignore=^[A-Z0-9]+\.md$

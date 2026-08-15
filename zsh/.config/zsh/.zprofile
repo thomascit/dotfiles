@@ -3,7 +3,7 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
 export EZA_CONFIG_DIR="$HOME/.config/eza"
 export TERMINAL="ghostty"
-export EDITOR="nvim"
+export EDITOR="vim"
 export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_NO_ENV_HINTS=1
 # /usr/local/share/go is writable under Homebrew but root-owned on Linux,

@@ -20,7 +20,6 @@
 | `sc` | `~/.config/starship/starship.toml` |
 | `sshc` | `~/.ssh/config` |
 | `vrc` | `~/.config/vim/vimrc` |
-| `nvrc` | `~/.config/nvim` (yazi) |
 | `yc` | `~/.config/yazi/yazi.toml` |
 | `hyc` | `~/.config/hypr/hyprland.conf` |
 | `df` | `~/.config` (yazi) |

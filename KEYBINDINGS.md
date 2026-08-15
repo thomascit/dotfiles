@@ -42,7 +42,7 @@
 |---|---|
 | `<prefix> c` | New window in current path |
 | `<prefix> C` | New named window (prompts for name) |
-| `<prefix> N` | New window with Neovim (`nvim`) |
+| `<prefix> N` | New window with `$EDITOR` (defaults to `vim`) |
 | `<prefix> O` | New window with OpenCode (`--continue`) |
 | `<prefix> f` | New window with Yazi file manager |
 | `<prefix> g` | New window with Lazygit |
@@ -122,6 +122,11 @@
 ---
 
 ## Neovim / Vim
+
+> **Neovim is discontinued.** The Neovim keymaps below describe the retired
+> config still kept under `nvim/` for reference — it is no longer stowed or
+> maintained, and `vim` is now the default editor. The live source for the
+> editor in use is `vim/.config/vim/vimrc`.
 
 > Sources:
 > - `nvim/.config/nvim/lua/config/keymaps.lua`

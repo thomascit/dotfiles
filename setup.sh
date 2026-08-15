@@ -202,6 +202,11 @@ remove_wrapper_files() {
 # Plugin Managers
 # ─────────────────────────────────────────────────────────────────────────────
 
+# All three plugin managers are fetched over the network. Because the script
+# runs under `set -e`, an unguarded failure here would abort the whole install
+# partway through — after stowing, but before fonts and the closing prompts.
+# Testing the command inside an `if` exempts it from set -e (same technique as
+# stow_packages), so a missing tool or an offline host warns and moves on.
 install_tpm() {
   local tpm_dir="$HOME/.config/tmux/plugins/tpm"
 
@@ -210,10 +215,18 @@ install_tpm() {
     return
   fi
 
+  if ! command_exists git; then
+    warn "git not found — skipping TPM install"
+    return
+  fi
+
   info "Installing TPM (Tmux Plugin Manager)..."
-  git clone https://github.com/tmux-plugins/tpm "$tpm_dir"
-  success "TPM installed"
-  info "Run tmux and press <prefix>+I to install plugins"
+  if git clone https://github.com/tmux-plugins/tpm "$tpm_dir"; then
+    success "TPM installed"
+    info "Run tmux and press <prefix>+I to install plugins"
+  else
+    warn "Could not clone TPM (no network?) — tmux will start without plugins"
+  fi
 }
 
 install_vim_plug() {
@@ -224,11 +237,19 @@ install_vim_plug() {
     return
   fi
 
+  if ! command_exists curl; then
+    warn "curl not found — skipping vim-plug install (vim works without it)"
+    return
+  fi
+
   info "Installing vim-plug..."
-  curl -fLo "$plug_file" --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  success "vim-plug installed"
-  info "Run vim and execute :PlugInstall to install plugins"
+  if curl -fLo "$plug_file" --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim; then
+    success "vim-plug installed"
+    info "Run vim and execute :PlugInstall to install plugins"
+  else
+    warn "Could not download vim-plug (no network?) — vim will start without plugins"
+  fi
 }
 
 install_zinit() {
@@ -239,10 +260,18 @@ install_zinit() {
     return
   fi
 
+  if ! command_exists git; then
+    warn "git not found — skipping Zinit install"
+    return
+  fi
+
   info "Installing Zinit (Zsh plugin manager)..."
   mkdir -p "$(dirname "$zinit_dir")"
-  git clone https://github.com/zdharma-continuum/zinit "$zinit_dir"
-  success "Zinit installed"
+  if git clone https://github.com/zdharma-continuum/zinit "$zinit_dir"; then
+    success "Zinit installed"
+  else
+    warn "Could not clone Zinit (no network?) — zsh will start without plugins"
+  fi
 }
 
 install_atuin() {

@@ -3,6 +3,14 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || /usr/local/bin/brew shellenv 2>/dev/null)"
 fi
 
+# ~/.local/bin, matching zsh (.zprofile) and fish (variables.fish). Needed for
+# the fd -> fdfind shim setup.sh creates on Debian/Ubuntu, among other things.
+# Debian's own ~/.profile adds this, but only for login shells.
+case ":$PATH:" in
+  *":$HOME/.local/bin:"*) ;;
+  *) export PATH="$HOME/.local/bin:$PATH" ;;
+esac
+
 # Exports
 export BASH_SILENCE_DEPRECATION_WARNING=1
 export XDG_CONFIG_HOME="$HOME/.config"

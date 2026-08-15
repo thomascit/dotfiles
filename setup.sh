@@ -239,11 +239,22 @@ fetch_dotfiles() {
   # bare host still gets a working checkout.
   if command_exists git; then
     info "Cloning via SSH..."
-    if git clone --quiet "$DOTFILES_REPO" "$DOTFILES_DIR" 2>/dev/null; then
+    # BatchMode stops ssh prompting for a passphrase or unknown host key, which
+    # would hang an unattended bootstrap; ConnectTimeout bounds an unreachable
+    # host. Deliberately not using StrictHostKeyChecking=accept-new: that would
+    # make a first SSH clone succeed via silent trust-on-first-use, and the
+    # HTTPS fallback below already covers that case safely.
+    if GIT_SSH_COMMAND='ssh -o BatchMode=yes -o ConnectTimeout=5' \
+       git clone --quiet "$DOTFILES_REPO" "$DOTFILES_DIR" 2>/dev/null; then
       success "Dotfiles cloned to $DOTFILES_DIR (SSH, push access)"
       return
     fi
-    warn "SSH clone failed (no key on this host?) — trying HTTPS"
+    # Report which of the two likely causes it actually was, rather than guess.
+    if compgen -G "$HOME/.ssh/id_*" >/dev/null 2>&1; then
+      warn "SSH clone failed despite a key in ~/.ssh — is it registered with GitHub?"
+    else
+      warn "SSH clone failed (no SSH key on this host) — trying HTTPS"
+    fi
 
     info "Cloning via HTTPS..."
     if git clone --quiet "$DOTFILES_REPO_HTTPS" "$DOTFILES_DIR"; then
@@ -507,6 +518,35 @@ install_apt_deps() {
   fi
 }
 
+# Debian/Ubuntu ship fd as `fdfind`, because the `fd` name is taken by another
+# package. The shell configs alias `fd=fdfind`, but an alias only exists in an
+# interactive shell — so plain scripts, tmux's run-shell/popups and function
+# bodies all still call a `fd` that does not exist. A real binary on PATH fixes
+# every one of those at once, which is also what Debian's own fd-find docs
+# suggest doing.
+ensure_fd_shim() {
+  command_exists fdfind || return 0   # nothing to shim (macOS, or fd absent)
+  command_exists fd && return 0       # a real fd is already on PATH
+
+  local shim="$HOME/.local/bin/fd"
+  if [[ -e "$shim" || -L "$shim" ]]; then
+    return 0
+  fi
+
+  mkdir -p "$HOME/.local/bin"
+  if ln -s "$(command -v fdfind)" "$shim"; then
+    success "Linked fd -> fdfind at $shim"
+    # Make it visible for the rest of this run (e.g. report_capabilities), the
+    # same way the shell configs put ~/.local/bin on PATH.
+    case ":$PATH:" in
+      *":$HOME/.local/bin:"*) ;;
+      *) export PATH="$HOME/.local/bin:$PATH" ;;
+    esac
+  else
+    warn "Could not create fd shim at $shim — tmux pickers using fd may fail"
+  fi
+}
+
 install_atuin() {
   if command_exists atuin; then
     success "Atuin already installed"
@@ -591,7 +631,7 @@ report_capabilities() {
   echo -e "${CYAN}Tool availability:${NC}"
 
   local tool
-  for tool in zsh fish tmux vim starship zoxide fzf rg bat batcat eza btop lazygit trash; do
+  for tool in zsh fish tmux vim starship zoxide fzf rg fd fdfind bat batcat eza btop lazygit trash; do
     if command_exists "$tool"; then
       printf "  ${GREEN}%-14s present${NC}\n" "$tool"
     else
@@ -627,9 +667,15 @@ run_minimal_install() {
   fi
 
   fetch_dotfiles
-  configure_git_hooks
+  ensure_fd_shim
   stow_packages "$PACKAGES_MINIMAL"
   copy_wrapper_files
+
+  # No git hooks here: the pre-commit secret scan only matters where commits
+  # happen, and a server checkout is read-only in practice. Running it would
+  # just emit a gitleaks-not-installed warning that cannot be acted on.
+  info "Skipping git hooks (server install, no commits expected)"
+  info "If you later enable push access: git -C \"$DOTFILES_DIR\" config core.hooksPath .githooks"
 
   # Deliberately skipped for a server: fonts (glyphs come from the client
   # terminal, not the host), and TPM/vim-plug/Zinit (all require network).
@@ -648,6 +694,7 @@ run_full_install() {
   create_xdg_dirs
   clone_dotfiles
   configure_git_hooks
+  ensure_fd_shim
   stow_packages "$PACKAGES_CLI"
   copy_wrapper_files
   install_atuin

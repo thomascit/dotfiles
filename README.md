@@ -24,10 +24,11 @@
 
 ## Prerequisites
 
-Install these before running the setup script:
+- `gnu stow` — the only hard requirement; nothing can be linked without it
+- `git` — needed only to *obtain* the repo, and only if you don't already have a
+  checkout. `setup.sh` falls back to a tarball download when git is absent.
 
-- `git`
-- `gnu stow`
+Both can be installed for you — see [Bootstrap without cloning](#bootstrap-without-cloning).
 
 All other tools (nvim, tmux, zsh, etc.) should be installed separately beforehand. The setup script only manages config files, not package installation — the one exception is `--minimal --with-deps`, which apt-installs the server tool set on Debian/Ubuntu (see [Minimal / Server Install](#minimal--server-install)).
 
@@ -41,6 +42,45 @@ Every config guards the optional tools it uses, so a missing tool degrades that 
 git clone git@github.com:thomascit/dotfiles.git ~/Projects/dotfiles
 ~/Projects/dotfiles/setup.sh
 ```
+
+### Bootstrap without cloning
+
+On a fresh machine you can pipe the script straight from GitHub — it fetches the
+repo itself:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/thomascit/dotfiles/main/setup.sh \
+  | bash -s -- --minimal --with-deps
+```
+
+The `-s --` is required: it tells `bash` to read the script from stdin and pass
+the remaining words through as arguments.
+
+**The repo still ends up on disk.** Stow works by creating symlinks that point
+into the checkout, so it has to stay where it lands — `~/Projects/dotfiles` by
+default, or wherever `DOTFILES_DIR` points. "Without cloning" means you don't
+have to clone it *yourself*, not that nothing is written.
+
+How the repo is obtained, in order — whichever works first wins:
+
+| Method | Requires | Result |
+|---|---|---|
+| SSH clone | git + an SSH key on the host | full checkout, push access |
+| HTTPS clone | git | full checkout, read-only remote |
+| Tarball | curl or wget, and tar | plain directory, no `.git` |
+
+So a box with no SSH key still works, and a box with no git at all still works.
+A tarball install cannot `git pull`, so re-run the bootstrap to update it.
+
+Environment overrides:
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `DOTFILES_DIR` | `~/Projects/dotfiles` | where the checkout goes |
+| `DOTFILES_BRANCH` | `main` | branch to fetch |
+
+`DOTFILES_DIR` takes precedence over everything, including the script's own
+location, so you can point a run at an alternate checkout deliberately.
 
 ## Setup Script
 
@@ -66,7 +106,15 @@ For a bare Debian or Ubuntu box where you want a working shell but no desktop:
 ```sh
 ./setup.sh --minimal              # configs only
 ./setup.sh --minimal --with-deps  # also apt-install what the repos provide
+
+# Or straight from GitHub on a box with nothing installed yet:
+curl -fsSL https://raw.githubusercontent.com/thomascit/dotfiles/main/setup.sh \
+  | bash -s -- --minimal --with-deps
 ```
+
+With `--with-deps`, dependencies are installed *before* the repo is fetched, so
+`git` and `stow` can be missing at the start — that is what makes the one-liner
+above work on a bare host.
 
 Stows `bash zsh fish tmux vim bat btop eza starship lazygit`. `zsh` is included
 even if you never run it, because `bash/bashrc` sources

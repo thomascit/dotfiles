@@ -76,6 +76,12 @@ If you change this list, update `setup.sh`, the "What's Inside" table in `README
 
 `DISTRO_NAME` is read from `/etc/os-release` for reporting only. **Do not branch on distro or version.** Capability is probed instead — `command -v` for tools, `apt_candidate()` for packages, `infocmp` for terminfo — so the script does not carry a release table that goes stale. Follow that pattern for anything new.
 
+`setup.sh` is designed to run piped (`curl … | bash -s -- --minimal --with-deps`). Two consequences when editing it:
+- `BASH_SOURCE[0]` is **unset** when piped, and `set -u` makes that fatal. Expand it defensively, and do not assume `$0` is a path — it is `bash`.
+- `read_input()` reads from `/dev/tty` precisely so prompts survive a pipe. Keep it that way, and keep `--minimal` prompt-free so it stays scriptable.
+
+`fetch_dotfiles()` obtains the repo by SSH clone, then HTTPS clone, then tarball, so a host with no key or no git still works. The checkout must persist: stow symlinks point into it. `DOTFILES_DIR` overrides everything, then the script's own directory, then `~/Projects/dotfiles`.
+
 Shell configs must guard every optional tool. Two failure modes to keep in mind:
 - On Debian/Ubuntu `bat` installs as **`batcat`**, and `fd` as **`fdfind`**. Aliasing `cat` or `fd` unconditionally breaks those commands shell-wide.
 - Anything fetched over the network (`git clone`, `curl`) must be tested inside an `if`, because `setup.sh` runs under `set -euo pipefail` and a bare failure aborts the whole install midway.

@@ -51,9 +51,6 @@ fish_config theme choose Dracula
 # Enable: Zoxide
 zoxide init fish | source
 
-# Fzf
-fzf --fish | source
-
 # Atuin
 if command -q atuin
     atuin init fish | source

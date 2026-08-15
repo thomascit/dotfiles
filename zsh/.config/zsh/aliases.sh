@@ -89,10 +89,20 @@ alias dnfu='dnf repoquery --installed --qf "%{name}\n" 2>/dev/null | fzf --multi
 # LS/FS
 # ─────────────────────────────────────────────
 command -v fdfind &>/dev/null && alias fd="fdfind"
-alias cat="bat"
-alias icat="kitten icat"
-alias ls="eza --icons=always --sort=type --header -l --git"
-alias lst="eza --icons=always --sort=type --header -l --git --tree"
+# Debian/Ubuntu ship bat as `batcat` (the `bat` name clashes with
+# bacula-console-qt). Guard both, and leave `cat` alone if neither exists —
+# an unguarded alias here breaks `cat` shell-wide.
+if command -v bat &>/dev/null; then
+  alias cat="bat"
+elif command -v batcat &>/dev/null; then
+  alias cat="batcat"
+fi
+command -v kitten &>/dev/null && alias icat="kitten icat"
+# eza is absent from Debian 12's repos; without a guard this breaks `ls`.
+if command -v eza &>/dev/null; then
+  alias ls="eza --icons=always --sort=type --header -l --git"
+  alias lst="eza --icons=always --sort=type --header -l --git --tree"
+fi
 command -v trash &>/dev/null && alias rm="trash"
 
 # ─────────────────────────────────────────────

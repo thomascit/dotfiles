@@ -1,7 +1,11 @@
 local opt = vim.opt
 
 -- Ensure Homebrew binaries are in PATH (for formatters, LSPs, etc.)
-vim.env.PATH = "/opt/homebrew/bin:/opt/homebrew/sbin:" .. vim.env.PATH
+-- macOS only; on Linux these paths do not exist and would just add two
+-- bogus entries to every subprocess lookup.
+if vim.fn.has("mac") == 1 then
+  vim.env.PATH = "/opt/homebrew/bin:/opt/homebrew/sbin:" .. vim.env.PATH
+end
 
 -- Line numbers
 opt.number = true         -- Show absolute line number on current line
@@ -32,8 +36,9 @@ opt.smartcase = true  -- Override ignorecase if uppercase used
 opt.hlsearch = true   -- Highlight search matches
 
 -- Clipboard
-opt.clipboard = "unnamed" -- Use system clipboard (macOS)
--- opt.clipboard = "unnamedplus"     -- Use system clipboard (Linux)
+-- macOS uses the * register (unnamed); Linux X11/Wayland uses + (unnamedplus,
+-- and needs xclip or wl-clipboard installed).
+opt.clipboard = vim.fn.has("mac") == 1 and "unnamed" or "unnamedplus"
 
 -- Performance
 opt.ttyfast = true -- Faster scrolling

@@ -16,37 +16,49 @@ fi
 fpath=(~/.config/zsh/functions $fpath)
 autoload -Uz ~/.config/zsh/functions/*(:t)
 
+ZVM_SYSTEM_CLIPBOARD_ENABLED=true
+
 ### Added by Zinit's installer
-if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
+# Bootstrap Zinit when git is available. No network pre-check: the guard below
+# is what actually prevents a failed clone from cascading, and probing first
+# would only add a dependency (curl is not installed on minimal Debian images).
+# GIT_HTTP_LOW_SPEED_* bounds the attempt so an offline host does not stall the
+# first shell start waiting on git's own, much longer, network timeout.
+ZINIT_HOME="$HOME/.local/share/zinit/zinit.git"
+if [[ ! -f $ZINIT_HOME/zinit.zsh ]] && command -v git &>/dev/null; then
     print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
     command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
-    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
+    GIT_HTTP_LOW_SPEED_LIMIT=1000 GIT_HTTP_LOW_SPEED_TIME=10 \
+        command git clone https://github.com/zdharma-continuum/zinit "$ZINIT_HOME" && \
         print -P "%F{33} %F{34}Installation successful.%f%b" || \
         print -P "%F{160} The clone has failed.%f%b"
 fi
 
-source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
+# Guarded: without Zinit, fall through to a plain zsh rather than erroring on
+# every startup. Loses syntax highlighting/autosuggestions/vi-mode, nothing more.
+if [[ -f $ZINIT_HOME/zinit.zsh ]]; then
+    source "$ZINIT_HOME/zinit.zsh"
+    autoload -Uz _zinit
+    (( ${+_comps} )) && _comps[zinit]=_zinit
 
-# Load a few important annexes, without Turbo
-# (this is currently required for annexes)
-ZVM_SYSTEM_CLIPBOARD_ENABLED=true
-
-zinit light-mode for \
-    zdharma-continuum/fast-syntax-highlighting \
-    zsh-users/zsh-autosuggestions \
-    zsh-users/zsh-completions \
-    jeffreytse/zsh-vi-mode \
-    hlissner/zsh-autopair  \
+    # Load a few important annexes, without Turbo
+    # (this is currently required for annexes)
+    zinit light-mode for \
+        zdharma-continuum/fast-syntax-highlighting \
+        zsh-users/zsh-autosuggestions \
+        zsh-users/zsh-completions \
+        jeffreytse/zsh-vi-mode \
+        hlissner/zsh-autopair
+fi
 
 # Enable: Zoxide
-eval "$(zoxide init zsh)"
+command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
 
 # Atuin
-eval "$(atuin init zsh)"
+command -v atuin &>/dev/null && eval "$(atuin init zsh)"
 
 # Sesh
+if command -v sesh &>/dev/null && command -v fzf &>/dev/null; then
 function sesh-sessions() {
   {
     exec </dev/tty
@@ -63,6 +75,7 @@ zle     -N             sesh-sessions
 bindkey -M emacs '\es' sesh-sessions
 bindkey -M vicmd '\es' sesh-sessions
 bindkey -M viins '\es' sesh-sessions
+fi
 
 # Enable: Starship (after plugins to avoid conflicts)
-eval "$(starship init zsh)"
+command -v starship &>/dev/null && eval "$(starship init zsh)"

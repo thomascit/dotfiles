@@ -125,7 +125,7 @@ alias e exit
 alias ff fastfetch
 alias fishc "clear && fish"
 alias l clear
-alias n "$EDITOR ."
+alias v "$EDITOR ."
 alias r reset
 alias zshc "clear && zsh"
 alias oc opencode

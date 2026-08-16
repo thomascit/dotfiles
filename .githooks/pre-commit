@@ -23,10 +23,23 @@ if git diff --cached --quiet; then
   exit 0
 fi
 
-# Pipe the staged diff into gitleaks stdin. This is the reliable v8 pattern
-# for pre-commit: `gitleaks git --staged` scans commit history, not the index.
-# --redact hides matched secrets in output so they don't echo into terminal scrollback.
-if ! git diff --cached -U0 | gitleaks stdin --redact --no-banner; then
+# Scan the staged changes, never commit history: `gitleaks git --staged` would
+# scan commits, not the index. The subcommand for this changed mid-v8, so probe
+# for it instead of parsing `gitleaks version` — distro builds report useless
+# strings like "version is set by build process".
+#   v8.19+ : `gitleaks stdin`, fed the staged diff ("protect" was removed)
+#   <v8.19 : `gitleaks protect --staged`, which reads the index itself
+# --redact keeps matched secrets out of terminal scrollback.
+if gitleaks stdin --help >/dev/null 2>&1; then
+  scan_staged() { git diff --cached -U0 | gitleaks stdin --redact --no-banner; }
+elif gitleaks protect --help >/dev/null 2>&1; then
+  scan_staged() { gitleaks protect --staged --redact --no-banner; }
+else
+  echo "[pre-commit] gitleaks found but exposes neither 'stdin' nor 'protect' — skipping scan." >&2
+  exit 0
+fi
+
+if ! scan_staged; then
   echo "" >&2
   echo "[pre-commit] gitleaks detected potential secrets in staged changes." >&2
   echo "[pre-commit] Review the findings above. To bypass (NOT recommended) use: git commit --no-verify" >&2

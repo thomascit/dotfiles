@@ -71,4 +71,14 @@ fi
 # LAZYGIT Settings
 export LAZYGIT_NEW_DIR_FILE=$HOME/.lazygit/newdir
 
+# ssh-agent (systemd user socket, Linux)
+# Debian/systemd ships a socket-activated agent (ssh-agent.socket, enabled by
+# default) listening on $XDG_RUNTIME_DIR/openssh_agent, but only exports
+# SSH_AUTH_SOCK into the systemd user manager — not into tty/ssh login shells.
+# One agent shared by every shell; keys added once with `sa` persist. The guard
+# leaves a forwarded/pre-existing agent (ssh -A, macOS) untouched.
+if [[ -z "$SSH_AUTH_SOCK" && -S "${XDG_RUNTIME_DIR}/openssh_agent" ]]; then
+  export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/openssh_agent"
+fi
+
 [ -f "$HOME/.zenv" ] && source "$HOME/.zenv"

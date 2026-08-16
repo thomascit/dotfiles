@@ -122,14 +122,14 @@
 
 | Alias | Description |
 |---|---|
-| `n` | `$EDITOR .` — open editor in cwd |
+| `v` | `$EDITOR` |
 | `oc` | `opencode` |
 | `ff` | `fastfetch` |
 | `l` | `clear` |
 | `r` | `reset` |
 | `e` | `exit` |
 | `sz` | Re-source zshrc |
-| `sa` | Re-source ssh-agent |
+| `sa` | Add SSH key to the running agent (`ssh-add`) |
 | `u` | Run `setup.sh` (reload/install dotfiles) |
 | `c` | Copy to clipboard (OS-aware: `wl-copy` / `pbcopy` / `clip.exe` / `xclip`) |
 | `bashc` | Clear + launch bash |

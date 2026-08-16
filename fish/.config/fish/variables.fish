@@ -57,4 +57,14 @@ set -gx ZVM_CLIPBOARD_PASTE_CMD 'xclip -selection clipboard -o'
 # LAZYGIT Settings
 set -gx LAZYGIT_NEW_DIR_FILE "$HOME/.lazygit/newdir"
 
+# ssh-agent (systemd user socket, Linux)
+# Debian/systemd ships a socket-activated agent (ssh-agent.socket, enabled by
+# default) listening on $XDG_RUNTIME_DIR/openssh_agent, but only exports
+# SSH_AUTH_SOCK into the systemd user manager — not into tty/ssh login shells.
+# One agent shared by every shell; keys added once with `sa` persist. The guard
+# leaves a forwarded/pre-existing agent (ssh -A, macOS) untouched.
+if test -z "$SSH_AUTH_SOCK" -a -S "$XDG_RUNTIME_DIR/openssh_agent"
+    set -gx SSH_AUTH_SOCK "$XDG_RUNTIME_DIR/openssh_agent"
+end
+
 test -f "$HOME/.fenv" && source "$HOME/.fenv"

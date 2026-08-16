@@ -60,7 +60,7 @@ Vendored plugin trees are managed by their own tools, not Git or submodules — 
 
 Grouped exactly as `setup.sh` defines them.
 
-- **CLI (`PACKAGES_CLI`, 13):** `atuin` `bash` `bat` `btop` `eza` `fish` `lazygit` `sesh` `starship` `tmux` `vim` `yazi` `zsh` — `nvim` is **discontinued** (config kept under `nvim/` but no longer stowed; `vim` is the default `$EDITOR`)
+- **CLI (`PACKAGES_CLI`, 12):** `atuin` `bash` `bat` `btop` `eza` `fish` `lazygit` `starship` `tmux` `vim` `yazi` `zsh` — `nvim` is **discontinued** (config kept under `nvim/` but no longer stowed; `vim` is the default `$EDITOR`)
 - **Minimal / server (`PACKAGES_MINIMAL`, 10):** `bash` `zsh` `fish` `tmux` `vim` `bat` `btop` `eza` `starship` `lazygit` — a subset of CLI, not a separate set of packages
 - **Terminals (`PACKAGES_TERMINALS`, 3):** `alacritty` `ghostty` `kitty`
 - **Linux window manager (`PACKAGES_WM_LINUX`, 4):** `hypr` `noctalia` `rofi` `wofi`
@@ -131,7 +131,7 @@ Write an imperative, lowercase subject that says what changed and why it matters
 
 ```
 fix: harden setup.sh (stow error reporting, OS guards, dirty-tree pull guard)
-docs: document sesh session manager and font install paths
+docs: document the tmux session picker and font install paths
 vim: persistent theme picker + transparent background
 ```
 

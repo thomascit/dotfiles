@@ -121,7 +121,7 @@ even if you never run it, because `bash/bashrc` sources
 `~/.config/zsh/aliases.sh`.
 
 Excluded on purpose: `nvim` (discontinued — no longer stowed by any flow),
-`yazi` and `sesh` (not packaged for Debian or Ubuntu at all), `atuin` (absent
+`yazi` (not packaged for Debian or Ubuntu at all), `atuin` (absent
 from Debian 12, and expects a sync server), plus all terminal and window
 manager configs.
 
@@ -197,7 +197,7 @@ tool below, so an absent one is a missing feature, never a broken shell.
 | `atuin` | ❌ | 18.6 | ❌ | ✅ |
 | `lazygit` | ❌ | 0.50 | ❌ | 0.57 |
 | ~~`neovim`~~ (discontinued) | — | — | — | — |
-| `yazi` `sesh` | ❌ | ❌ | ❌ | ❌ |
+| `yazi` | ❌ | ❌ | ❌ | ❌ |
 
 Debian 13 or Ubuntu 26.04 gives you nearly everything. On Debian 12 you lose
 `starship`, `eza` and `lazygit` — the prompt falls back to plain, `ls` and `cat`
@@ -224,7 +224,6 @@ the config also falls back to `screen-256color` as a second line of defence.
 | `noctalia` | Hyprland shell — bar, launcher, dock, lock screen, notifications, control center |
 | ~~`nvim`~~ | **(Discontinued)** Neovim with LazyVim + lazy.nvim — no longer stowed or maintained. See note below. |
 | `rofi` | Application launcher (X11) |
-| `sesh` | Smart session manager for tmux (fzf-powered switcher) |
 | `starship` | Fast, customizable shell prompt |
 | `tmux` | Terminal multiplexer with TPM plugins and Dracula theme |
 | `vim` | Vim with vim-plug and Dracula theme |

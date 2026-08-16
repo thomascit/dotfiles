@@ -45,7 +45,7 @@ fi
 # Stow package groups
 # nvim is discontinued: the config still lives in nvim/ but is no longer stowed
 # or maintained. vim is now the default editor ($EDITOR). See README.
-PACKAGES_CLI="atuin bash bat btop eza fish lazygit sesh starship tmux vim yazi zsh"
+PACKAGES_CLI="atuin bash bat btop eza fish lazygit starship tmux vim yazi zsh"
 PACKAGES_TERMINALS="alacritty ghostty kitty"
 PACKAGES_WM_LINUX="hypr noctalia rofi wofi"
 
@@ -57,7 +57,6 @@ PACKAGES_WM_LINUX="hypr noctalia rofi wofi"
 # Deliberately excluded:
 #   nvim   — discontinued; no longer stowed by any flow (vim is the editor now)
 #   yazi   — not packaged for Debian or Ubuntu at all
-#   sesh   — not packaged for Debian or Ubuntu at all
 #   atuin  — not in Debian 12; also expects a sync server
 # zsh is required even if unused: bash/bashrc sources ~/.config/zsh/aliases.sh.
 PACKAGES_MINIMAL="bash zsh fish tmux vim bat btop eza starship lazygit"

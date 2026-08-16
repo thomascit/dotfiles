@@ -8,11 +8,12 @@
 
 | Binding | Description |
 |---|---|
-| `prefix + C-o` | Project picker — fzf `~/Projects` → sesh session (launches OpenCode on create) |
-| `prefix + s` | Session switcher (sesh) |
+| `prefix + s` | Session picker — fzf over running sessions (windows in the preview) |
+| `prefix + P` | Project picker — fzf `~/Projects` → session named after the project |
 | `prefix + S` | SSH host picker (fzf from `~/.ssh/config`) |
 | `prefix + r` | Run command (prompts, runs in new window) |
 | `prefix + C-c` | Config file picker (`~/.config`, bat preview) |
+| `prefix + R` | Reload `~/.config/tmux/tmux.conf` (confirms in the status line) |
 | `prefix + ?` | Key bindings reference popup |
 
 ---
@@ -69,49 +70,65 @@
 
 | Binding | Description |
 |---|---|
+| `prefix + s` | Session picker (see below) |
+| `prefix + $` | Rename session (tmux built-in) |
 | `prefix + C-s` | Rename session to cwd |
 
 ---
 
-## Project Picker (`prefix + C-o`)
+## Project Picker (`prefix + P`)
 
-`prefix + C-o` runs `~/.config/tmux/scripts/opencode-project.sh`, which lists the
-directories one level under `~/Projects` in an fzf popup and hands the selection to
-`sesh connect`.
+`prefix + P` is inline shell in `tmux.conf` (via `run-shell`) that lists the directories
+one level under `~/Projects` in an fzf popup (contents previewed on the right) and turns
+the selection into a tmux session.
 
 | Situation | What happens |
 |---|---|
-| No session for that directory yet | Creates a session named after the directory and starts OpenCode in it |
-| Session already exists | Attaches/switches to it, leaving whatever is running untouched |
+| No session for that directory yet | Creates a session named after the directory, rooted in it |
+| Session already exists | Switches to it, leaving whatever is running untouched |
 
-The create-or-attach behaviour comes from `sesh connect`, and the "only start OpenCode
-once" behaviour comes from its `--command` flag, which sesh **ignores when the session
-already exists**. So pressing `C-o` on the same project repeatedly never stacks a second
-OpenCode on top of the first.
+Session names come from the directory basename with `.` and `:` translated to `_`,
+matching the substitution tmux performs on session names itself — which is also what lets
+the `has-session` check reliably find an existing session instead of creating a duplicate.
 
 Override the search root with `PROJECTS_DIR` if needed.
 
-> **Note:** this overrides tmux's default `prefix + C-o` (`rotate-window`, which cycles
-> pane contents around the current layout). Use `prefix + {` / `prefix + }` to rearrange
-> panes instead. Because it sits behind the prefix, `C-o` still works normally inside
-> Vim and the shell.
+This is the in-tmux twin of the [`tm` shell function](#shell-aliases): both list with
+`find | sort`, name sessions the same way, and reuse an existing session. Neither starts
+OpenCode — use `prefix + O` for a new window or `prefix + o` for a 40% split.
+
+Because it is inline shell rather than a script, the binding is wrapped in **single**
+quotes so tmux does not expand `$` before the shell sees it, and each statement ends with
+`;` since the trailing `\` line continuations are joined into one line. That also means the
+code cannot contain a single quote — hence `tr .: __` is written unquoted.
+
+> **Note:** the picker used to live on `prefix + C-o`, which is now back to tmux's default
+> `rotate-window`.
 
 ---
 
-## Sesh
+## Session Picker (`prefix + s`)
 
-`prefix + s` opens the [sesh](https://github.com/joshmedeski/sesh) session picker in an
-fzf popup (tmux sessions listed first). These bindings work inside the picker:
+`prefix + s` is inline shell in `tmux.conf` (via `run-shell`): an fzf popup listing the
+running sessions, with the selected session's windows shown in the preview pane.
 
 | Binding | Description |
 |---|---|
-| `Tab` / `S-Tab` | Move down / up |
-| `C-a` | List all sources |
-| `C-t` | List tmux sessions |
-| `C-g` | List sesh configs |
-| `C-x` | List zoxide directories |
-| `C-f` | Find directories under `~` (`fd`) |
-| `C-d` | Kill the selected tmux session |
+| `Enter` | Switch to the selected session |
+| `C-x` | Kill the selected session and refresh the list |
+| `Esc` | Cancel |
+
+This overrides tmux's default `s` (`choose-tree -Zs`), which is still available via
+`prefix + :` then `choose-tree -Zs`.
+
+The tmux formats are the brace-free aliases (`#S`, `#I`, `#W`) rather than
+`#{session_name}`, because those strings are passed through fzf's `--preview` and
+`--bind` actions where `{...}` is fzf's own placeholder syntax. They still need quoting,
+since an unquoted `#` would start a shell comment — and where quotes must nest (the
+`--preview` and `--bind` values) the inner ones are written `\"`. tmux performs no
+replacements inside single quotes, so those backslashes reach the shell untouched.
+
+From the shell, `s` is the same picker — see [Shell Aliases](#shell-aliases).
 
 ---
 
@@ -145,12 +162,40 @@ fzf popup (tmux sessions listed first). These bindings work inside the picker:
 
 ---
 
-## Resurrect
+## Plugins / TPM
+
+The config is designed to work **standalone**, without TPM. A server installed with
+`setup.sh --minimal` has no TPM at all, since fetching plugins needs network, and the
+`if-shell` guard at the bottom of `tmux.conf` skips the plugin loader silently.
+
+Everything TPM adds is therefore additive:
+
+| Plugin | What is lost without TPM |
+|---|---|
+| `dracula/tmux` | Nothing functional — the fallback section of `tmux.conf` reproduces the status bar in pure tmux |
+| `vim-tmux-navigator` | Nothing — `C-h/j/k/l/\` are reproduced in the fallback section, including the "is vim running?" check |
+| `tmux-resurrect` | **`prefix + M-s` / `prefix + M-r` do not exist.** No pure-tmux equivalent |
+| `tmux-yank` | `prefix + y` / `prefix + Y`. Copy-mode `y` still works via this config plus `set-clipboard on` |
+| `tmux-continuum` | Nothing — its options are commented out anyway |
+
+`tmux-sensible` is deliberately **not** used. Its options are set directly in the options
+block at the top of `tmux.conf` instead, so scrollback, `escape-time`, `display-time`,
+`focus-events`, `status-keys` and `aggressive-resize` are identical with and without TPM.
+Its only other bindings, `C-p`/`C-n`, duplicate `M-h`/`M-l`.
+
+Install the plugins on a networked host with `./setup.sh --plugins`, then `prefix + I`.
+
+---
+
+## Resurrect (requires TPM)
+
+Provided by `tmux-plugins/tmux-resurrect`, so these only work on a machine where TPM is
+installed. They are bound in the **prefix** table, not as bare `M-s`/`M-r`.
 
 | Binding | Description |
 |---|---|
-| `M-s` | Save session |
-| `M-r` | Restore session |
+| `prefix + M-s` | Save session |
+| `prefix + M-r` | Restore session |
 
 ---
 
@@ -158,12 +203,20 @@ fzf popup (tmux sessions listed first). These bindings work inside the picker:
 
 | Alias | Description |
 |---|---|
-| `tm` | Create or join the MAIN tmux session (zsh); fzf session picker (fish) |
+| `tm` | fzf picker over `~/Projects` → session named after the project, rooted in it |
+| `s` | fzf picker over running sessions → switch (inside tmux) or attach (outside) |
 | `tma` | Attach to a session by name (`tmux attach-session -t`) |
 | `tmn` | New window opening `$EDITOR` in current path |
 | `tmk` | Kill the tmux server (`tmux kill-server`, zsh only) |
 | `tmr` | Rename current session |
 | `tmt` | New/attach session named after cwd |
 | `tmts` | New/switch session named after cwd (switch-client if inside tmux) |
-| `tms` | fzf picker over `~/Projects` → new/switch session (fish only) |
-| `s` | fzf picker over `sesh list` → connect to the selected session |
+
+`tm` reuses an existing session for the project instead of creating a duplicate, and
+`.`/`:` in the directory name become `_` (matching tmux's own session-name rules).
+Override the search root with `PROJECTS_DIR`. It is the shell twin of `prefix + P`, just
+as `s` is the shell twin of `prefix + s`.
+
+`tm` and `s` are shell **functions**, not aliases, so bash and zsh share one definition
+from `zsh/.config/zsh/aliases.sh`; fish has its own copies in
+`fish/.config/fish/aliases.fish`.

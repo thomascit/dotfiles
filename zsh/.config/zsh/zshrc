@@ -57,24 +57,23 @@ command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
 # Atuin
 command -v atuin &>/dev/null && eval "$(atuin init zsh)"
 
-# Sesh
-if command -v sesh &>/dev/null && command -v fzf &>/dev/null; then
-function sesh-sessions() {
+# Session picker on Alt-s
+# Wraps the `s` function from aliases.sh (sourced above) in a ZLE widget, so
+# the picker is reachable mid-prompt without pressing Enter first.
+if command -v tmux &>/dev/null && command -v fzf &>/dev/null; then
+function tmux-sessions() {
   {
     exec </dev/tty
     exec <&1
-    local session
-    session=$(sesh list -t -c | fzf --height 40% --reverse --border-label ' sesh ' --border --prompt '⚡  ')
+    s
     zle reset-prompt > /dev/null 2>&1 || true
-    [[ -z "$session" ]] && return
-    sesh connect $session
   }
 }
 
-zle     -N             sesh-sessions
-bindkey -M emacs '\es' sesh-sessions
-bindkey -M vicmd '\es' sesh-sessions
-bindkey -M viins '\es' sesh-sessions
+zle     -N             tmux-sessions
+bindkey -M emacs '\es' tmux-sessions
+bindkey -M vicmd '\es' tmux-sessions
+bindkey -M viins '\es' tmux-sessions
 fi
 
 # Enable: Starship (after plugins to avoid conflicts)

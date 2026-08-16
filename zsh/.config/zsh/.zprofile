@@ -31,7 +31,7 @@ export PATH="$HOME/.opencode/bin:$PATH"
 
 # Fzf
 # Read by the fzf binary itself, so these apply to every fzf invocation
-# (tmux popups, sesh picker, the package-manager aliases in aliases.sh).
+# (tmux popups, the session picker, the package-manager aliases in aliases.sh).
 # Exclude container storage — subdirs are owned by uid 100000 (Podman rootless
 # user namespace mapping) and are not accessible as the normal user, causing
 # rg to emit permission errors when traversing them.

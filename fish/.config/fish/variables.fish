@@ -31,7 +31,7 @@ fish_add_path "$HOME/.opencode/bin"
 
 # FZF
 # Read by the fzf binary itself, so these apply to every fzf invocation
-# (tmux popups, sesh picker, the package-manager aliases in aliases.fish).
+# (tmux popups, the session picker, the package-manager aliases in aliases.fish).
 # Falls back to fd/find so fzf still lists files without ripgrep installed.
 if command -q rg
     set -gx FZF_DEFAULT_COMMAND 'rg --files --hidden --glob "!.local/share/containers"'

@@ -29,11 +29,12 @@
 
 | Keybinding | Description |
 |---|---|
-| `<prefix> C-o` | Project picker — fzf `~/Projects` → sesh session (launches OpenCode on create) |
-| `<prefix> s` | Session switcher (sesh, fzf popup) |
+| `<prefix> s` | Session picker — fzf over running sessions (`C-x` kills, windows in preview) |
+| `<prefix> P` | Project picker — fzf `~/Projects` → session named after the project |
 | `<prefix> S` | SSH host picker (fzf popup from `~/.ssh/config`) |
 | `<prefix> r` | Run command (prompts, runs in new window) |
 | `<prefix> C-c` | Config file picker (`~/.config`, bat preview) |
+| `<prefix> R` | Reload `~/.config/tmux/tmux.conf` (confirms in the status line) |
 | `<prefix> ?` | Key bindings reference popup |
 
 ### New Windows
@@ -81,6 +82,13 @@
 | `<prefix> K` (repeatable) | Resize pane up 5 rows |
 | `<prefix> L` (repeatable) | Resize pane right 5 cols |
 
+### Sessions
+
+| Keybinding | Description |
+|---|---|
+| `<prefix> s` | Session picker (fzf popup — see [Popups](#popups)) |
+| `<prefix> $` | Rename session (tmux built-in) |
+
 ### Rename
 
 | Keybinding | Description |
@@ -112,12 +120,14 @@
 | `<prefix> B` | Toggle pane border status |
 | `<prefix> T` | Toggle status bar position (top ↔ bottom) |
 
-### Session Persistence (tmux-resurrect)
+### Session Persistence (tmux-resurrect — requires TPM)
+
+Only available where TPM is installed, and bound in the **prefix** table.
 
 | Keybinding | Description |
 |---|---|
-| `Alt+s` | Save tmux session |
-| `Alt+r` | Restore tmux session |
+| `<prefix> Alt+s` | Save tmux session |
+| `<prefix> Alt+r` | Restore tmux session |
 
 ---
 
@@ -286,11 +296,19 @@ not enabled — those are covered by `atuin` (history), `zoxide` (`z`) and `yazi
 reverse-search where atuin is unavailable.
 
 fzf itself is still used heavily for the aliases below, the tmux popups, and the
-sesh session pickers. Theming for all of those comes from `FZF_DEFAULT_OPTS`.
+`s` session picker. Theming for all of those comes from `FZF_DEFAULT_OPTS`.
 
 ### fzf-powered Shell Aliases
 
 These aliases use fzf for interactive selection:
+
+**Tmux sessions**
+
+| Alias | Description |
+|---|---|
+| `tm` | Pick a project under `~/Projects` (`$PROJECTS_DIR`) → session named after it, rooted in it |
+| `s` | Pick a running session → `switch-client` inside tmux, `attach-session` outside |
+| `Alt+s` | Same as `s`, bound as a zsh ZLE widget so it works mid-prompt |
 
 **Homebrew (macOS)**
 

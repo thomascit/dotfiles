@@ -128,7 +128,6 @@ alias oc="opencode"
 # ─────────────────────────────────────────────
 # Tmux
 # ─────────────────────────────────────────────
-alias tm='tmux new-session -A -s MAIN'
 alias tma="tmux attach-session -t"
 alias tmn='tmux new-window -c "#{pane_current_path}" $EDITOR .'
 alias tmk='tmux kill-server'
@@ -137,9 +136,68 @@ alias tmt='tmux new-session -A -s "${PWD##*/}" -c "$PWD"'
 alias tmts='if [ -n "$TMUX" ]; then tmux switch-client -t "${PWD##*/}" 2>/dev/null || tmux new-session -d -s "${PWD##*/}" -c "$PWD" && tmux switch-client -t "${PWD##*/}"; else tmux new-session -A -s "${PWD##*/}" -c "$PWD"; fi'
 
 # ─────────────────────────────────────────────
-# Sesh
+# Session pickers (functions, not aliases, so bash and zsh share one copy)
 # ─────────────────────────────────────────────
-alias s='_sesh=$(sesh list --icons | fzf --ansi --no-sort --height 40% --reverse --border --border-label " sesh " --prompt "⚡  ") && [ -n "$_sesh" ] && sesh connect "$_sesh"'
+# Enter a session: switch when already inside tmux, attach when outside.
+# "=" forces an exact name match, so "dot" cannot match "dotfiles".
+_tmux_goto() {
+    if [ -n "$TMUX" ]; then
+        tmux switch-client -t "=$1"
+    else
+        tmux attach-session -t "=$1"
+    fi
+}
+
+# s — fzf over the running sessions, windows listed in the preview.
+# Shell twin of tmux's `prefix + s`. Brace-free tmux formats (#S, #I, #W) are
+# used because "{...}" is fzf's own placeholder syntax inside --preview.
+s() {
+    command -v fzf >/dev/null 2>&1 || { echo "s: fzf not found" >&2; return 1; }
+
+    local picked
+    picked=$(
+        tmux list-sessions -F '#S' 2>/dev/null \
+            | fzf --no-sort --height 40% --reverse --border \
+                --border-label ' sessions ' --prompt 'session > ' \
+                --preview 'tmux list-windows -t ={} -F "#I: #W"' \
+                --preview-window 'right,50%'
+    ) || return 0
+    [ -n "$picked" ] || return 0
+
+    _tmux_goto "$picked"
+}
+
+# tm — fzf over the directories in $PROJECTS_DIR (default ~/Projects). The
+# chosen directory becomes the session's working directory and its basename the
+# session name; an existing session for that project is reused.
+# `find` rather than `fd` so this works on hosts where only fd-find's `fdfind`
+# binary exists (the fd alias is not visible inside a function body).
+tm() {
+    command -v fzf >/dev/null 2>&1 || { echo "tm: fzf not found" >&2; return 1; }
+
+    local root dir name
+    root="${PROJECTS_DIR:-$HOME/Projects}"
+    [ -d "$root" ] || { echo "tm: $root not found" >&2; return 1; }
+
+    # --with-nth=-1 shows just the basename while fzf still returns the path.
+    dir=$(
+        find "$root" -mindepth 1 -maxdepth 1 -type d | sort \
+            | fzf --no-sort --height 40% --reverse --border \
+                --delimiter=/ --with-nth=-1 \
+                --border-label ' projects ' --prompt 'project > ' \
+                --preview 'ls -A {}' --preview-window 'right,50%'
+    ) || return 0
+    [ -n "$dir" ] || return 0
+
+    # tmux rewrites "." and ":" to "_" in session names; do it up front so the
+    # has-session check compares against the name tmux would actually create.
+    name=$(basename "$dir" | tr '.:' '__')
+
+    tmux has-session -t "=$name" 2>/dev/null \
+        || tmux new-session -d -s "$name" -c "$dir"
+
+    _tmux_goto "$name"
+}
 
 # ─────────────────────────────────────────────
 # Docker

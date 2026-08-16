@@ -137,14 +137,37 @@ alias tma "tmux attach-session -t"
 alias tmn "tmux new-window -c \"#{pane_current_path}\" $EDITOR ."
 alias tmr "tmux rename-session"
 
+# tm — fzf over the directories in $PROJECTS_DIR (default ~/Projects). The
+# chosen directory becomes the session's working directory and its basename the
+# session name; an existing session for that project is reused.
+# `find` rather than `fd` so this works on hosts that only have fd-find's
+# `fdfind` binary.
 function tm
-    set name (tmux list-sessions -F "#{session_name}" 2>/dev/null | fzf)
-    test -z "$name"; and return
-    if test -n "$TMUX"
-        tmux switch-client -t $name
-    else
-        tmux attach-session -t $name
+    set -l root $PROJECTS_DIR
+    test -z "$root"; and set root "$HOME/Projects"
+    if not test -d "$root"
+        echo "tm: $root not found" >&2
+        return 1
     end
+
+    # --with-nth=-1 shows just the basename while fzf still returns the path.
+    set -l dir (
+        find "$root" -mindepth 1 -maxdepth 1 -type d | sort \
+            | fzf --no-sort --height 40% --reverse --border \
+                --delimiter=/ --with-nth=-1 \
+                --border-label " projects " --prompt "project > " \
+                --preview 'ls -A {}' --preview-window 'right,50%'
+    )
+    test -z "$dir"; and return
+
+    # tmux rewrites "." and ":" to "_" in session names; do it up front so the
+    # has-session check compares against the name tmux would actually create.
+    set -l name (basename "$dir" | tr '.:' '__')
+
+    tmux has-session -t "=$name" 2>/dev/null
+    or tmux new-session -d -s "$name" -c "$dir"
+
+    _tmux_goto "$name"
 end
 
 function tmt
@@ -162,27 +185,33 @@ function tmts
     end
 end
 
-function tms
-    set name (fd . $HOME/Projects -t d -d 1 --exec basename | fzf)
-    test -z "$name"; and return
-    set dir "$HOME/Projects/$name"
+# ─────────────────────────────────────────────
+# Session pickers
+# ─────────────────────────────────────────────
+# Enter a session: switch when already inside tmux, attach when outside.
+# "=" forces an exact name match, so "dot" cannot match "dotfiles".
+function _tmux_goto
     if test -n "$TMUX"
-        tmux switch-client -t $name 2>/dev/null; or begin
-            tmux new-session -d -s $name -c $dir
-            tmux switch-client -t $name
-        end
+        tmux switch-client -t "=$argv[1]"
     else
-        tmux new-session -A -s $name -c $dir
+        tmux attach-session -t "=$argv[1]"
     end
 end
 
-# ─────────────────────────────────────────────
-# Sesh
-# ─────────────────────────────────────────────
+# s — fzf over the running sessions, windows listed in the preview.
+# Shell twin of tmux's `prefix + s`. Brace-free tmux formats (#S, #I, #W) are
+# used because "{...}" is fzf's own placeholder syntax inside --preview.
 function s
-    set -l session (sesh list --icons | fzf --ansi --no-sort --height 40% --reverse --border --border-label " sesh " --prompt "⚡  ")
-    test -z "$session"; and return
-    sesh connect "$session"
+    set -l picked (
+        tmux list-sessions -F '#S' 2>/dev/null \
+            | fzf --no-sort --height 40% --reverse --border \
+                --border-label " sessions " --prompt "session > " \
+                --preview 'tmux list-windows -t ={} -F "#I: #W"' \
+                --preview-window 'right,50%'
+    )
+    test -z "$picked"; and return
+
+    _tmux_goto "$picked"
 end
 
 # ─────────────────────────────────────────────

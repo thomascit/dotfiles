@@ -45,7 +45,7 @@
 
 | Alias | Description |
 |---|---|
-| `tm` | Create or join the MAIN tmux session |
+| `tm` | fzf picker over `~/Projects` → session named after the project, rooted in it |
 | `tma` | Attach to session by name |
 | `tmn` | New window opening `$EDITOR` in current path |
 | `tmk` | Kill the tmux server |
@@ -55,11 +55,17 @@
 
 ---
 
-## Sesh
+## Session Picker
 
 | Alias | Description |
 |---|---|
-| `s` | fzf picker over `sesh list` → connect to the selected session |
+| `s` | fzf picker over running tmux sessions → switch (inside tmux) or attach (outside) |
+| `Alt-s` | Same picker, bound as a ZLE widget so it works mid-prompt |
+
+`s` and `tm` are functions rather than aliases (defined in `aliases.sh`, so bash gets
+them too). `tm` reuses an existing session for the project instead of duplicating it;
+override the search root with `PROJECTS_DIR`. Both are the shell twins of tmux's
+`prefix + s` and `prefix + P`.
 
 ---
 

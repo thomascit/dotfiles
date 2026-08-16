@@ -42,6 +42,11 @@ export FZF_DEFAULT_OPTS='--color=border:#44475a --color=fg:#f8f8f2,bg:#282a36,hl
 # Aliases
 [ -f "$HOME/.config/zsh/aliases.sh" ] && . "$HOME/.config/zsh/aliases.sh"
 
+# Reload this bash config (bash-scoped; mirrors zsh `sz` and fish `sf`).
+# Defined here rather than in the shared aliases.sh so it targets ~/.bashrc,
+# not the zsh rc that `sz` reloads.
+alias sb="source $HOME/.bashrc"
+
 # Disable: Greeting (.hushlogin is a macOS login-banner mechanism)
 if [[ "$OSTYPE" == "darwin"* ]]; then
   [ -f "$HOME/.hushlogin" ] || touch "$HOME/.hushlogin"

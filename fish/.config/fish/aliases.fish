@@ -112,7 +112,10 @@ end
 # Source Shells
 # ─────────────────────────────────────────────
 alias sf "source $HOME/.config/fish/config.fish"
-alias sa "source $HOME/.config/fish/ssh-agent.fish"
+# Add SSH keys to the already-running agent (systemd ssh-agent.socket on Linux,
+# launchd on macOS); SSH_AUTH_SOCK is exported in variables.fish. Not piped to
+# /dev/null: ssh-add prompts for the key passphrase on stderr.
+alias sa "ssh-add ~/.ssh/id_ed25519"
 
 # ─────────────────────────────────────────────
 # Terminal

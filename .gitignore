@@ -17,6 +17,10 @@ test.md
 .opencode/*
 !.opencode/agents/
 
+# btop runtime log (btop < 1.4 writes it into the config dir instead of
+# ~/.local/state, so it lands inside the stow package)
+btop/.config/btop/btop.log
+
 # Fish-specific
 fish/.config/fish/fish_variables
 fish/.config/fish/fishd.*

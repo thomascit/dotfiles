@@ -107,7 +107,10 @@ command -v trash &>/dev/null && alias rm="trash"
 # Source Shells
 # ─────────────────────────────────────────────
 alias sz="source $HOME/.config/zsh/zshrc"
-alias sa="source $HOME/.config/zsh/ssh-agent.sh"
+# Add SSH keys to the already-running agent (systemd ssh-agent.socket on Linux,
+# launchd on macOS); SSH_AUTH_SOCK is exported in .zprofile. Not piped to
+# /dev/null: ssh-add prompts for the key passphrase on stderr.
+alias sa="ssh-add ~/.ssh/id_ed25519"
 
 # ─────────────────────────────────────────────
 # Terminal
@@ -117,7 +120,7 @@ alias e="exit"
 alias ff="fastfetch"
 alias fishc="clear && fish"
 alias l="clear"
-alias n="$EDITOR"
+alias v="$EDITOR"
 alias r="reset"
 alias zshc="clear && zsh"
 alias oc="opencode"

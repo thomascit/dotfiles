@@ -1,12 +1,12 @@
 [[plugin.deps]]
 use = "yazi-rs/plugins:full-border"
-rev = "0be29a9"
-hash = "7b625412411be411153886894d9acaf"
+rev = "c591a36"
+hash = "f281261ff04ad7ec867c3f802a50835f"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:git"
-rev = "0be29a9"
-hash = "fbb53c3c04f816d737f9f4b1d29f3310"
+rev = "c591a36"
+hash = "5bb0bfab901d3601c370eafdd66edd31"
 
 [[plugin.deps]]
 use = "imsi32/yatline"
@@ -15,18 +15,18 @@ hash = "e6e98d12b1648d1894c2b560d85eeaa7"
 
 [[plugin.deps]]
 use = "hankertrix/augment-command"
-rev = "dd2d6cf"
-hash = "cba2bae0c4ad211f4219de550b3838a5"
+rev = "352dc37"
+hash = "ceb04cad6bd268b664c0c7fa1e8e9928"
 
 [[plugin.deps]]
 use = "Rolv-Apneseth/starship"
-rev = "159eaba"
-hash = "7de446280b1ba8c49ffd86dbc24bbbe6"
+rev = "ea92cf4"
+hash = "9776f378459072b6c2875eae5addc49d"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:toggle-pane"
-rev = "0be29a9"
-hash = "15e5b67a241172cbb86b8fbf9e63692"
+rev = "c591a36"
+hash = "5b2fbef7d1513ce38ff72623a071a5e"
 
 [[plugin.deps]]
 use = "AnirudhG07/rich-preview"
@@ -50,18 +50,13 @@ hash = "1fcbcce39229bd75e81be4dcb1d3e5a8"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:smart-enter"
-rev = "0be29a9"
+rev = "c591a36"
 hash = "187cc58ba7ac3befd49c342129e6f1b6"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:smart-paste"
-rev = "0be29a9"
+rev = "c591a36"
 hash = "3f8d49413bc8691b4c652eb417a20178"
-
-[[plugin.deps]]
-use = "yazi-rs/plugins:smart-tab"
-rev = "0be29a9"
-hash = "99aa06d3014798d86001c324468d497f"
 
 [[plugin.deps]]
 use = "dedukun/relative-motions"
@@ -70,8 +65,8 @@ hash = "e02a788e5b8ae0fb47fd0193dda589cc"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:piper"
-rev = "0be29a9"
-hash = "f23ecc89ce0f9eeefdd4cea14e2a9ba7"
+rev = "c591a36"
+hash = "45a533508a9840cc5a10cf6129f63e6a"
 
 [[plugin.deps]]
 use = "Lil-Dank/lazygit"
@@ -80,5 +75,5 @@ hash = "6ea5f37c7f219671ec504cb8311f889d"
 
 [[flavor.deps]]
 use = "yazi-rs/flavors:dracula"
-rev = "be0b21d"
+rev = "20b47bf"
 hash = "40136c9a02e166067a36d9ad618887f2"

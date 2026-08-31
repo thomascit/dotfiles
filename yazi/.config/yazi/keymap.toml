@@ -26,10 +26,51 @@ on   = "p"
 run  = "plugin smart-paste"
 desc = "Paste into the hovered directory or CWD"
 
+# smart-switch takes a 0-based tab index, matching the builtin `tab_switch`.
+[[mgr.prepend_keymap]]
+on   = "1"
+run  = "plugin smart-switch 0"
+desc = "Switch or create tab 1"
+
 [[mgr.prepend_keymap]]
 on   = "2"
 run  = "plugin smart-switch 1"
 desc = "Switch or create tab 2"
+
+[[mgr.prepend_keymap]]
+on   = "3"
+run  = "plugin smart-switch 2"
+desc = "Switch or create tab 3"
+
+[[mgr.prepend_keymap]]
+on   = "4"
+run  = "plugin smart-switch 3"
+desc = "Switch or create tab 4"
+
+[[mgr.prepend_keymap]]
+on   = "5"
+run  = "plugin smart-switch 4"
+desc = "Switch or create tab 5"
+
+[[mgr.prepend_keymap]]
+on   = "6"
+run  = "plugin smart-switch 5"
+desc = "Switch or create tab 6"
+
+[[mgr.prepend_keymap]]
+on   = "7"
+run  = "plugin smart-switch 6"
+desc = "Switch or create tab 7"
+
+[[mgr.prepend_keymap]]
+on   = "8"
+run  = "plugin smart-switch 7"
+desc = "Switch or create tab 8"
+
+[[mgr.prepend_keymap]]
+on   = "9"
+run  = "plugin smart-switch 8"
+desc = "Switch or create tab 9"
 
 [[mgr.prepend_keymap]]
 on   = [ "g", "i" ]

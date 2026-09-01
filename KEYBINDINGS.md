@@ -44,20 +44,26 @@
 | `<prefix> c` | New window in current path |
 | `<prefix> C` | New named window (prompts for name) |
 | `<prefix> N` | New window with `$EDITOR` (defaults to `vim`) |
-| `<prefix> O` | New window with OpenCode (`--continue`) |
+| `<prefix> V` | New window with `$EDITOR` (same as `N`, alternate key) |
+| `<prefix> O` | New window with OpenCode — fresh session (`<prefix> o` is the one that continues) |
 | `<prefix> f` | New window with Yazi file manager |
 | `<prefix> g` | New window with Lazygit |
-| `<prefix> p` | New window with btop |
+| `<prefix> p` | New window with btop (`sudo btop`) |
 | `<prefix> a` | New window with cmatrix screensaver |
 
 ### Pane Splits
+
+"Horizontal" and "Vertical" describe the orientation of the divider, matching the
+wording in the `<prefix> ?` popup.
 
 | Keybinding | Description |
 |---|---|
 | `<prefix> -` | Split pane horizontally (current path) |
 | `<prefix> _` | Split pane vertically (current path) |
-| `<prefix> o` | Split pane vertically — 40% width, opens OpenCode |
+| `<prefix> v` | Split pane vertically — left, 60% width, opens `$EDITOR` |
+| `<prefix> o` | Split pane vertically — 40% width, opens `opencode --continue` |
 | `<prefix> t` | Split pane horizontally — 25% height (current path) |
+| `<prefix> m` | Split pane horizontally — 10% height (current path) |
 
 ### Navigation
 
@@ -68,10 +74,12 @@
 | `Ctrl+k` | Move to pane / Vim split up (vim-tmux-navigator) |
 | `Ctrl+l` | Move to pane / Vim split right (vim-tmux-navigator) |
 | `Ctrl+\` | Move to previous pane (vim-tmux-navigator) |
+| `<prefix> w` | Window switcher — fzf popup over the current session's windows |
 | `Alt+h` | Previous window (no prefix) |
 | `Alt+l` | Next window (no prefix) |
 | `Shift+Left` | Swap window left |
 | `Shift+Right` | Swap window right |
+| `<prefix> C-o` | Rotate window (tmux default, restated explicitly — the project picker used to live here) |
 
 ### Resize
 
@@ -147,19 +155,30 @@ Only available where TPM is installed, and bound in the **prefix** table.
 > - `nvim/.config/nvim/lua/plugins/trouble.lua`
 > - `nvim/.config/nvim/lua/plugins/todo-comments.lua`
 > - `nvim/.config/nvim/lua/plugins/grug-far.lua`
+> - `nvim/.config/nvim/lua/plugins/neo-tree.lua`
+> - `nvim/.config/nvim/lua/plugins/which-key.lua`
+> - `nvim/.config/nvim/lua/plugins/cutlass.lua`
 > - `vim/.config/vim/vimrc`
 
 **Leader key:** `Space`
 
 ### General
 
+The rows below exist in **both** `vim` and `nvim` except where noted.
+
 | Keybinding | Mode | Description |
 |---|---|---|
 | `jk` | Insert | Exit insert mode |
-| `Ctrl+s` | Insert / Normal / Visual | Save file |
+| `Ctrl+s` | Insert / Normal / Visual | Save file (vim: Insert / Normal only) |
 | `<leader>qq` | Normal | Quit all |
-| `<leader>l` | Normal | Open Lazy plugin manager |
+| `<leader>l` | Normal | Open Lazy plugin manager (**nvim only** — vim uses vim-plug) |
 | `<leader>fn` | Normal | New file |
+| `<Esc>` | Normal | Clear search highlight |
+| `H` / `L` | Normal | Previous / next buffer |
+| `Ctrl+q` | Normal | Delete buffer |
+| `Ctrl+d` / `Ctrl+u` | Normal | Half-page scroll, cursor centred |
+| `n` / `N` | Normal | Next / previous search result, centred |
+| `y` | Visual | Yank, keeping the selection highlighted |
 
 ### Pane / Split Navigation (vim-tmux-navigator)
 
@@ -180,7 +199,7 @@ Shared between Neovim and Tmux — navigate seamlessly across both.
 | `<leader>tw` | Normal | Toggle line wrap |
 | `<leader>tc` | Normal | Toggle 80-column colorcolumn |
 
-### Git (Snacks + Telescope)
+### Git (Snacks)
 
 | Keybinding | Mode | Description |
 |---|---|---|
@@ -234,9 +253,11 @@ Shared between Neovim and Tmux — navigate seamlessly across both.
 
 | Keybinding | Mode | Description |
 |---|---|---|
-| `<leader>-` | Normal / Visual | Open Yazi at current file |
-| `<leader>cw` | Normal | Open Yazi in Neovim's cwd |
-| `Ctrl+Up` | Normal | Resume last Yazi session |
+| `<leader>yy` | Normal / Visual | Open Yazi at current file |
+| `<leader>yw` | Normal | Open Yazi in Neovim's cwd |
+| `<leader>yc` | Normal | Open Yazi in `~/.config` (dotfiles) |
+| `<leader>yr` | Normal | Resume last Yazi session |
+| `F1` | in Yazi | Show Yazi help |
 
 ### Trouble (Diagnostics)
 
@@ -277,12 +298,30 @@ Shared between Neovim and Tmux — navigate seamlessly across both.
 
 ### Plugin: cutlass.nvim
 
-Separates "cut" and "delete": `d`, `D`, `c`, `C`, `x`, `X` no longer yank to the default register. Use `m` (move) to cut explicitly. See [cutlass.nvim docs](https://github.com/gbprod/cutlass.nvim).
+Separates "cut" and "delete": `d`, `D`, `c`, `C`, `x`, `X`, `s`, `S` no longer yank to
+the default register. Overrides are skipped for any key already mapped, which is why
+flash.nvim keeps `s`/`S`.
 
-### LazyVim Defaults
+The plugin is configured with `opts = {}`, so `cut_key` is unset and **there is no
+explicit cut key** — use `"+y` style registers instead. See
+[cutlass.nvim docs](https://github.com/gbprod/cutlass.nvim).
 
-This config is based on [LazyVim](https://www.lazyvim.org/). All default LazyVim keymaps apply unless overridden above.  
-Reference: https://www.lazyvim.org/keymaps
+### Not LazyVim
+
+Despite the leftover `README.md` and `lazyvim.json` in `nvim/.config/nvim/`, this config
+is **plain lazy.nvim** — `lua/config/lazy.lua` imports only `lua/plugins/`, and there is
+no `LazyVim` entry in `lazy-lock.json`. No LazyVim default keymaps apply.
+
+Two keymaps are stale fallout from this: `<leader>gg` and `<leader>gl` call
+`LazyVim.root.git()` in `keymaps.lua`, which is a nil global here, so both error.
+
+### Undocumented keymaps
+
+The tables above cover `config/keymaps.lua` and the plugins listed under Sources. Several
+plugin files define keymaps that are **not** listed here — `gitsigns.lua` (`]h`, `[h`,
+`<leader>gh*`), `lsp.lua` (`gd`, `gr`, `K`, `<leader>ca`, …), `opencode.lua`
+(`<leader>o*`), `persistence.lua` (`<leader>q[sSld]`), `conform.lua`, `mason.lua`,
+`snacks.lua`. Read the file directly for those.
 
 ---
 
@@ -306,9 +345,13 @@ These aliases use fzf for interactive selection:
 
 | Alias | Description |
 |---|---|
-| `tm` | Pick a project under `~/Projects` (`$PROJECTS_DIR`) → session named after it, rooted in it |
+| `tmp` | Pick a project under `~/Projects` (`$PROJECTS_DIR`) → session named after it, rooted in it |
 | `s` | Pick a running session → `switch-client` inside tmux, `attach-session` outside |
-| `Alt+s` | Same as `s`, bound as a zsh ZLE widget so it works mid-prompt |
+
+`tmp` and `s` are shell **functions**, not aliases, so bash gets them too via
+`aliases.sh`. `FZF_DEFAULT_OPTS` / `FZF_DEFAULT_COMMAND` are set in
+`zsh/.config/zsh/.zprofile`, `bash/.config/bash/bashrc` and
+`fish/.config/fish/variables.fish`.
 
 **Homebrew (macOS)**
 
@@ -355,21 +398,33 @@ These aliases use fzf for interactive selection:
 | `ZVM_VI_ESCAPE_BINDKEY` | `jk` | Exit insert mode with `jk` chord |
 | `ZVM_SYSTEM_CLIPBOARD_ENABLED` | `true` | System clipboard integration |
 
-Standard vi-mode bindings apply in both normal and insert modes. The `zsh-history-substring-search` plugin is also active.
+Standard vi-mode bindings apply in both normal and insert modes.
+
+Plugins loaded via Zinit (`zsh/.config/zsh/zshrc`): `fast-syntax-highlighting`,
+`zsh-autosuggestions`, `zsh-completions`, `zsh-vi-mode`, `zsh-autopair`.
+
+Clipboard commands for vi-mode yank/paste are set per-OS in `.zprofile`
+(`pbcopy` on macOS, `clip.exe` on WSL, `wl-copy` on Wayland, `xclip` otherwise).
 
 ---
 
 ## Fish Shell
 
-> Source: `fish/.config/fish/config.fish`
+> Sources: `fish/.config/fish/config.fish`,
+> `fish/.config/fish/conf.d/fish_frozen_key_bindings.fish`
 
 Fish uses `fish_vi_key_bindings` (VI mode enabled).
 
 | Keybinding | Mode | Description |
 |---|---|---|
-| `jk` | Insert | Exit insert mode (cancel or switch to normal mode) |
+| `jk` | Insert | Exit insert mode (cancel the pager, or switch to normal mode) |
 | `Ctrl+P` | Insert | Paste from system clipboard |
-| `p` | Normal | Paste from system clipboard |
+| `p` | Normal | Paste from system clipboard (overrides vi-mode's killring paste) |
+| `Ctrl+R` | Insert / Normal | Atuin history search |
+| `Up` | Insert / Normal | Atuin up-binding (history, then line navigation) |
+
+Cursor shape follows the vi mode: block in normal/visual, line in insert,
+underscore in replace.
 
 ---
 
@@ -382,13 +437,19 @@ These prepend (override with higher priority) the default Yazi keymaps.
 | Keybinding | Description |
 |---|---|
 | `m` | Trigger relative motion (plugin: `relative-motions`) |
-| `l` | Smart enter — open file or enter directory |
 | `p` | Smart paste — paste into hovered directory or CWD |
 | `!` | Open `$SHELL` (or PowerShell on Windows) in current directory |
-| `T P` | Toggle preview pane (minimize/restore) |
-| `T p` | Maximize or restore preview pane |
-| `t t` | Create a new tab and enter hovered directory |
-| `2` | Switch to or create tab 2 |
+| `L` | Maximize or restore preview pane (plugin: `toggle-pane max-preview`) |
+| `g i` | Open lazygit in the current directory (plugin: `lazygit`) |
+| `1` … `9` | Switch to tab *n*, creating it (and revealing the hovered dir) if absent |
+
+Tab switching uses the local `smart-switch` plugin
+(`yazi/.config/yazi/plugins/smart-switch.yazi/`), which takes a 0-based index —
+so `1` runs `smart-switch 0`. There is no `0` binding, meaning a tenth tab is
+not reachable this way.
+
+The `smart-enter` plugin is still installed and loaded in `init.lua`, but nothing
+is bound to it — `l` uses Yazi's built-in enter.
 
 ---
 
@@ -446,10 +507,14 @@ These prepend (override with higher priority) the default Yazi keymaps.
 |---|---|
 | `Super+1` … `Super+0` | Switch to workspace 1–10 |
 | `Super+Shift+1` … `Super+Shift+0` | Move active window to workspace 1–10 |
-| `Super+S` | Toggle special workspace (scratchpad) |
+| `Super+Tab` | Toggle special workspace (scratchpad) |
 | `Super+Shift+S` | Move window to special workspace |
 | `Super+ScrollDown` | Next workspace |
 | `Super+ScrollUp` | Previous workspace |
+
+> The scratchpad toggle is on `Super+Tab`, not the stock `Super+S`, because
+> `Super+S` is taken by the Noctalia control center. Hyprland does not
+> deduplicate binds, so leaving both would fire both dispatchers on one press.
 
 ### Touchpad Gestures
 
@@ -514,4 +579,4 @@ All standard Vimium keybindings apply. See [Vimium docs](https://vimium.github.i
 
 ---
 
-*Last updated: 2026-08-06*
+*Last updated: 2026-08-31*

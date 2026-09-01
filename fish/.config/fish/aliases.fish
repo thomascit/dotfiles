@@ -133,20 +133,20 @@ alias oc opencode
 # ─────────────────────────────────────────────
 # Tmux
 # ─────────────────────────────────────────────
+alias tm tmux
 alias tma "tmux attach-session -t"
-alias tmn "tmux new-window -c \"#{pane_current_path}\" $EDITOR ."
 alias tmr "tmux rename-session"
 
-# tm — fzf over the directories in $PROJECTS_DIR (default ~/Projects). The
+# tmp — fzf over the directories in $PROJECTS_DIR (default ~/Projects). The
 # chosen directory becomes the session's working directory and its basename the
 # session name; an existing session for that project is reused.
 # `find` rather than `fd` so this works on hosts that only have fd-find's
 # `fdfind` binary.
-function tm
+function tmp
     set -l root $PROJECTS_DIR
     test -z "$root"; and set root "$HOME/Projects"
     if not test -d "$root"
-        echo "tm: $root not found" >&2
+        echo "tmp: $root not found" >&2
         return 1
     end
 
@@ -172,17 +172,6 @@ end
 
 function tmt
     tmux new-session -A -s (basename $PWD) -c $PWD
-end
-
-function tmts
-    if test -n "$TMUX"
-        tmux switch-client -t (basename $PWD) 2>/dev/null; or begin
-            tmux new-session -d -s (basename $PWD) -c $PWD
-            tmux switch-client -t (basename $PWD)
-        end
-    else
-        tmux new-session -A -s (basename $PWD) -c $PWD
-    end
 end
 
 # ─────────────────────────────────────────────

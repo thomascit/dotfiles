@@ -25,10 +25,11 @@
 | `prefix + c` | New window (current path) |
 | `prefix + C` | New named window (prompt) |
 | `prefix + N` | Editor (`$EDITOR`, defaults to `vim`) |
-| `prefix + O` | OpenCode (continue last session) |
+| `prefix + V` | Editor (same as `N`, alternate key) |
+| `prefix + O` | OpenCode (fresh session — `prefix + o` is the one that continues) |
 | `prefix + f` | Yazi file manager |
 | `prefix + g` | Lazygit |
-| `prefix + p` | btop |
+| `prefix + p` | btop (`sudo btop`) |
 | `prefix + a` | cmatrix |
 
 ---
@@ -39,8 +40,14 @@
 |---|---|
 | `prefix + -` | Horizontal split (current path) |
 | `prefix + _` | Vertical split (current path) |
-| `prefix + o` | Vertical split 40% → OpenCode |
+| `prefix + v` | Vertical split left, 60% → `$EDITOR` |
+| `prefix + o` | Vertical split 40% → `opencode --continue` |
 | `prefix + t` | Horizontal split 25% |
+| `prefix + m` | Horizontal split 10% |
+
+"Horizontal" and "Vertical" here describe the orientation of the divider, matching the
+wording in the `prefix + ?` popup: `-` is `split-window -v` (panes stacked), `_` is
+`split-window -h` (panes side by side).
 
 ---
 
@@ -58,6 +65,7 @@
 
 | Binding | Description |
 |---|---|
+| `prefix + w` | Window switcher — fzf popup over the current session's windows |
 | `M-h` | Previous window |
 | `M-l` | Next window |
 | `S-Left` | Swap window left |
@@ -73,6 +81,12 @@
 | `prefix + s` | Session picker (see below) |
 | `prefix + $` | Rename session (tmux built-in) |
 | `prefix + C-s` | Rename session to cwd |
+
+Sessions created without a name (a bare `tmux` or `tm`) are numbered from **1**, not 0,
+so they line up with `base-index 1` and `pane-base-index 1`. tmux has no session-level
+`base-index` — an unnamed session is always created as `0` — so a `session-created` hook
+runs `scripts/session-renumber.sh`, which renames it to the lowest free number ≥ 1.
+Only purely numeric auto-names are touched; `tm`/`tmp`/`tmt` sessions keep their names.
 
 ---
 
@@ -93,7 +107,7 @@ the `has-session` check reliably find an existing session instead of creating a 
 
 Override the search root with `PROJECTS_DIR` if needed.
 
-This is the in-tmux twin of the [`tm` shell function](#shell-aliases): both list with
+This is the in-tmux twin of the [`tmp` shell function](#shell-aliases): both list with
 `find | sort`, name sessions the same way, and reuse an existing session. Neither starts
 OpenCode — use `prefix + O` for a new window or `prefix + o` for a 40% split.
 
@@ -203,20 +217,20 @@ installed. They are bound in the **prefix** table, not as bare `M-s`/`M-r`.
 
 | Alias | Description |
 |---|---|
-| `tm` | fzf picker over `~/Projects` → session named after the project, rooted in it |
+| `tmp` | fzf picker over `~/Projects` → session named after the project, rooted in it |
 | `s` | fzf picker over running sessions → switch (inside tmux) or attach (outside) |
+| `tm` | Bare `tmux` |
 | `tma` | Attach to a session by name (`tmux attach-session -t`) |
-| `tmn` | New window opening `$EDITOR` in current path |
-| `tmk` | Kill the tmux server (`tmux kill-server`, zsh only) |
+| `tmk` | Kill the tmux server (`tmux kill-server`, zsh/bash only) |
 | `tmr` | Rename current session |
-| `tmt` | New/attach session named after cwd |
-| `tmts` | New/switch session named after cwd (switch-client if inside tmux) |
+| `tmt` | New/attach session named after cwd (`new-session -A`) |
+| `tc` | Open `tmux.conf` in `$EDITOR` |
 
-`tm` reuses an existing session for the project instead of creating a duplicate, and
+`tmp` reuses an existing session for the project instead of creating a duplicate, and
 `.`/`:` in the directory name become `_` (matching tmux's own session-name rules).
 Override the search root with `PROJECTS_DIR`. It is the shell twin of `prefix + P`, just
 as `s` is the shell twin of `prefix + s`.
 
-`tm` and `s` are shell **functions**, not aliases, so bash and zsh share one definition
+`tmp` and `s` are shell **functions**, not aliases, so bash and zsh share one definition
 from `zsh/.config/zsh/aliases.sh`; fish has its own copies in
 `fish/.config/fish/aliases.fish`.

@@ -45,13 +45,13 @@
 
 | Alias | Description |
 |---|---|
-| `tm` | fzf picker over `~/Projects` → session named after the project, rooted in it |
+| `tm` | Bare `tmux` |
+| `tmp` | fzf picker over `~/Projects` → session named after the project, rooted in it |
 | `tma` | Attach to session by name |
-| `tmn` | New window opening `$EDITOR` in current path |
 | `tmk` | Kill the tmux server |
 | `tmr` | Rename current session |
-| `tmt` | New/attach session named after cwd |
-| `tmts` | New/switch session named after cwd (switch-client if inside tmux) |
+| `tmt` | New/attach session named after cwd (`new-session -A`) |
+| `tc` | Open `tmux.conf` in `$EDITOR` |
 
 ---
 
@@ -60,10 +60,9 @@
 | Alias | Description |
 |---|---|
 | `s` | fzf picker over running tmux sessions → switch (inside tmux) or attach (outside) |
-| `Alt-s` | Same picker, bound as a ZLE widget so it works mid-prompt |
 
-`s` and `tm` are functions rather than aliases (defined in `aliases.sh`, so bash gets
-them too). `tm` reuses an existing session for the project instead of duplicating it;
+`s` and `tmp` are functions rather than aliases (defined in `aliases.sh`, so bash gets
+them too). `tmp` reuses an existing session for the project instead of duplicating it;
 override the search root with `PROJECTS_DIR`. Both are the shell twins of tmux's
 `prefix + s` and `prefix + P`.
 
@@ -182,7 +181,6 @@ override the search root with `PROJECTS_DIR`. Both are the shell twins of tmux's
 |---|---|
 | `fast-syntax-highlighting` | Syntax highlighting in the shell |
 | `zsh-autosuggestions` | Fish-style inline suggestions |
-| `zsh-history-substring-search` | History search by substring |
 | `zsh-completions` | Extra completions |
 | `zsh-vi-mode` | Vi keybindings (with system clipboard) |
 | `zsh-autopair` | Auto-close brackets and quotes |

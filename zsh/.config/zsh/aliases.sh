@@ -128,12 +128,11 @@ alias oc="opencode"
 # ─────────────────────────────────────────────
 # Tmux
 # ─────────────────────────────────────────────
+alias tm="tmux"
 alias tma="tmux attach-session -t"
-alias tmn='tmux new-window -c "#{pane_current_path}" $EDITOR .'
 alias tmk='tmux kill-server'
 alias tmr="tmux rename-session"
 alias tmt='tmux new-session -A -s "${PWD##*/}" -c "$PWD"'
-alias tmts='if [ -n "$TMUX" ]; then tmux switch-client -t "${PWD##*/}" 2>/dev/null || tmux new-session -d -s "${PWD##*/}" -c "$PWD" && tmux switch-client -t "${PWD##*/}"; else tmux new-session -A -s "${PWD##*/}" -c "$PWD"; fi'
 
 # ─────────────────────────────────────────────
 # Session pickers (functions, not aliases, so bash and zsh share one copy)
@@ -167,17 +166,17 @@ s() {
     _tmux_goto "$picked"
 }
 
-# tm — fzf over the directories in $PROJECTS_DIR (default ~/Projects). The
+# tmp — fzf over the directories in $PROJECTS_DIR (default ~/Projects). The
 # chosen directory becomes the session's working directory and its basename the
 # session name; an existing session for that project is reused.
 # `find` rather than `fd` so this works on hosts where only fd-find's `fdfind`
 # binary exists (the fd alias is not visible inside a function body).
-tm() {
-    command -v fzf >/dev/null 2>&1 || { echo "tm: fzf not found" >&2; return 1; }
+tmp() {
+    command -v fzf >/dev/null 2>&1 || { echo "tmp: fzf not found" >&2; return 1; }
 
     local root dir name
     root="${PROJECTS_DIR:-$HOME/Projects}"
-    [ -d "$root" ] || { echo "tm: $root not found" >&2; return 1; }
+    [ -d "$root" ] || { echo "tmp: $root not found" >&2; return 1; }
 
     # --with-nth=-1 shows just the basename while fzf still returns the path.
     dir=$(

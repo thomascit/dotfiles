@@ -116,7 +116,7 @@ With `--with-deps`, dependencies are installed *before* the repo is fetched, so
 `git` and `stow` can be missing at the start — that is what makes the one-liner
 above work on a bare host.
 
-Stows `bash zsh fish tmux vim bat btop eza starship lazygit`. `zsh` is included
+Stows `bash zsh fish tmux vim bat btop eza starship lazygit ranger`. `zsh` is included
 even if you never run it, because `bash/bashrc` sources
 `~/.config/zsh/aliases.sh`.
 
@@ -196,6 +196,7 @@ tool below, so an absent one is a missing feature, never a broken shell.
 | `starship` | ❌ | 1.22 | ❌ | 1.22 |
 | `atuin` | ❌ | 18.6 | ❌ | ✅ |
 | `lazygit` | ❌ | 0.50 | ❌ | 0.57 |
+| `ranger` | ✅ | ✅ | ✅ | ✅ |
 | ~~`neovim`~~ (discontinued) | — | — | — | — |
 | `yazi` | ❌ | ❌ | ❌ | ❌ |
 
@@ -224,6 +225,7 @@ the config also falls back to `screen-256color` as a second line of defence.
 | `noctalia` | Hyprland shell — bar, launcher, dock, lock screen, notifications, control center |
 | ~~`nvim`~~ | **(Discontinued)** Neovim with LazyVim + lazy.nvim — no longer stowed or maintained. See note below. |
 | `rofi` | Application launcher (X11) |
+| `ranger` | Terminal file manager with Dracula colors and Vim-style navigation |
 | `starship` | Fast, customizable shell prompt |
 | `tmux` | Terminal multiplexer with TPM plugins and Dracula theme |
 | `vim` | Vim with vim-plug and Dracula theme |
@@ -245,7 +247,7 @@ the config also falls back to `screen-256color` as a second line of defence.
 
 ## Theme
 
-Dracula across the board — vim, fish, tmux, terminals, rofi, wofi, yazi, noctalia. See https://draculatheme.com.
+Dracula across the board — vim, fish, tmux, terminals, rofi, wofi, ranger, yazi, noctalia. See https://draculatheme.com.
 
 ## Fonts
 

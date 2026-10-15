@@ -12,6 +12,7 @@
 - [fzf (Shell Aliases)](#fzf-shell-aliases)
 - [Zsh VI Mode](#zsh-vi-mode)
 - [Fish Shell](#fish-shell)
+- [Ranger](#ranger)
 - [Yazi](#yazi)
 - [Hyprland](#hyprland)
 - [Ghostty](#ghostty)
@@ -425,6 +426,26 @@ Fish uses `fish_vi_key_bindings` (VI mode enabled).
 
 Cursor shape follows the vi mode: block in normal/visual, line in insert,
 underscore in replace.
+
+---
+
+## Ranger
+
+> Source: `ranger/.config/ranger/rc.conf` (Dracula theme in `colorschemes/dracula.py`)
+
+Ranger loads its default `rc.conf` before these overrides. The built-in Vim
+bindings include `hjkl` to move/open/ascend, `gg`/`G` for first/last entry,
+`Ctrl+d`/`Ctrl+u` for half-page moves, `/` with `n`/`N` for searching,
+`v`/`V` for selection, `yy`/`dd`/`pp` for copy/cut/paste, and `H`/`L`
+for backward/forward directory history.
+
+| Keybinding | Description |
+|---|---|
+| `Ctrl+o` | Back in directory history (Vim jumplist-style) |
+| `-` | Ascend to parent directory (netrw-style) |
+
+`Ctrl+i` is not remapped to history forward: terminals commonly send it as Tab,
+which ranger already uses for switching tabs. Use `L` to go forward instead.
 
 ---
 

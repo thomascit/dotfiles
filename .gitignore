@@ -21,6 +21,9 @@ test.md
 # ~/.local/state, so it lands inside the stow package)
 btop/.config/btop/btop.log
 
+# Ranger imports custom colorschemes as Python modules in the stowed directory.
+ranger/.config/ranger/colorschemes/__pycache__/
+
 # Fish-specific
 fish/.config/fish/fish_variables
 fish/.config/fish/fishd.*
@@ -60,4 +63,3 @@ id_dsa
 .netrc
 *_secret*
 *credentials*
-

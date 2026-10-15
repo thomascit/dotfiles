@@ -45,7 +45,7 @@ fi
 # Stow package groups
 # nvim is discontinued: the config still lives in nvim/ but is no longer stowed
 # or maintained. vim is now the default editor ($EDITOR). See README.
-PACKAGES_CLI="atuin bash bat btop eza fish lazygit starship tmux vim yazi zsh"
+PACKAGES_CLI="atuin bash bat btop eza fish lazygit ranger starship tmux vim yazi zsh"
 PACKAGES_TERMINALS="alacritty ghostty kitty"
 PACKAGES_WM_LINUX="hypr noctalia rofi wofi"
 
@@ -59,7 +59,7 @@ PACKAGES_WM_LINUX="hypr noctalia rofi wofi"
 #   yazi   — not packaged for Debian or Ubuntu at all
 #   atuin  — not in Debian 12; also expects a sync server
 # zsh is required even if unused: bash/bashrc sources ~/.config/zsh/aliases.sh.
-PACKAGES_MINIMAL="bash zsh fish tmux vim bat btop eza starship lazygit"
+PACKAGES_MINIMAL="bash zsh fish tmux vim bat btop eza starship lazygit ranger"
 
 # Packages install_apt_deps() will try. Availability is probed at runtime
 # rather than assumed, so this list is safe across Debian and Ubuntu releases:
@@ -69,7 +69,7 @@ PACKAGES_MINIMAL="bash zsh fish tmux vim bat btop eza starship lazygit"
 #   curl          needed by install_vim_plug
 #   xclip         clipboard over `ssh -X`
 APT_DEPS_MINIMAL="git stow tmux vim fish zsh ncurses-term bat fd-find ripgrep \
-fzf zoxide btop eza starship lazygit trash-cli xclip curl"
+fzf zoxide btop eza starship lazygit ranger trash-cli xclip curl"
 
 # Wrapper files to copy (not stowed) to $HOME
 WRAPPER_FILES=".bashrc .zshrc .vimrc"

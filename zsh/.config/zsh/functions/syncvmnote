@@ -2,5 +2,5 @@ mkdir -p "$HOME/Projects/vmnote"
 rsync -avu \
   --exclude='.git/' --exclude='.venv/' \
   --exclude='__pycache__/' --exclude='*.egg-info/' \
-  devbox:/home/t0mms1n/Projects/notes/ \
+  devbox:/home/t0mms1n/Projects/vmnote/ \
   "$HOME/Projects/vmnote/"

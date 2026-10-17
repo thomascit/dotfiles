@@ -13,7 +13,6 @@
 - [Zsh VI Mode](#zsh-vi-mode)
 - [Fish Shell](#fish-shell)
 - [Ranger](#ranger)
-- [Yazi](#yazi)
 - [Hyprland](#hyprland)
 - [Ghostty](#ghostty)
 - [Vimium (Browser)](#vimium-browser)
@@ -30,11 +29,10 @@
 
 | Keybinding | Description |
 |---|---|
-| `<prefix> s` | Session picker — fzf over running sessions (`C-x` kills, windows in preview) |
-| `<prefix> P` | Project picker — fzf `~/Projects` → session named after the project |
+| `<prefix> s` | Session picker — fzf over running sessions (`C-x` kills) |
 | `<prefix> S` | SSH host picker (fzf popup from `~/.ssh/config`) |
 | `<prefix> r` | Run command (prompts, runs in new window) |
-| `<prefix> C-c` | Config file picker (`~/.config`, bat preview) |
+| `<prefix> C` | Config file picker (`~/.config`) |
 | `<prefix> R` | Reload `~/.config/tmux/tmux.conf` (confirms in the status line) |
 | `<prefix> ?` | Key bindings reference popup |
 
@@ -43,13 +41,11 @@
 | Keybinding | Description |
 |---|---|
 | `<prefix> c` | New window in current path |
-| `<prefix> C` | New named window (prompts for name) |
 | `<prefix> N` | New window with `$EDITOR` (defaults to `vim`) |
-| `<prefix> V` | New window with `$EDITOR` (same as `N`, alternate key) |
 | `<prefix> O` | New window with OpenCode — fresh session (`<prefix> o` is the one that continues) |
-| `<prefix> f` | New window with Yazi file manager |
+| `<prefix> f` | New window with Ranger file manager |
 | `<prefix> g` | New window with Lazygit |
-| `<prefix> p` | New window with btop (`sudo btop`) |
+| `<prefix> p` | New window with btop |
 | `<prefix> a` | New window with cmatrix screensaver |
 
 ### Pane Splits
@@ -93,17 +89,8 @@ wording in the `<prefix> ?` popup.
 
 ### Sessions
 
-| Keybinding | Description |
-|---|---|
-| `<prefix> s` | Session picker (fzf popup — see [Popups](#popups)) |
-| `<prefix> $` | Rename session (tmux built-in) |
-
-### Rename
-
-| Keybinding | Description |
-|---|---|
-| `<prefix> C-w` | Rename window to current directory |
-| `<prefix> C-s` | Rename session to current directory |
+Use `<prefix> s` to pick a session (see [Popups](#popups)). Sessions use numeric
+names starting at 1; window names follow the running command.
 
 ### Kill / Close
 
@@ -152,7 +139,6 @@ Only available where TPM is installed, and bound in the **prefix** table.
 > - `nvim/.config/nvim/lua/plugins/vim-tmux-navigator.lua`
 > - `nvim/.config/nvim/lua/plugins/telescope.lua`
 > - `nvim/.config/nvim/lua/plugins/flash.lua`
-> - `nvim/.config/nvim/lua/plugins/yazi.lua`
 > - `nvim/.config/nvim/lua/plugins/trouble.lua`
 > - `nvim/.config/nvim/lua/plugins/todo-comments.lua`
 > - `nvim/.config/nvim/lua/plugins/grug-far.lua`
@@ -250,16 +236,6 @@ Shared between Neovim and Tmux — navigate seamlessly across both.
 | `<leader>en` | Normal | Open Neovim config in Neo-tree |
 | `<leader>fe` | Normal | Reveal current file in explorer |
 
-### Yazi (File Manager)
-
-| Keybinding | Mode | Description |
-|---|---|---|
-| `<leader>yy` | Normal / Visual | Open Yazi at current file |
-| `<leader>yw` | Normal | Open Yazi in Neovim's cwd |
-| `<leader>yc` | Normal | Open Yazi in `~/.config` (dotfiles) |
-| `<leader>yr` | Normal | Resume last Yazi session |
-| `F1` | in Yazi | Show Yazi help |
-
 ### Trouble (Diagnostics)
 
 | Keybinding | Mode | Description |
@@ -330,10 +306,11 @@ plugin files define keymaps that are **not** listed here — `gitsigns.lua` (`]h
 
 > Source: `zsh/.config/zsh/aliases.sh`, `fish/.config/fish/aliases.fish`
 
-fzf's built-in shell integration (`Ctrl+T` / `Ctrl+R` / `Alt+C`) is deliberately
-not enabled — those are covered by `atuin` (history), `zoxide` (`z`) and `yazi`
-(`y`) instead. `Ctrl+R` falls through to atuin, or to the shell's builtin
-reverse-search where atuin is unavailable.
+fzf's shell integration is enabled in bash, zsh and fish when the installed fzf
+supports `--bash`, `--zsh` or `--fish`. `Ctrl+T` selects files and `Alt+C`
+selects a directory. `Ctrl+R` searches fzf history in bash; in zsh and fish,
+atuin loads after fzf and takes over `Ctrl+R` when installed (otherwise fzf
+handles it). Bash and zsh also get fzf fuzzy completion.
 
 fzf itself is still used heavily for the aliases below, the tmux popups, and the
 `s` session picker. Theming for all of those comes from `FZF_DEFAULT_OPTS`.
@@ -346,10 +323,9 @@ These aliases use fzf for interactive selection:
 
 | Alias | Description |
 |---|---|
-| `tmp` | Pick a project under `~/Projects` (`$PROJECTS_DIR`) → session named after it, rooted in it |
 | `s` | Pick a running session → `switch-client` inside tmux, `attach-session` outside |
 
-`tmp` and `s` are shell **functions**, not aliases, so bash gets them too via
+`s` is a shell **function**, not an alias, so bash gets it too via
 `aliases.sh`. `FZF_DEFAULT_OPTS` / `FZF_DEFAULT_COMMAND` are set in
 `zsh/.config/zsh/.zprofile`, `bash/.config/bash/bashrc` and
 `fish/.config/fish/variables.fish`.
@@ -446,31 +422,6 @@ for backward/forward directory history.
 
 `Ctrl+i` is not remapped to history forward: terminals commonly send it as Tab,
 which ranger already uses for switching tabs. Use `L` to go forward instead.
-
----
-
-## Yazi
-
-> Source: `yazi/.config/yazi/keymap.toml`
-
-These prepend (override with higher priority) the default Yazi keymaps.
-
-| Keybinding | Description |
-|---|---|
-| `m` | Trigger relative motion (plugin: `relative-motions`) |
-| `p` | Smart paste — paste into hovered directory or CWD |
-| `!` | Open `$SHELL` (or PowerShell on Windows) in current directory |
-| `L` | Maximize or restore preview pane (plugin: `toggle-pane max-preview`) |
-| `g i` | Open lazygit in the current directory (plugin: `lazygit`) |
-| `1` … `9` | Switch to tab *n*, creating it (and revealing the hovered dir) if absent |
-
-Tab switching uses the local `smart-switch` plugin
-(`yazi/.config/yazi/plugins/smart-switch.yazi/`), which takes a 0-based index —
-so `1` runs `smart-switch 0`. There is no `0` binding, meaning a tenth tab is
-not reachable this way.
-
-The `smart-enter` plugin is still installed and loaded in `init.lua`, but nothing
-is bound to it — `l` uses Yazi's built-in enter.
 
 ---
 

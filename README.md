@@ -90,7 +90,7 @@ The setup script stows configs, installs plugin managers, and copies fonts. It d
 ./setup.sh --full       # Stow all CLI configs + plugin managers + fonts
 ./setup.sh --minimal    # Server/headless: reduced set, no prompts, no network
 ./setup.sh --custom     # Select specific packages to stow
-./setup.sh --plugins    # Install plugin managers only (TPM, vim-plug, Zinit, yazi plugins)
+./setup.sh --plugins    # Install plugin managers only (TPM, vim-plug, Zinit)
 ./setup.sh --fonts      # Install fonts from reference/fonts/
 ./setup.sh --uninstall  # Remove dotfile symlinks and plugin managers
 ./setup.sh --help       # Show help and package lists
@@ -121,7 +121,7 @@ even if you never run it, because `bash/bashrc` sources
 `~/.config/zsh/aliases.sh`.
 
 Excluded on purpose: `nvim` (discontinued — no longer stowed by any flow),
-`yazi` (not packaged for Debian or Ubuntu at all), `atuin` (absent
+`atuin` (absent
 from Debian 12, and expects a sync server), plus all terminal and window
 manager configs.
 
@@ -145,8 +145,9 @@ Two packages install under a different name than upstream:
 | `bat` | `batcat` |
 | `fd-find` | `fdfind` |
 
-The shell configs alias around both, but an alias only exists in an interactive
-shell — scripts, tmux popups and function bodies would still fail. So `--minimal`
+The shell configs alias `fd` to `fdfind`; use `batcat` explicitly on these hosts
+(`cat` is not overridden). Aliases do not provide executables to scripts or
+tmux popups, so `--minimal`
 also symlinks `~/.local/bin/fd` → `fdfind` when `fdfind` is present and `fd` is
 not, which is what the tmux project and session pickers need.
 
@@ -198,11 +199,10 @@ tool below, so an absent one is a missing feature, never a broken shell.
 | `lazygit` | ❌ | 0.50 | ❌ | 0.57 |
 | `ranger` | ✅ | ✅ | ✅ | ✅ |
 | ~~`neovim`~~ (discontinued) | — | — | — | — |
-| `yazi` | ❌ | ❌ | ❌ | ❌ |
 
 Debian 13 or Ubuntu 26.04 gives you nearly everything. On Debian 12 you lose
-`starship`, `eza` and `lazygit` — the prompt falls back to plain, `ls` and `cat`
-stay as the coreutils versions.
+`starship`, `eza` and `lazygit` — the prompt falls back to plain and `ls`
+stays as the coreutils version. `cat` is never overridden on any platform.
 
 `ncurses-term` is installed alongside: it provides the `tmux-256color` terminfo
 entry that `tmux.conf` asks for. Without it tmux would refuse to start, though
@@ -215,7 +215,7 @@ the config also falls back to `screen-256color` as a second line of defence.
 | `alacritty` | Terminal emulator with Dracula theme |
 | `atuin` | Shell history sync and search |
 | `bash` / `zsh` / `fish` | Shells with VI mode, Starship prompt, Zoxide, shared aliases |
-| `bat` | Cat replacement with syntax highlighting |
+| `bat` | Syntax-highlighted file viewer (invoke `bat` or `batcat`; `cat` is unchanged) |
 | `btop` | Resource monitor |
 | `eza` | Modern ls replacement with icons and Git status |
 | `ghostty` | Fast GPU-accelerated terminal |
@@ -230,7 +230,6 @@ the config also falls back to `screen-256color` as a second line of defence.
 | `tmux` | Terminal multiplexer with TPM plugins and Dracula theme |
 | `vim` | Vim with vim-plug and Dracula theme |
 | `wofi` | Application launcher (Wayland) |
-| `yazi` | Terminal file manager with plugins |
 
 > **Discontinued:** `nvim` is no longer stowed or maintained. `vim` is now the
 > default editor (`$EDITOR`). The Neovim config still lives in `nvim/` for
@@ -247,7 +246,7 @@ the config also falls back to `screen-256color` as a second line of defence.
 
 ## Theme
 
-Dracula across the board — vim, fish, tmux, terminals, rofi, wofi, ranger, yazi, noctalia. See https://draculatheme.com.
+Dracula across the board — vim, fish, tmux, terminals, rofi, wofi, ranger, noctalia. See https://draculatheme.com.
 
 ## Fonts
 
@@ -267,7 +266,6 @@ Terminal configs (alacritty, ghostty, kitty) and noctalia are pre-configured to 
 | ~~Neovim~~ | ~~lazy.nvim (LazyVim)~~ | **(Discontinued)** no longer stowed or bootstrapped |
 | Zsh | Zinit | Bootstraps automatically on first shell start |
 | Tmux | TPM | Press `<prefix>+I` to install plugins after first launch |
-| Yazi | ya pkg | Run `ya pkg install` or use `./setup.sh --plugins` |
 
 ## Keybindings
 

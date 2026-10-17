@@ -1,4 +1,0 @@
-  # usage: rest 10m, rest 60s etc. Default is 5m
-  timer "${1:-5m}" && terminal-notifier -message 'Pomodoro'\
-        -title 'Break is over! Get back to work 😬'\
-        -sound Crystal

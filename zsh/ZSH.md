@@ -11,7 +11,7 @@
 | `als` | `~/.config/zsh/aliases.sh` |
 | `alsf` | `~/.config/fish/aliases.fish` |
 | `brc` | `~/.config/bash/bashrc` |
-| `fc` | `~/.config/fish/config.fish` |
+| `fsh` | `~/.config/fish/config.fish` |
 | `vc` | `~/.config/fish/variables.fish` |
 | `ac` | `~/.config/alacritty/alacritty.toml` |
 | `gc` | `~/.config/ghostty/config` |
@@ -20,9 +20,12 @@
 | `sc` | `~/.config/starship/starship.toml` |
 | `sshc` | `~/.ssh/config` |
 | `vrc` | `~/.config/vim/vimrc` |
-| `yc` | `~/.config/yazi/yazi.toml` |
 | `hyc` | `~/.config/hypr/hyprland.conf` |
-| `df` | `~/.config` (yazi) |
+
+Editor shortcuts resolve `$EDITOR` when invoked (default: `vim`), accept extra
+arguments, and quote config paths. `EDITOR` may contain an executable and flags;
+Zsh also supports quoted words within it. Bash and Fish split it on whitespace.
+`fc` and `df` retain their standard meanings.
 
 ---
 
@@ -46,11 +49,8 @@
 | Alias | Description |
 |---|---|
 | `tm` | Bare `tmux` |
-| `tmp` | fzf picker over `~/Projects` → session named after the project, rooted in it |
 | `tma` | Attach to session by name |
-| `tmk` | Kill the tmux server |
-| `tmr` | Rename current session |
-| `tmt` | New/attach session named after cwd (`new-session -A`) |
+| `tmk` | Kill the tmux server and all its sessions |
 | `tc` | Open `tmux.conf` in `$EDITOR` |
 
 ---
@@ -61,10 +61,8 @@
 |---|---|
 | `s` | fzf picker over running tmux sessions → switch (inside tmux) or attach (outside) |
 
-`s` and `tmp` are functions rather than aliases (defined in `aliases.sh`, so bash gets
-them too). `tmp` reuses an existing session for the project instead of duplicating it;
-override the search root with `PROJECTS_DIR`. Both are the shell twins of tmux's
-`prefix + s` and `prefix + P`.
+`s` is a function rather than an alias (defined in `aliases.sh`, so bash gets it
+too). It is the shell twin of tmux's `prefix + s`.
 
 ---
 
@@ -80,7 +78,7 @@ override the search root with `PROJECTS_DIR`. Both are the shell twins of tmux's
 | `buc` | fzf uninstall cask |
 | `bup` | Update + upgrade all |
 | `ba` | Autoremove |
-| `bc` | Cleanup |
+| `bc` | Cleanup, pruning all cached downloads (`--prune=all`) |
 
 ### Pacman / Yay / Paru (Arch)
 
@@ -115,11 +113,12 @@ override the search root with `PROJECTS_DIR`. Both are the shell twins of tmux's
 |---|---|
 | `ls` | `eza` with icons, git info, long format |
 | `lst` | `eza` tree view |
-| `cat` | `bat` (syntax-highlighted cat) |
 | `icat` | Kitty inline image viewer |
 | `fd` | `fdfind` (Debian/Ubuntu alias) |
 | `rm` | `trash` (safe delete) |
-| `y` | Yazi file manager (cd on exit) |
+
+`cat` is unchanged; invoke `bat` (or Debian/Ubuntu's `batcat`) explicitly for
+syntax highlighting. Optional replacements are only enabled when installed.
 
 ---
 
@@ -135,8 +134,9 @@ override the search root with `PROJECTS_DIR`. Both are the shell twins of tmux's
 | `e` | `exit` |
 | `sz` | Re-source zshrc |
 | `sa` | Add SSH key to the running agent (`ssh-add`) |
-| `u` | Run `setup.sh` (reload/install dotfiles) |
-| `c` | Copy to clipboard (OS-aware: `wl-copy` / `pbcopy` / `clip.exe` / `xclip`) |
+| `sskg COMMENT` | Generate an Ed25519 SSH key with the supplied comment |
+| `u` | Run the dotfiles setup menu (`setup.sh`); does not reload the shell |
+| `c` | Copy to clipboard; checks tools and display availability when invoked, or reports an error |
 | `bashc` | Clear + launch bash |
 | `fishc` | Clear + launch fish |
 | `zshc` | Clear + launch zsh |
@@ -155,23 +155,15 @@ override the search root with `PROJECTS_DIR`. Both are the shell twins of tmux's
 
 ---
 
-## Pomodoro
-
-| Alias | Description |
-|---|---|
-| `p50` | 50m work → 10m rest |
-| `p20` | 20m work → 10m rest |
-
----
-
 ## Functions
 
 | Function | Description |
 |---|---|
-| `y` | Yazi wrapper — cd into the directory you quit from |
 | `lg` | Lazygit wrapper — cd into the directory lazygit navigated to |
-| `work [duration]` | Start a work timer (default `20m`), notify on completion |
-| `rest [duration]` | Start a break timer (default `5m`), notify on completion |
+
+`c` and `_edit` are functions in the shared alias file, alongside `s` and its
+helper `_tmux_goto`. Clipboard priority is macOS `pbcopy`, Wayland `wl-copy`,
+X11 `xclip`, then WSL `clip.exe`, provided the corresponding tool is installed.
 
 ---
 
@@ -192,5 +184,7 @@ override the search root with `PROJECTS_DIR`. Both are the shell twins of tmux's
 | Tool | Init |
 |---|---|
 | `zoxide` | `eval "$(zoxide init zsh)"` |
+| `fzf` | Shell key bindings/completion via `fzf --zsh`, when supported |
+| `atuin` | `eval "$(atuin init zsh)"` (retains Ctrl+R for history) |
 | `starship` | `eval "$(starship init zsh)"` |
 | `brew` | `eval "$(brew shellenv)"` *(macOS only)* |

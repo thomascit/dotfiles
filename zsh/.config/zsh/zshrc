@@ -54,6 +54,12 @@ fi
 # Enable: Zoxide
 command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
 
+# Enable fzf key bindings and fuzzy completion when this fzf supports --zsh.
+# Atuin loads afterwards and retains Ctrl+R for history search.
+if command -v fzf &>/dev/null && fzf --zsh >/dev/null 2>&1; then
+    source <(fzf --zsh)
+fi
+
 # Atuin
 command -v atuin &>/dev/null && eval "$(atuin init zsh)"
 

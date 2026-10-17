@@ -10,7 +10,7 @@
 #
 # $1 is the name of the session that triggered the hook. Sessions with an
 # explicit (non-numeric) name are left alone — only tmux's own numeric
-# auto-names are rewritten, so `tmp`/`tmt` sessions are untouched.
+# auto-names are rewritten, regardless of how the unnamed session was created.
 #
 # The hook MUST use `run-shell -b`. Without -b, run-shell blocks the tmux
 # server until the script exits, while the script itself is waiting on a

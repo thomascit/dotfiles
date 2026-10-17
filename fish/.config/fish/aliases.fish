@@ -1,40 +1,51 @@
 # ─────────────────────────────────────────────
 # Clipboard (OS-specific)
 # ─────────────────────────────────────────────
-if test (uname) = Darwin
-    alias c pbcopy
-else
-    if grep -qiE "(microsoft|wsl)" /proc/version 2>/dev/null
-        alias c clip.exe
-    else if test -n "$WAYLAND_DISPLAY"
-        alias c wl-copy
+for retired in fc yc df cat p40 p50 p20 y work rest
+    functions -e $retired
+end
+function c
+    if test (uname) = Darwin; and command -q pbcopy
+        command pbcopy $argv
+    else if test -n "$WAYLAND_DISPLAY"; and command -q wl-copy
+        command wl-copy $argv
+    else if test -n "$DISPLAY"; and command -q xclip
+        command xclip -i -selection clipboard $argv
+    else if grep -qiE '(microsoft|wsl)' /proc/version 2>/dev/null; and command -q clip.exe
+        command clip.exe $argv
     else
-        alias c "xclip -i -selection clipboard"
+        echo 'c: no clipboard available (requires pbcopy, Wayland + wl-copy, X11 + xclip, or WSL + clip.exe)' >&2
+        return 1
     end
 end
 
-# Reload Config
+# Run the dotfiles setup menu (does not reload the shell).
 alias u "$HOME/Projects/dotfiles/setup.sh"
 # ─────────────────────────────────────────────
 # Edit Config Files
 # ─────────────────────────────────────────────
-alias ac "$EDITOR $HOME/.config/alacritty/alacritty.toml"
-alias als "$EDITOR $HOME/.config/zsh/aliases.sh"
-alias alsf "$EDITOR $HOME/.config/fish/aliases.fish"
-alias brc "$EDITOR $HOME/.config/bash/bashrc"
-alias fc "$EDITOR $HOME/.config/fish/config.fish"
-alias gc "$EDITOR $HOME/.config/ghostty/config"
-alias hyc "$EDITOR $HOME/.config/hypr/hyprland.conf"
-alias kc "$EDITOR $HOME/.config/kitty/kitty.conf"
-alias sc "$EDITOR $HOME/.config/starship/starship.toml"
-alias sshc "$EDITOR $HOME/.ssh/config"
-alias tc "$EDITOR $HOME/.config/tmux/tmux.conf"
-alias vrc "$EDITOR $HOME/.config/vim/vimrc"
-alias zrc "$EDITOR $HOME/.config/zsh/zshrc"
-alias zpc "$EDITOR $HOME/.config/zsh/.zprofile"
-alias vc "$EDITOR $HOME/.config/fish/variables.fish"
-alias yc "$EDITOR $HOME/.config/yazi/yazi.toml"
-alias df "yazi $HOME/.config"
+function _edit
+    set -l editor vim
+    if test -n "$EDITOR"
+        set editor (string split --no-empty ' ' -- "$EDITOR")
+    end
+    command $editor $argv
+end
+alias ac '_edit "$HOME/.config/alacritty/alacritty.toml"'
+alias als '_edit "$HOME/.config/zsh/aliases.sh"'
+alias alsf '_edit "$HOME/.config/fish/aliases.fish"'
+alias brc '_edit "$HOME/.config/bash/bashrc"'
+alias fsh '_edit "$HOME/.config/fish/config.fish"'
+alias gc '_edit "$HOME/.config/ghostty/config"'
+alias hyc '_edit "$HOME/.config/hypr/hyprland.conf"'
+alias kc '_edit "$HOME/.config/kitty/kitty.conf"'
+alias sc '_edit "$HOME/.config/starship/starship.toml"'
+alias sshc '_edit "$HOME/.ssh/config"'
+alias tc '_edit "$HOME/.config/tmux/tmux.conf"'
+alias vrc '_edit "$HOME/.config/vim/vimrc"'
+alias zrc '_edit "$HOME/.config/zsh/zshrc"'
+alias zpc '_edit "$HOME/.config/zsh/.zprofile"'
+alias vc '_edit "$HOME/.config/fish/variables.fish"'
 
 # ─────────────────────────────────────────────
 # Git
@@ -79,7 +90,7 @@ alias au "dpkg --get-selections | grep -v deinstall | cut -f1 | fzf --multi --pr
 # DNF (Fedora/RHEL)
 # ─────────────────────────────────────────────
 alias dnfi "dnf repoquery --available -y --qf '%{name}\n' 2>/dev/null | fzf --multi --preview 'dnf info {1}' | xargs -ro sudo dnf install"
-# Note: not 'du' — that shadows the disk-usage builtin.
+# Note: not 'du' — that shadows the disk-usage command.
 alias dnfu "dnf repoquery --installed --qf '%{name}\n' 2>/dev/null | fzf --multi --preview 'dnf info {1}' | xargs -ro sudo dnf remove"
 
 # ─────────────────────────────────────────────
@@ -87,14 +98,6 @@ alias dnfu "dnf repoquery --installed --qf '%{name}\n' 2>/dev/null | fzf --multi
 # ─────────────────────────────────────────────
 if command -q fdfind
     alias fd fdfind
-end
-# Debian/Ubuntu ship bat as `batcat` (the `bat` name clashes with
-# bacula-console-qt). Guard both, and leave `cat` alone if neither exists —
-# an unguarded alias here breaks `cat` shell-wide.
-if command -q bat
-    alias cat bat
-else if command -q batcat
-    alias cat batcat
 end
 if command -q kitten
     alias icat "kitten icat"
@@ -125,7 +128,7 @@ alias e exit
 alias ff fastfetch
 alias fishc "clear && fish"
 alias l clear
-alias v "$EDITOR ."
+alias v '_edit'
 alias r reset
 alias zshc "clear && zsh"
 alias oc opencode
@@ -133,46 +136,13 @@ alias oc opencode
 # ─────────────────────────────────────────────
 # Tmux
 # ─────────────────────────────────────────────
+# Sourcing a changed file does not remove functions from this shell.
+# Fish aliases are functions too; clear only our retired tmux shortcuts.
+for retired in tmr tmt tmp
+    functions -q $retired; and functions -e $retired
+end
 alias tm tmux
 alias tma "tmux attach-session -t"
-alias tmr "tmux rename-session"
-
-# tmp — fzf over the directories in $PROJECTS_DIR (default ~/Projects). The
-# chosen directory becomes the session's working directory and its basename the
-# session name; an existing session for that project is reused.
-# `find` rather than `fd` so this works on hosts that only have fd-find's
-# `fdfind` binary.
-function tmp
-    set -l root $PROJECTS_DIR
-    test -z "$root"; and set root "$HOME/Projects"
-    if not test -d "$root"
-        echo "tmp: $root not found" >&2
-        return 1
-    end
-
-    # --with-nth=-1 shows just the basename while fzf still returns the path.
-    set -l dir (
-        find "$root" -mindepth 1 -maxdepth 1 -type d | sort \
-            | fzf --no-sort --height 40% --reverse --border \
-                --delimiter=/ --with-nth=-1 \
-                --border-label " projects " --prompt "project > " \
-                --preview 'ls -A {}' --preview-window 'right,50%'
-    )
-    test -z "$dir"; and return
-
-    # tmux rewrites "." and ":" to "_" in session names; do it up front so the
-    # has-session check compares against the name tmux would actually create.
-    set -l name (basename "$dir" | tr '.:' '__')
-
-    tmux has-session -t "=$name" 2>/dev/null
-    or tmux new-session -d -s "$name" -c "$dir"
-
-    _tmux_goto "$name"
-end
-
-function tmt
-    tmux new-session -A -s (basename $PWD) -c $PWD
-end
 
 # ─────────────────────────────────────────────
 # Session pickers
@@ -187,16 +157,13 @@ function _tmux_goto
     end
 end
 
-# s — fzf over the running sessions, windows listed in the preview.
-# Shell twin of tmux's `prefix + s`. Brace-free tmux formats (#S, #I, #W) are
-# used because "{...}" is fzf's own placeholder syntax inside --preview.
+# s — fzf over the running sessions.
+# Shell twin of tmux's `prefix + s`.
 function s
     set -l picked (
         tmux list-sessions -F '#S' 2>/dev/null \
             | fzf --no-sort --height 40% --reverse --border \
-                --border-label " sessions " --prompt "session > " \
-                --preview 'tmux list-windows -t ={} -F "#I: #W"' \
-                --preview-window 'right,50%'
+                --border-label " sessions " --prompt "session > "
     )
     test -z "$picked"; and return
 
@@ -216,9 +183,3 @@ alias dcb "docker compose build --no-cache"
 # SSH
 # ─────────────────────────────────────────────
 alias sskg "ssh-keygen -o -a 100 -t ed25519 -C"
-
-# ─────────────────────────────────────────────
-# Pomodoro
-# ─────────────────────────────────────────────
-alias p50 "work 50m && rest 10m"
-alias p20 "work 20m && rest 10m"

@@ -53,6 +53,12 @@ if command -q zoxide
     zoxide init fish | source
 end
 
+# Enable fzf key bindings when this fzf supports --fish.
+# Atuin loads afterwards and retains Ctrl+R for history search.
+if command -q fzf; and fzf --fish >/dev/null 2>&1
+    fzf --fish | source
+end
+
 # Atuin
 if command -q atuin
     atuin init fish | source

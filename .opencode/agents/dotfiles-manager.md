@@ -52,7 +52,6 @@ This repo is a GNU Stow package tree. `.stowrc` sets `--target=$HOME`, `--ignore
 Vendored plugin trees are managed by their own tools, not Git or submodules — there is no `.gitmodules`. Do not "fix" these by committing them:
 
 - `tmux/.config/tmux/plugins/*` — TPM
-- `yazi/.config/yazi/plugins/*` and `flavors/*` — `ya pkg`, except the two custom plugins `folder-rules.yazi/` and `smart-switch.yazi/`, which are negated back in and *are* tracked
 - `nvim/.config/nvim/lazy-lock.json` — ignored at `.gitignore:24`. **Neovim is discontinued** (no longer stowed or maintained), so this lock file is inert; the `nvim/` tree is kept for reference only.
 - `.opencode/*` — allow-listed; only `agents/` is shared.
 
@@ -60,8 +59,8 @@ Vendored plugin trees are managed by their own tools, not Git or submodules — 
 
 Grouped exactly as `setup.sh` defines them.
 
-- **CLI (`PACKAGES_CLI`, 12):** `atuin` `bash` `bat` `btop` `eza` `fish` `lazygit` `starship` `tmux` `vim` `yazi` `zsh` — `nvim` is **discontinued** (config kept under `nvim/` but no longer stowed; `vim` is the default `$EDITOR`)
-- **Minimal / server (`PACKAGES_MINIMAL`, 10):** `bash` `zsh` `fish` `tmux` `vim` `bat` `btop` `eza` `starship` `lazygit` — a subset of CLI, not a separate set of packages
+- **CLI (`PACKAGES_CLI`, 12):** `atuin` `bash` `bat` `btop` `eza` `fish` `lazygit` `ranger` `starship` `tmux` `vim` `zsh` — `nvim` is **discontinued** (config kept under `nvim/` but no longer stowed; `vim` is the default `$EDITOR`)
+- **Minimal / server (`PACKAGES_MINIMAL`, 11):** `bash` `zsh` `fish` `tmux` `vim` `bat` `btop` `eza` `starship` `lazygit` `ranger` — a subset of CLI, not a separate set of packages
 - **Terminals (`PACKAGES_TERMINALS`, 3):** `alacritty` `ghostty` `kitty`
 - **Linux window manager (`PACKAGES_WM_LINUX`, 4):** `hypr` `noctalia` `rofi` `wofi`
 - **Not stowed:** `reference/fonts` (JetBrainsMono Nerd Font), `reference/vimium`
@@ -83,7 +82,7 @@ If you change this list, update `setup.sh`, the "What's Inside" table in `README
 `fetch_dotfiles()` obtains the repo by SSH clone, then HTTPS clone, then tarball, so a host with no key or no git still works. The checkout must persist: stow symlinks point into it. `DOTFILES_DIR` overrides everything, then the script's own directory, then `~/Projects/dotfiles`.
 
 Shell configs must guard every optional tool. Two failure modes to keep in mind:
-- On Debian/Ubuntu `bat` installs as **`batcat`**, and `fd` as **`fdfind`**. Aliasing `cat` or `fd` unconditionally breaks those commands shell-wide.
+- On Debian/Ubuntu `bat` installs as **`batcat`**, and `fd` as **`fdfind`**. Leave `cat` unchanged; guard the optional `fd` alias with a command-availability check.
 - Anything fetched over the network (`git clone`, `curl`) must be tested inside an `if`, because `setup.sh` runs under `set -euo pipefail` and a bare failure aborts the whole install midway.
 
 ## Conventions
@@ -125,7 +124,7 @@ Treat a refused command as a correct outcome, not an obstacle to route around. N
 Conventional Commits with scoped prefixes, matching existing history:
 
 - Standard types: `feat:`, `fix:`, `docs:`, `chore:`, `refactor:`
-- Package-scoped prefixes are also used for single-package changes: `vim:`, `yazi:`, `tmux:`, `zsh:`
+- Package-scoped prefixes are also used for single-package changes: `vim:`, `ranger:`, `tmux:`, `zsh:`
 
 Write an imperative, lowercase subject that says what changed and why it matters, for example:
 

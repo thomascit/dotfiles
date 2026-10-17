@@ -45,7 +45,7 @@ fi
 # Stow package groups
 # nvim is discontinued: the config still lives in nvim/ but is no longer stowed
 # or maintained. vim is now the default editor ($EDITOR). See README.
-PACKAGES_CLI="atuin bash bat btop eza fish lazygit ranger starship tmux vim yazi zsh"
+PACKAGES_CLI="atuin bash bat btop eza fish lazygit ranger starship tmux vim zsh"
 PACKAGES_TERMINALS="alacritty ghostty kitty"
 PACKAGES_WM_LINUX="hypr noctalia rofi wofi"
 
@@ -56,7 +56,6 @@ PACKAGES_WM_LINUX="hypr noctalia rofi wofi"
 #
 # Deliberately excluded:
 #   nvim   — discontinued; no longer stowed by any flow (vim is the editor now)
-#   yazi   — not packaged for Debian or Ubuntu at all
 #   atuin  — not in Debian 12; also expects a sync server
 # zsh is required even if unused: bash/bashrc sources ~/.config/zsh/aliases.sh.
 PACKAGES_MINIMAL="bash zsh fish tmux vim bat btop eza starship lazygit ranger"
@@ -563,17 +562,6 @@ install_atuin() {
   fi
 }
 
-install_yazi_plugins() {
-  if ! command_exists ya; then
-    warn "ya not found, skipping yazi plugin install"
-    return
-  fi
-
-  info "Installing yazi plugins and flavors..."
-  ya pkg install
-  success "Yazi plugins installed"
-}
-
 remove_plugin_managers() {
   info "Removing plugin managers..."
 
@@ -702,7 +690,6 @@ run_full_install() {
   install_tpm
   install_vim_plug
   install_zinit
-  install_yazi_plugins
   install_fonts
 
   echo ""
@@ -756,7 +743,6 @@ run_plugin_managers_only() {
   install_tpm
   install_vim_plug
   install_zinit
-  install_yazi_plugins
   success "Plugin managers installed!"
 }
 
@@ -849,7 +835,7 @@ show_menu() {
   echo "  1) Full install (CLI + wrappers + plugin managers + fonts)"
   echo "  2) Minimal install (server/headless: shells + tmux + vim, no network)"
   echo "  3) Custom install (select packages)"
-  echo "  4) Install plugin managers only (TPM, vim-plug, Zinit, yazi plugins)"
+  echo "  4) Install plugin managers only (TPM, vim-plug, Zinit)"
   echo "  5) Install fonts only"
   echo "  6) Uninstall"
   echo "  7) Exit"
@@ -940,7 +926,7 @@ main() {
     echo "  --full, -f      Stow all CLI configs + plugin managers + fonts"
     echo "  --minimal, -m   Server/headless: stow a reduced set, no prompts, no network"
     echo "  --custom, -c    Select specific packages to stow"
-    echo "  --plugins, -p   Install plugin managers only (TPM, vim-plug, Zinit, yazi plugins)"
+    echo "  --plugins, -p   Install plugin managers only (TPM, vim-plug, Zinit)"
     echo "  --fonts         Install fonts from reference/fonts/"
     echo "  --uninstall, -u Remove dotfile symlinks and plugin managers"
     echo "  --help, -h      Show this help message"

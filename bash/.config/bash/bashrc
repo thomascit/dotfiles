@@ -71,6 +71,13 @@ bind "set show-mode-in-prompt on"
 bind "set vi-ins-mode-string \1\e[6 q\2"
 bind "set vi-cmd-mode-string \1\e[2 q\2"
 
+# Enable fzf key bindings (Ctrl+T, Ctrl+R, Alt+C) and fuzzy completion.
+# Older packaged fzf versions may not support --bash; leave their shell alone.
+if command -v fzf &>/dev/null; then
+  fzf_bash_integration=$(fzf --bash 2>/dev/null) && eval "$fzf_bash_integration"
+  unset fzf_bash_integration
+fi
+
 # Ensure external commands (like Vim) start with a block cursor
 # This resets the cursor shape right before any command runs so
 # DECSCUSR from the prompt doesn't leak into TUI programs.
@@ -80,15 +87,6 @@ fi
 
 # Enable: Zoxide
 command -v zoxide &>/dev/null && eval "$(zoxide init bash)"
-
-# Yazi shell wrapper
-function y() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-	yazi "$@" --cwd-file="$tmp"
-	IFS= read -r -d '' cwd < "$tmp"
-	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
-	rm -f -- "$tmp"
-}
 
 # Lazygit wrapper function
 lg()

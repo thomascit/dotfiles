@@ -8,11 +8,10 @@
 
 | Binding | Description |
 |---|---|
-| `prefix + s` | Session picker — fzf over running sessions (windows in the preview) |
-| `prefix + P` | Project picker — fzf `~/Projects` → session named after the project |
+| `prefix + s` | Session picker — fzf over running sessions |
 | `prefix + S` | SSH host picker (fzf from `~/.ssh/config`) |
 | `prefix + r` | Run command (prompts, runs in new window) |
-| `prefix + C-c` | Config file picker (`~/.config`, bat preview) |
+| `prefix + C` | Config file picker (`~/.config`) |
 | `prefix + R` | Reload `~/.config/tmux/tmux.conf` (confirms in the status line) |
 | `prefix + ?` | Key bindings reference popup |
 
@@ -23,13 +22,11 @@
 | Binding | Description |
 |---|---|
 | `prefix + c` | New window (current path) |
-| `prefix + C` | New named window (prompt) |
 | `prefix + N` | Editor (`$EDITOR`, defaults to `vim`) |
-| `prefix + V` | Editor (same as `N`, alternate key) |
 | `prefix + O` | OpenCode (fresh session — `prefix + o` is the one that continues) |
-| `prefix + f` | Yazi file manager |
+| `prefix + f` | Ranger file manager |
 | `prefix + g` | Lazygit |
-| `prefix + p` | btop (`sudo btop`) |
+| `prefix + p` | btop |
 | `prefix + a` | cmatrix |
 
 ---
@@ -70,61 +67,27 @@ wording in the `prefix + ?` popup: `-` is `split-window -v` (panes stacked), `_`
 | `M-l` | Next window |
 | `S-Left` | Swap window left |
 | `S-Right` | Swap window right |
-| `prefix + C-w` | Rename window to cwd |
+
+Windows keep tmux's automatic names based on the running command.
 
 ---
 
 ## Sessions
 
-| Binding | Description |
-|---|---|
-| `prefix + s` | Session picker (see below) |
-| `prefix + $` | Rename session (tmux built-in) |
-| `prefix + C-s` | Rename session to cwd |
+Use `prefix + s` to pick a session (see below).
 
 Sessions created without a name (a bare `tmux` or `tm`) are numbered from **1**, not 0,
 so they line up with `base-index 1` and `pane-base-index 1`. tmux has no session-level
 `base-index` — an unnamed session is always created as `0` — so a `session-created` hook
 runs `scripts/session-renumber.sh`, which renames it to the lowest free number ≥ 1.
-Only purely numeric auto-names are touched; `tm`/`tmp`/`tmt` sessions keep their names.
-
----
-
-## Project Picker (`prefix + P`)
-
-`prefix + P` is inline shell in `tmux.conf` (via `run-shell`) that lists the directories
-one level under `~/Projects` in an fzf popup (contents previewed on the right) and turns
-the selection into a tmux session.
-
-| Situation | What happens |
-|---|---|
-| No session for that directory yet | Creates a session named after the directory, rooted in it |
-| Session already exists | Switches to it, leaving whatever is running untouched |
-
-Session names come from the directory basename with `.` and `:` translated to `_`,
-matching the substitution tmux performs on session names itself — which is also what lets
-the `has-session` check reliably find an existing session instead of creating a duplicate.
-
-Override the search root with `PROJECTS_DIR` if needed.
-
-This is the in-tmux twin of the [`tmp` shell function](#shell-aliases): both list with
-`find | sort`, name sessions the same way, and reuse an existing session. Neither starts
-OpenCode — use `prefix + O` for a new window or `prefix + o` for a 40% split.
-
-Because it is inline shell rather than a script, the binding is wrapped in **single**
-quotes so tmux does not expand `$` before the shell sees it, and each statement ends with
-`;` since the trailing `\` line continuations are joined into one line. That also means the
-code cannot contain a single quote — hence `tr .: __` is written unquoted.
-
-> **Note:** the picker used to live on `prefix + C-o`, which is now back to tmux's default
-> `rotate-window`.
+Only purely numeric auto-names are touched; `tm` creates an unnamed session.
 
 ---
 
 ## Session Picker (`prefix + s`)
 
 `prefix + s` is inline shell in `tmux.conf` (via `run-shell`): an fzf popup listing the
-running sessions, with the selected session's windows shown in the preview pane.
+running sessions, without a preview pane.
 
 | Binding | Description |
 |---|---|
@@ -135,11 +98,11 @@ running sessions, with the selected session's windows shown in the preview pane.
 This overrides tmux's default `s` (`choose-tree -Zs`), which is still available via
 `prefix + :` then `choose-tree -Zs`.
 
-The tmux formats are the brace-free aliases (`#S`, `#I`, `#W`) rather than
-`#{session_name}`, because those strings are passed through fzf's `--preview` and
-`--bind` actions where `{...}` is fzf's own placeholder syntax. They still need quoting,
+The tmux format is the brace-free alias `#S` rather than
+`#{session_name}`, because it is passed through fzf's
+`--bind` actions where `{...}` is fzf's own placeholder syntax. It still needs quoting,
 since an unquoted `#` would start a shell comment — and where quotes must nest (the
-`--preview` and `--bind` values) the inner ones are written `\"`. tmux performs no
+`--bind` value) the inner ones are written `\"`. tmux performs no
 replacements inside single quotes, so those backslashes reach the shell untouched.
 
 From the shell, `s` is the same picker — see [Shell Aliases](#shell-aliases).
@@ -217,20 +180,12 @@ installed. They are bound in the **prefix** table, not as bare `M-s`/`M-r`.
 
 | Alias | Description |
 |---|---|
-| `tmp` | fzf picker over `~/Projects` → session named after the project, rooted in it |
 | `s` | fzf picker over running sessions → switch (inside tmux) or attach (outside) |
 | `tm` | Bare `tmux` |
 | `tma` | Attach to a session by name (`tmux attach-session -t`) |
 | `tmk` | Kill the tmux server (`tmux kill-server`, zsh/bash only) |
-| `tmr` | Rename current session |
-| `tmt` | New/attach session named after cwd (`new-session -A`) |
 | `tc` | Open `tmux.conf` in `$EDITOR` |
 
-`tmp` reuses an existing session for the project instead of creating a duplicate, and
-`.`/`:` in the directory name become `_` (matching tmux's own session-name rules).
-Override the search root with `PROJECTS_DIR`. It is the shell twin of `prefix + P`, just
-as `s` is the shell twin of `prefix + s`.
-
-`tmp` and `s` are shell **functions**, not aliases, so bash and zsh share one definition
-from `zsh/.config/zsh/aliases.sh`; fish has its own copies in
+`s` is a shell **function**, not an alias, so bash and zsh share one definition
+from `zsh/.config/zsh/aliases.sh`; fish has its own copy in
 `fish/.config/fish/aliases.fish`.

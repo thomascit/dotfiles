@@ -1,5 +1,0 @@
-[flavor]
-dark = "dracula"
-
-[indicator]
-padding = { open = "█", close = "█" }

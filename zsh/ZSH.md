@@ -174,7 +174,7 @@ X11 `xclip`, then WSL `clip.exe`, provided the corresponding tool is installed.
 | `fast-syntax-highlighting` | Syntax highlighting in the shell |
 | `zsh-autosuggestions` | Fish-style inline suggestions |
 | `zsh-completions` | Extra completions |
-| `zsh-vi-mode` | Vi keybindings (with system clipboard) |
+| `zsh-vi-mode` | Vi keybindings (with system clipboard). `ZVM_INIT_MODE=sourcing` so it binds at load time instead of the first prompt — otherwise it overwrites the fzf/atuin keys |
 | `zsh-autopair` | Auto-close brackets and quotes |
 
 ---

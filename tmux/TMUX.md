@@ -11,6 +11,7 @@
 | `prefix + s` | Session picker — fzf over running sessions |
 | `prefix + S` | SSH host picker (fzf from `~/.ssh/config`) |
 | `prefix + r` | Run command (prompts, runs in new window) |
+| `prefix + e` | Replace the active pane's program with a command — only that pane changes (`scripts/pane-replace.sh`, uses `respawn-pane -k`) |
 | `prefix + C` | Config file picker (`~/.config`) |
 | `prefix + R` | Reload `~/.config/tmux/tmux.conf` (confirms in the status line) |
 | `prefix + ?` | Key bindings reference popup |
@@ -54,6 +55,7 @@ wording in the `prefix + ?` popup: `-` is `split-window -v` (panes stacked), `_`
 |---|---|
 | `C-h / C-l / C-k / C-j` | Move between panes (vim-style, works across vim) |
 | `C-\` | Previous pane |
+| `prefix + C-l` | Clear screen (bare `C-l` is taken by pane navigation) |
 | `prefix + H/J/K/L` | Resize pane (repeatable) |
 
 ---

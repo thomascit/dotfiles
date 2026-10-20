@@ -32,6 +32,7 @@
 | `<prefix> s` | Session picker — fzf over running sessions (`C-x` kills) |
 | `<prefix> S` | SSH host picker (fzf popup from `~/.ssh/config`) |
 | `<prefix> r` | Run command (prompts, runs in new window) |
+| `<prefix> e` | Replace the **active pane's** program with a command (e.g. lazygit → `opencode`). Other panes and the layout are untouched; the pane drops to a shell when the command exits. Empty Enter or `Ctrl+C` cancels |
 | `<prefix> C` | Config file picker (`~/.config`) |
 | `<prefix> R` | Reload `~/.config/tmux/tmux.conf` (confirms in the status line) |
 | `<prefix> ?` | Key bindings reference popup |
@@ -61,6 +62,7 @@ wording in the `<prefix> ?` popup.
 | `<prefix> o` | Split pane vertically — 40% width, opens `opencode --continue` |
 | `<prefix> t` | Split pane horizontally — 25% height (current path) |
 | `<prefix> m` | Split pane horizontally — 10% height (current path) |
+| `<prefix> Ctrl+l` | Clear screen (sends `Ctrl+l` to the pane; bare `Ctrl+l` navigates) |
 
 ### Navigation
 
@@ -72,7 +74,7 @@ wording in the `<prefix> ?` popup.
 | `Ctrl+l` | Move to pane / Vim split right (vim-tmux-navigator) |
 | `Ctrl+\` | Move to previous pane (vim-tmux-navigator) |
 | `<prefix> w` | Window switcher — fzf popup over the current session's windows |
-| `Alt+h` | Previous window (no prefix) |
+| `Alt+h` | Previous window (no prefix; on macOS, Option acts as Alt in Ghostty, kitty and Alacritty) |
 | `Alt+l` | Next window (no prefix) |
 | `Shift+Left` | Swap window left |
 | `Shift+Right` | Swap window right |
@@ -156,11 +158,12 @@ The rows below exist in **both** `vim` and `nvim` except where noted.
 | Keybinding | Mode | Description |
 |---|---|---|
 | `jk` | Insert | Exit insert mode |
-| `Ctrl+s` | Insert / Normal / Visual | Save file (vim: Insert / Normal only) |
+| `Ctrl+s` | Insert / Normal / Visual | Save file (vim: Insert / Normal only; Insert keeps the cursor in place) |
 | `<leader>qq` | Normal | Quit all |
 | `<leader>l` | Normal | Open Lazy plugin manager (**nvim only** — vim uses vim-plug) |
 | `<leader>fn` | Normal | New file |
-| `<Esc>` | Normal | Clear search highlight |
+| `<leader><Esc>` | Normal | Clear search highlight (**vim**). Bare `<Esc>` is not mapped in terminal Vim: escape sequences start with Esc, so mapping it garbles input |
+| `<Esc>` | Normal | Clear search highlight (**nvim only**) |
 | `H` / `L` | Normal | Previous / next buffer |
 | `Ctrl+q` | Normal | Delete buffer |
 | `Ctrl+d` / `Ctrl+u` | Normal | Half-page scroll, cursor centred |
@@ -312,6 +315,10 @@ selects a directory. `Ctrl+R` searches fzf history in bash; in zsh and fish,
 atuin loads after fzf and takes over `Ctrl+R` when installed (otherwise fzf
 handles it). Bash and zsh also get fzf fuzzy completion.
 
+In zsh this ordering depends on `ZVM_INIT_MODE=sourcing` in `zshrc`. By default
+zsh-vi-mode initialises at the first prompt and rebinds every key, which would
+silently overwrite the fzf and atuin bindings.
+
 fzf itself is still used heavily for the aliases below, the tmux popups, and the
 `s` session picker. Theming for all of those comes from `FZF_DEFAULT_OPTS`.
 
@@ -374,6 +381,7 @@ These aliases use fzf for interactive selection:
 |---|---|---|
 | `ZVM_VI_ESCAPE_BINDKEY` | `jk` | Exit insert mode with `jk` chord |
 | `ZVM_SYSTEM_CLIPBOARD_ENABLED` | `true` | System clipboard integration |
+| `ZVM_INIT_MODE` | `sourcing` | Initialise at load time so later fzf/atuin bindings are kept (set in `zshrc`) |
 
 Standard vi-mode bindings apply in both normal and insert modes.
 
@@ -419,6 +427,15 @@ for backward/forward directory history.
 |---|---|
 | `Ctrl+o` | Back in directory history (Vim jumplist-style) |
 | `-` | Ascend to parent directory (netrw-style) |
+| `zf` | Live fuzzy filter in the current directory (`fzf_filter`); Escape cancels. Replaces ranger's built-in `zf` (`filter`), still available as `:filter` |
+| `cz` | Prefill zoxide directory query (`:z `) |
+| `cZ` | Interactive zoxide picker (`:zi`, requires `fzf`) |
+| `ex` | Prefill `:extract ` for selected archive(s); optional argument is output directory |
+| `ec` | Prefill `:compress ` for selected files; supply an archive name, e.g. `files.zip` |
+
+These plugin shortcuts require the [Ranger plugins](README.md#plugin-managers).
+Clear an accepted fuzzy filter with `:fzf_filter` (empty query). Default `f`
+and `/` remain unchanged.
 
 `Ctrl+i` is not remapped to history forward: terminals commonly send it as Tab,
 which ranger already uses for switching tabs. Use `L` to go forward instead.
@@ -551,4 +568,4 @@ All standard Vimium keybindings apply. See [Vimium docs](https://vimium.github.i
 
 ---
 
-*Last updated: 2026-08-31*
+*Last updated: 2026-10-19*

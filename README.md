@@ -90,7 +90,7 @@ The setup script stows configs, installs plugin managers, and copies fonts. It d
 ./setup.sh --full       # Stow all CLI configs + plugin managers + fonts
 ./setup.sh --minimal    # Server/headless: reduced set, no prompts, no network
 ./setup.sh --custom     # Select specific packages to stow
-./setup.sh --plugins    # Install plugin managers only (TPM, vim-plug, Zinit)
+./setup.sh --plugins    # Install TPM, vim-plug, Zinit and pinned Ranger plugins
 ./setup.sh --fonts      # Install fonts from reference/fonts/
 ./setup.sh --uninstall  # Remove dotfile symlinks and plugin managers
 ./setup.sh --help       # Show help and package lists
@@ -126,7 +126,7 @@ from Debian 12, and expects a sync server), plus all terminal and window
 manager configs.
 
 Skips fonts (glyphs come from your local terminal, not the server) and the
-TPM / vim-plug / Zinit plugin managers, since all three need network access.
+TPM / vim-plug / Zinit and Ranger plugins, since these need network access.
 Add them later on a networked host with `./setup.sh --plugins`.
 
 Also skips the git pre-commit hook: a server checkout is read-only in practice,
@@ -227,6 +227,7 @@ the config also falls back to `screen-256color` as a second line of defence.
 | `rofi` | Application launcher (X11) |
 | `ranger` | Terminal file manager with Dracula colors and Vim-style navigation |
 | `starship` | Fast, customizable shell prompt |
+| `superfile` | Modern terminal file manager (`spf`) with Dracula theme |
 | `tmux` | Terminal multiplexer with TPM plugins and Dracula theme |
 | `vim` | Vim with vim-plug and Dracula theme |
 | `wofi` | Application launcher (Wayland) |
@@ -266,6 +267,47 @@ Terminal configs (alacritty, ghostty, kitty) and noctalia are pre-configured to 
 | ~~Neovim~~ | ~~lazy.nvim (LazyVim)~~ | **(Discontinued)** no longer stowed or bootstrapped |
 | Zsh | Zinit | Bootstraps automatically on first shell start |
 | Tmux | TPM | Press `<prefix>+I` to install plugins after first launch |
+| Ranger | Pinned Git clones | devicons2, fzf-filter, zoxide and archives; installed by full install / `--plugins` |
+
+To install just the four Ranger plugins, run
+`bash ranger/.config/ranger/install-plugins.sh` from this repository, then restart
+Ranger. Ignored clones are pinned to reviewed commits of
+[cdump/ranger-devicons2](https://github.com/cdump/ranger-devicons2),
+[MuXiu1997/ranger-fzf-filter](https://github.com/MuXiu1997/ranger-fzf-filter),
+[jchook/ranger-zoxide](https://github.com/jchook/ranger-zoxide), and
+[maximtrp/ranger-archives](https://github.com/maximtrp/ranger-archives). The installer never
+updates or overwrites existing clones. Review upstream code before changing pins
+and manually updating clean clones. Select a Nerd Font for icons; Dracula stays
+unchanged. Without devicons2, Ranger uses its default filename display.
+Minimal installs skip downloads; plugin shortcuts require the corresponding
+plugin. Uninstall does not delete clones automatically.
+
+`fzf` and `zoxide` must be on PATH; the installer skips a new plugin download
+when its required executable is missing. Keep `zoxide` installed while its plugin
+is present: the directory-change hook invokes it and records visits in your
+shared zoxide database. Interactive `zi` also needs `fzf`. No dependencies are
+installed by this script. `zf` filters the current directory live (not recursive);
+Escape cancels, or use `:fzf_filter` with no query to clear an accepted filter.
+Filters persist per directory unless `clear_filters_on_dir_change` is enabled
+(Ranger defaults it to false).
+`cz` prefills `:z ` for a directory query; `cZ` runs `:zi` interactively.
+Default `f` and `/` are preserved. oscyank and quit_cd_wd are not installed.
+
+Archives use external tools detected at runtime, e.g. `zip`/`unzip` and
+`tar`/`gzip`; `7z`/`7zz`/`7za`, `rar`/`unrar` and other compressors add formats.
+Python 3.9+ is needed for all plugin features. No archive tools are installed by
+the installer. Mark archive(s), or highlight one with no marks, then press `ex`
+and Enter (`:extract`) to extract here; `:extract "output directory"` chooses an
+output directory. This argument is **not** an archive filename. `:extract_to_dirs`
+extracts each selected archive into its own subdirectory; `:extract_raw FLAGS`
+passes archiver-specific flags. Extraction clears Ranger's copy/cut buffer.
+
+Mark files/directories, then press `ec`, enter `files.zip` or `files.tar.gz`, and
+Enter (`:compress files.zip`). Syntax: `:compress [FLAGS] [FILENAME.EXT]`, e.g.
+`:compress -9 "my files.zip"`. Bare `:compress` uses the current directory's name
+plus `.zip`; quote names containing spaces. Operations run through Ranger's task
+queue. Extract only trusted archives into an appropriate directory: member-path
+safety and overwrite behavior depend on the external archiver, not a sandbox.
 
 ## Keybindings
 

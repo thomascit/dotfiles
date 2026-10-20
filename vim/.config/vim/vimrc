@@ -66,6 +66,12 @@ set termguicolors             " Enable 24-bit RGB colors
 " Leader key
 let mapleader = " "           " Set leader key to space
 
+" One group for every autocmd in this file. `autocmd!` clears it first, so
+" re-sourcing (e.g. the PlugInstall autocmd below) cannot stack duplicates.
+augroup vimrc
+  autocmd!
+augroup END
+
 " Key mappings
 inoremap jk <Esc>
 
@@ -83,13 +89,16 @@ nnoremap <leader>qq :qa<CR>
 
 " Save file
 nnoremap <C-s> :w<CR>
-inoremap <C-s> <Esc>:w<CR>a
+" <C-o> runs one command without leaving insert mode, so the cursor stays put.
+inoremap <C-s> <C-o>:w<CR>
 
 " New file
 nnoremap <leader>fn :enew<CR>
 
 " Clear search highlights
-nnoremap <Esc> :nohlsearch<CR>
+" Not bare <Esc>: in terminal Vim, arrow keys and terminal replies begin with
+" Esc, so mapping it can garble input or start Vim in Replace mode.
+nnoremap <silent> <leader><Esc> :nohlsearch<CR>
 
 " Buffer navigation
 nnoremap H :bprevious<CR>
@@ -113,8 +122,10 @@ let &t_SR = "\e[4 q"   " Enter Replace: underline
 let &t_EI = "\e[2 q"   " Exit Insert/Replace: block
 
 " Install vim-plug if not found (needs curl and network access)
+" Timeouts bound the attempt: this runs on every start while plug.vim is
+" missing, and an offline host with filtered egress would otherwise hang Vim.
 if empty(glob('~/.vim/autoload/plug.vim')) && executable('curl')
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs --connect-timeout 5 --max-time 20
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 endif
 
@@ -123,7 +134,7 @@ endif
 " startup, and the g:plugs autocmd below throws E121.
 if !empty(glob('~/.vim/autoload/plug.vim'))
   " Run PlugInstall if there are missing plugins
-  autocmd VimEnter * if exists('g:plugs') && len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  autocmd vimrc VimEnter * if exists('g:plugs') && len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
     \ | PlugInstall --sync | source $MYVIMRC
     \ | endif
 
@@ -156,7 +167,7 @@ let g:airline#extensions#tabline#right_sep = ''            " tabline right separ
 let g:airline_skip_empty_sections = 1                      " skip empty sections
 
 " Airline section_a customization (requires function, set after plugins load)
-autocmd VimEnter * if exists('*airline#section#create_left') | let g:airline_section_a = airline#section#create_left(['mode', 'paste']) | endif
+autocmd vimrc VimEnter * if exists('*airline#section#create_left') | let g:airline_section_a = airline#section#create_left(['mode', 'paste']) | endif
 
 " Colorscheme (silent to avoid error on first run before plugins install)
 silent! colorscheme dracula

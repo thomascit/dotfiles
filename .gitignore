@@ -23,6 +23,13 @@ btop/.config/btop/btop.log
 
 # Ranger imports custom colorschemes as Python modules in the stowed directory.
 ranger/.config/ranger/colorschemes/__pycache__/
+# Ranger plugins (downloaded by install-plugins.sh); generated loader/cache.
+ranger/.config/ranger/plugins/ranger-devicons2/
+ranger/.config/ranger/plugins/ranger-fzf-filter/
+ranger/.config/ranger/plugins/ranger-zoxide/
+ranger/.config/ranger/plugins/ranger-archives/
+ranger/.config/ranger/plugins/__init__.py
+ranger/.config/ranger/plugins/__pycache__/
 
 # Fish-specific
 fish/.config/fish/fish_variables

@@ -6,9 +6,6 @@ fi
 # Environment variables (from .zprofile for non-login shells)
 [ -f "$HOME/.config/zsh/.zprofile" ] && source "$HOME/.config/zsh/.zprofile"
 
-# Local Env
-[ -f "$HOME/.zenv" ] && source "$HOME/.zenv"
-
 # Aliases
 [ -f "$HOME/.config/zsh/aliases.sh" ] && source "$HOME/.config/zsh/aliases.sh"
 
@@ -16,7 +13,12 @@ fi
 fpath=(~/.config/zsh/functions $fpath)
 autoload -Uz ~/.config/zsh/functions/*(:t)
 
-ZVM_SYSTEM_CLIPBOARD_ENABLED=true
+# zsh-vi-mode defaults to initialising at the first prompt, which rebinds every
+# key and silently overwrites the fzf (Ctrl+T, Alt+C) and atuin (Ctrl+R)
+# bindings set further down. Initialising at source time keeps the order of
+# this file meaningful: later bindings win. (ZVM_SYSTEM_CLIPBOARD_ENABLED and
+# the jk escape are already exported from .zprofile.)
+ZVM_INIT_MODE=sourcing
 
 ### Added by Zinit's installer
 # Bootstrap Zinit when git is available. No network pre-check: the guard below

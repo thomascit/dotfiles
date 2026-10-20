@@ -6,13 +6,9 @@ set -gx TERMINAL "ghostty"
 set -gx EDITOR "vim"
 set -gx HOMEBREW_NO_AUTO_UPDATE 1
 set -gx HOMEBREW_NO_ENV_HINTS 1
-# /usr/local/share/go is writable under Homebrew but root-owned on Linux,
-# where `go install` would fail without sudo.
-if test (uname) = Darwin
-    set -gx GOPATH "/usr/local/share/go"
-else
-    set -gx GOPATH "$HOME/go"
-end
+# Go's own default. /usr/local/share is root-owned on Linux and on Apple
+# Silicon Macs (Homebrew lives in /opt/homebrew), so `go install` would fail.
+set -gx GOPATH "$HOME/go"
 
 # Dracula Man Page Colors
 set -gx MANPAGER "less -s -M +Gg"
@@ -28,6 +24,8 @@ set -gx GROFF_NO_SGR 1                 # for konsole
 # PATH
 fish_add_path "$HOME/.local/bin"
 fish_add_path "$HOME/.opencode/bin"
+# `go install` targets; appended so they never shadow system commands.
+fish_add_path --append "$GOPATH/bin"
 
 # FZF
 # Read by the fzf binary itself, so these apply to every fzf invocation

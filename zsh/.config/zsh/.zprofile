@@ -6,13 +6,9 @@ export TERMINAL="ghostty"
 export EDITOR="vim"
 export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_NO_ENV_HINTS=1
-# /usr/local/share/go is writable under Homebrew but root-owned on Linux,
-# where `go install` would fail without sudo.
-if [[ "$OSTYPE" == "darwin"* ]]; then
-  export GOPATH="/usr/local/share/go"
-else
-  export GOPATH="$HOME/go"
-fi
+# Go's own default. /usr/local/share is root-owned on Linux and on Apple
+# Silicon Macs (Homebrew lives in /opt/homebrew), so `go install` would fail.
+export GOPATH="$HOME/go"
 
 # Dracula Man Page Colors
 export MANPAGER="less -s -M +Gg"
@@ -26,8 +22,13 @@ export LESS_TERMCAP_ue=$'\e[0m'        # reset underline
 export GROFF_NO_SGR=1                  # for konsole
 
 # PATH
+# zshrc re-sources this file in every interactive shell, so nested shells and
+# tmux panes would prepend the same entries again. -U keeps entries unique.
+typeset -U path PATH
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.opencode/bin:$PATH"
+# `go install` targets; appended so they never shadow system commands.
+path+=("$GOPATH/bin")
 
 # Fzf
 # Read by the fzf binary itself, so these apply to every fzf invocation
@@ -55,7 +56,7 @@ export ZVM_SYSTEM_CLIPBOARD_ENABLED=true
 if [[ "$OSTYPE" == "darwin"* ]]; then
   export ZVM_CLIPBOARD_COPY_CMD='pbcopy'
   export ZVM_CLIPBOARD_PASTE_CMD='pbpaste'
-elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+elif [[ "$OSTYPE" == linux* ]]; then
   if grep -qiE "(microsoft|wsl)" /proc/version 2>/dev/null; then
     export ZVM_CLIPBOARD_COPY_CMD='clip.exe'
     export ZVM_CLIPBOARD_PASTE_CMD='powershell.exe -Command Get-Clipboard'

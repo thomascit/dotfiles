@@ -11,6 +11,13 @@ case ":$PATH:" in
   *) export PATH="$HOME/.local/bin:$PATH" ;;
 esac
 
+# `go install` targets (Go's default GOPATH is ~/go); appended so they never
+# shadow system commands.
+case ":$PATH:" in
+  *":$HOME/go/bin:"*) ;;
+  *) export PATH="$PATH:$HOME/go/bin" ;;
+esac
+
 # Exports
 export BASH_SILENCE_DEPRECATION_WARNING=1
 export XDG_CONFIG_HOME="$HOME/.config"

@@ -59,13 +59,9 @@ if command -q fzf; and fzf --fish >/dev/null 2>&1
     fzf --fish | source
 end
 
-# Atuin
+# Atuin (its init binds Ctrl+R and Up in every vi mode itself)
 if command -q atuin
     atuin init fish | source
-    bind -M insert \cr _atuin_search
-    bind \cr _atuin_search
-    bind -M insert \e\[A _atuin_bind_up
-    bind \e\[A _atuin_bind_up
 end
 
 # Enable: Starship

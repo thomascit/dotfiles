@@ -89,6 +89,13 @@ wording in the `<prefix> ?` popup.
 | `<prefix> K` (repeatable) | Resize pane up 5 rows |
 | `<prefix> L` (repeatable) | Resize pane right 5 cols |
 
+### Rename
+
+| Keybinding | Description |
+|---|---|
+| `<prefix> ,` / `<prefix> W` | Rename current window (prompt prefilled with the current name; an explicit name pins it, other windows keep automatic naming) |
+| `<prefix> P` | Rename current pane — sets the pane **title** (`select-pane -T`). Not shown by default: the pane border displays the running command and is hidden until `<prefix> B` |
+
 ### Sessions
 
 Use `<prefix> s` to pick a session (see [Popups](#popups)). Sessions use numeric
@@ -568,4 +575,4 @@ All standard Vimium keybindings apply. See [Vimium docs](https://vimium.github.i
 
 ---
 
-*Last updated: 2026-10-19*
+*Last updated: 2026-10-20*

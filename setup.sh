@@ -45,7 +45,7 @@ fi
 # Stow package groups
 # nvim is discontinued: the config still lives in nvim/ but is no longer stowed
 # or maintained. vim is now the default editor ($EDITOR). See README.
-PACKAGES_CLI="atuin bash bat btop eza fish lazygit ranger starship tmux vim zsh"
+PACKAGES_CLI="atuin bash bat btop eza fish lazygit ranger starship superfile tmux vim zsh"
 PACKAGES_TERMINALS="alacritty ghostty kitty"
 PACKAGES_WM_LINUX="hypr noctalia rofi wofi"
 
@@ -352,8 +352,11 @@ unstow_packages() {
   for package in $packages; do
     if [[ -d "$DOTFILES_DIR/$package" ]]; then
       # cd for the same reason as stow_packages: .stowrc is read from cwd.
-      (cd "$DOTFILES_DIR" && stow -v -D -d "$DOTFILES_DIR" -t "$HOME" "$package" 2>&1) || true
-      success "Unstowed $package"
+      if (cd "$DOTFILES_DIR" && stow -v -D -d "$DOTFILES_DIR" -t "$HOME" "$package" 2>&1); then
+        success "Unstowed $package"
+      else
+        warn "Failed to unstow $package — see stow output above"
+      fi
     else
       warn "Package directory not found, skipping: $package"
     fi
@@ -365,9 +368,25 @@ copy_wrapper_files() {
 
   for file in $WRAPPER_FILES; do
     if [[ -f "$DOTFILES_DIR/$file" ]]; then
+      # Already our wrapper (e.g. a re-run): nothing to do. Without this check a
+      # second run would "back up" the wrapper itself over the real original.
+      if [[ -f "$HOME/$file" ]] && cmp -s "$DOTFILES_DIR/$file" "$HOME/$file"; then
+        success "$file already up to date"
+        continue
+      fi
       if [[ -f "$HOME/$file" ]] && [[ ! -L "$HOME/$file" ]]; then
-        info "Backing up existing $file to $file.backup"
-        mv "$HOME/$file" "$HOME/$file.backup"
+        if [[ -e "$HOME/$file.backup" ]]; then
+          # The first backup is the user's original; never overwrite it. The
+          # current file differs from the wrapper (e.g. an installer appended
+          # to it), so keep it too, under a timestamped name.
+          local stamp
+          stamp="$(date +%Y%m%d-%H%M%S)"
+          info "Backing up modified $file to $file.backup.$stamp (original $file.backup kept)"
+          mv "$HOME/$file" "$HOME/$file.backup.$stamp"
+        else
+          info "Backing up existing $file to $file.backup"
+          mv "$HOME/$file" "$HOME/$file.backup"
+        fi
       fi
       cp "$DOTFILES_DIR/$file" "$HOME/$file"
       success "Copied $file"
@@ -380,6 +399,11 @@ remove_wrapper_files() {
 
   for file in $WRAPPER_FILES; do
     if [[ -f "$HOME/$file" ]]; then
+      # Only remove the file if it is our wrapper, never a user's own config.
+      if [[ -f "$DOTFILES_DIR/$file" ]] && ! cmp -s "$DOTFILES_DIR/$file" "$HOME/$file"; then
+        warn "$file differs from the dotfiles wrapper — left in place"
+        continue
+      fi
       rm "$HOME/$file"
       success "Removed $file"
       if [[ -f "$HOME/$file.backup" ]]; then
@@ -394,7 +418,7 @@ remove_wrapper_files() {
 # Plugin Managers
 # ─────────────────────────────────────────────────────────────────────────────
 
-# All three plugin managers are fetched over the network. Because the script
+# Plugin managers and Ranger plugins are fetched over the network. Because the script
 # runs under `set -e`, an unguarded failure here would abort the whole install
 # partway through — after stowing, but before fonts and the closing prompts.
 # Testing the command inside an `if` exempts it from set -e (same technique as
@@ -441,6 +465,17 @@ install_vim_plug() {
     info "Run vim and execute :PlugInstall to install plugins"
   else
     warn "Could not download vim-plug (no network?) — vim will start without plugins"
+  fi
+}
+
+install_ranger_plugins() {
+  local installer="$DOTFILES_DIR/ranger/.config/ranger/install-plugins.sh"
+  if [[ -f "$installer" ]]; then
+    if ! bash "$installer"; then
+      warn "Ranger plugin install failed — continuing"
+    fi
+  else
+    warn "Ranger plugin installer not found — skipping"
   fi
 }
 
@@ -554,9 +589,13 @@ install_atuin() {
   fi
 
   info "Installing Atuin..."
-  if [[ "${OS:-}" == "macos" ]]; then
-    brew install atuin
-    success "Atuin installed"
+  if [[ "${OS:-}" == "macos" ]] && command_exists brew; then
+    # Guarded like the other network steps: a failure must not abort the run.
+    if brew install atuin; then
+      success "Atuin installed"
+    else
+      warn "Could not install atuin via Homebrew — continuing"
+    fi
   else
     warn "Please install atuin manually: https://atuin.sh/docs/install"
   fi
@@ -573,6 +612,10 @@ remove_plugin_managers() {
 
   local zinit_dir="$HOME/.local/share/zinit"
   [[ -d "$zinit_dir" ]] && rm -rf "$zinit_dir" && success "Removed Zinit"
+
+  # The `[[ ]] &&` lines above return 1 when a manager is absent; without this
+  # the function's status would be 1 and `set -e` would end the script.
+  return 0
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -672,7 +715,7 @@ run_minimal_install() {
 
   echo ""
   success "Minimal installation complete!"
-  info "Skipped: fonts, and the TPM/vim-plug/Zinit plugin managers (network)."
+  info "Skipped: fonts, TPM/vim-plug/Zinit and Ranger plugins (network)."
   # $0 is "bash" when piped, so point at the on-disk copy instead.
   info "To add plugin managers later on a networked host: $DOTFILES_DIR/setup.sh --plugins"
 }
@@ -690,6 +733,7 @@ run_full_install() {
   install_tpm
   install_vim_plug
   install_zinit
+  install_ranger_plugins
   install_fonts
 
   echo ""
@@ -743,6 +787,7 @@ run_plugin_managers_only() {
   install_tpm
   install_vim_plug
   install_zinit
+  install_ranger_plugins
   success "Plugin managers installed!"
 }
 
@@ -835,7 +880,7 @@ show_menu() {
   echo "  1) Full install (CLI + wrappers + plugin managers + fonts)"
   echo "  2) Minimal install (server/headless: shells + tmux + vim, no network)"
   echo "  3) Custom install (select packages)"
-  echo "  4) Install plugin managers only (TPM, vim-plug, Zinit)"
+  echo "  4) Install plugin managers and Ranger plugins (TPM, vim-plug, Zinit)"
   echo "  5) Install fonts only"
   echo "  6) Uninstall"
   echo "  7) Exit"
@@ -926,7 +971,7 @@ main() {
     echo "  --full, -f      Stow all CLI configs + plugin managers + fonts"
     echo "  --minimal, -m   Server/headless: stow a reduced set, no prompts, no network"
     echo "  --custom, -c    Select specific packages to stow"
-    echo "  --plugins, -p   Install plugin managers only (TPM, vim-plug, Zinit)"
+    echo "  --plugins, -p   Install TPM, vim-plug, Zinit and pinned Ranger plugins"
     echo "  --fonts         Install fonts from reference/fonts/"
     echo "  --uninstall, -u Remove dotfile symlinks and plugin managers"
     echo "  --help, -h      Show this help message"

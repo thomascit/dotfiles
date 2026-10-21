@@ -46,6 +46,7 @@ This repo is a GNU Stow package tree. `.stowrc` sets `--target=$HOME`, `--ignore
 - **Root wrapper dotfiles `.bashrc`, `.zshrc`, `.vimrc` are copied, not stowed** (see `copy_wrapper_files()` in `setup.sh`). They are thin shims that source the real config from `~/.config/`. Editing them does not take effect via symlink — they must be re-copied.
 - `reference/` is deliberately **not** stowed; it holds fonts and a Vimium config installed by other means.
 - `Brewfile` at the repo root is the Homebrew manifest (installed by `setup.sh --brew`). It is a stow-root file, not a package. Refresh it with `brew bundle dump --force` from the repo root; never hand-edit entries the dump would overwrite.
+- **`Brewfile` is local-only and must never be committed.** It is git-ignored (`/Brewfile`) and was purged from all history with `git filter-repo` because the repo is public and it exposed the full app list. Never `git add -f` it, remove the ignore rule, or suggest committing it after a dump.
 - Because stow uses symlinks, editing `~/.config/<pkg>/...` edits the repo file through the link. Prefer editing inside the repo so paths in diffs stay unambiguous.
 
 ### What Is Deliberately Not Tracked
@@ -64,7 +65,7 @@ Grouped exactly as `setup.sh` defines them.
 - **CLI (`PACKAGES_CLI`, 13, macOS):** `atuin` `bash` `bat` `btop` `eza` `fish` `lazygit` `ranger` `starship` `superfile` `tmux` `vim` `zsh` — `vim` is the default `$EDITOR`
 - **Minimal / server (`PACKAGES_MINIMAL`, 11, Linux over SSH):** `bash` `zsh` `fish` `tmux` `vim` `bat` `btop` `eza` `starship` `lazygit` `ranger` — a subset of CLI, not a separate set of packages
 - **Terminals (`PACKAGES_TERMINALS`, 3, macOS):** `alacritty` `ghostty` `kitty`
-- **Not stowed:** `Brewfile`, `reference/fonts` (JetBrainsMono Nerd Font), `reference/vimium`
+- **Not stowed:** `Brewfile` (local-only, untracked), `reference/fonts` (JetBrainsMono Nerd Font), `reference/vimium`
 
 If you change this list, update `setup.sh`, the "What's Inside" table in `README.md`, and this file together.
 

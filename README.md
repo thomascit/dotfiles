@@ -56,7 +56,7 @@ Every config guards the optional tools it uses, so a missing tool degrades that 
 
 ```sh
 git clone git@github.com:thomascit/dotfiles.git ~/Projects/dotfiles
-~/Projects/dotfiles/setup.sh --brew   # installs the Brewfile, including stow
+~/Projects/dotfiles/setup.sh --brew   # installs your local Brewfile (not in the repo — see below)
 ~/Projects/dotfiles/setup.sh          # interactive menu
 ```
 
@@ -73,6 +73,11 @@ curl -fsSL https://raw.githubusercontent.com/thomascit/dotfiles/main/setup.sh \
 formulae, casks, VS Code extensions and global npm packages — produced by
 [`brew bundle`](https://docs.brew.sh/Brew-Bundle-and-Brewfile).
 
+It is **local-only**: `/Brewfile` is git-ignored and was purged from history, so
+the public repo does not publish the app list. A fresh clone has no Brewfile —
+copy it over from another Mac (or run `brew bundle dump` there) into the repo
+root before `./setup.sh --brew`, which otherwise skips with a warning.
+
 ```sh
 ./setup.sh --brew              # install everything in it
 brew bundle check              # is anything missing?
@@ -82,8 +87,8 @@ brew bundle cleanup --force    # ...and uninstall those
 ```
 
 Run `brew bundle` commands from the repo root (or pass `--file=Brewfile`).
-Re-dump after `brew install`, then commit, so the file stays the source of
-truth. The repo is public, so the Brewfile also publishes your app list.
+Re-dump after `brew install` so the file stays the source of truth. There is
+nothing to commit — back it up some other way if you need it on another Mac.
 
 ### Bootstrap without cloning
 
@@ -294,7 +299,7 @@ the config also falls back to `screen-256color` as a second line of defence.
 
 | File | Description |
 |------|-------------|
-| `Brewfile` | Homebrew manifest — see [Brewfile](#brewfile) |
+| `Brewfile` | Homebrew manifest — local-only, git-ignored; see [Brewfile](#brewfile) |
 | `reference/fonts/` | JetBrainsMono Nerd Font |
 | `reference/vimium/` | Vimium browser extension settings (Dracula theme + custom keymaps) |
 

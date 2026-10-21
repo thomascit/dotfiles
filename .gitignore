@@ -7,6 +7,9 @@ userstate.cbor
 todo.md
 test.md
 
+# Homebrew manifest: kept locally for setup.sh --brew, not published.
+/Brewfile
+
 # opencode: share agent definitions, ignore local state.
 # Allow-list on purpose: opencode auto-populates this dir with node_modules,
 # lockfiles, caches and possibly credentials, so default to excluding

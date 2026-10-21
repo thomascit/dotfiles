@@ -710,7 +710,7 @@ report_capabilities() {
   fi
 }
 
-# Headless install: config only, no prompts, no network fetches. Safe to run
+# Headless install: configs and Ranger plugins, no prompts. Safe to run
 # unattended over SSH, which the interactive flows are not — read_input() reads
 # from /dev/tty, so anything with a prompt cannot be scripted.
 run_minimal_install() {
@@ -733,6 +733,7 @@ run_minimal_install() {
   ensure_fd_shim
   stow_packages "$PACKAGES_MINIMAL"
   copy_wrapper_files
+  install_ranger_plugins
 
   # No git hooks here: the pre-commit secret scan only matters where commits
   # happen, and a server checkout is read-only in practice. Running it would
@@ -746,7 +747,7 @@ run_minimal_install() {
 
   echo ""
   success "Minimal installation complete!"
-  info "Skipped: fonts, TPM/vim-plug/Zinit and Ranger plugins (network)."
+  info "Skipped: fonts and TPM/vim-plug/Zinit. Ranger plugin downloads were attempted."
   # $0 is "bash" when piped, so point at the on-disk copy instead.
   info "To add plugin managers later on a networked host: $DOTFILES_DIR/setup.sh --plugins"
   info "Clipboard over SSH uses OSC 52: \`c\` and tmux copy-mode reach your local clipboard"
@@ -923,7 +924,7 @@ show_menu() {
     echo "  6) Uninstall"
     echo "  7) Exit"
   else
-    echo "  1) Server install (shells + tmux + vim configs, no network)"
+    echo "  1) Server install (headless configs + Ranger plugins)"
     echo "  2) Server install + apt dependencies (needs root or sudo)"
     echo "  3) Install plugin managers and Ranger plugins (TPM, vim-plug, Zinit)"
     echo "  4) Uninstall"
@@ -1062,7 +1063,7 @@ main() {
     echo "  --fonts         Install fonts from reference/fonts/"
     echo ""
     echo "Linux (server over SSH) — also works on macOS:"
-    echo "  --minimal, -m   Stow the headless set, no prompts, no network"
+    echo "  --minimal, -m   Stow the headless set + download Ranger plugins, no prompts"
     echo ""
     echo "Both:"
     echo "  --plugins, -p   Install TPM, vim-plug, Zinit and pinned Ranger plugins"

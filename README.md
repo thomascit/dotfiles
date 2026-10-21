@@ -142,7 +142,7 @@ The setup script stows configs, installs plugin managers, copies fonts and
 ./setup.sh --fonts      # Install fonts from reference/fonts/
 
 # Linux server (also works on macOS)
-./setup.sh --minimal    # Headless set: no prompts, no network
+./setup.sh --minimal    # Headless configs + Ranger plugins, no prompts
 
 # Both
 ./setup.sh --plugins    # Install TPM, vim-plug, Zinit and pinned Ranger plugins
@@ -161,7 +161,7 @@ an SSH session are installed — no terminal emulators, fonts, GUI apps or
 clipboard tools, because all of those live on the *client* (your Mac):
 
 ```sh
-./setup.sh --minimal              # configs only
+./setup.sh --minimal              # configs + Ranger plugins
 ./setup.sh --minimal --with-deps  # also apt-install what the repos provide
 
 # Or straight from GitHub on a box with nothing installed yet:
@@ -194,9 +194,13 @@ cat ~/.ssh/id_ed25519.pub | c    # lands on your Mac's clipboard
 tmux forwards it because `tmux.conf` sets `set-clipboard on`. Ghostty and kitty
 allow OSC 52 writes by default; payloads are capped at roughly 100 KB.
 
-Skips fonts (glyphs come from your local terminal, not the server) and the
-TPM / vim-plug / Zinit and Ranger plugins, since these need network access.
-Add them later on a networked host with `./setup.sh --plugins`.
+Automatically downloads the pinned Ranger plugins after linking configs. Git
+and network access are required; failed downloads warn without stopping setup.
+The fzf-filter and zoxide plugins are skipped when their executables are missing;
+`--with-deps` attempts to install those dependencies first.
+
+Skips fonts (glyphs come from your local terminal, not the server) and
+TPM / vim-plug / Zinit. Add those later with `./setup.sh --plugins`.
 
 Also skips the git pre-commit hook: a server checkout is read-only in practice,
 so a secret scan there has nothing to scan.
@@ -326,7 +330,7 @@ Servers need no fonts: over SSH, glyphs are drawn by your local terminal.
 | Vim | vim-plug | Run `:PlugInstall` on first launch |
 | Zsh | Zinit | Bootstraps automatically on first shell start |
 | Tmux | TPM | Press `<prefix>+I` to install plugins after first launch |
-| Ranger | Pinned Git clones | devicons2, fzf-filter, zoxide and archives; installed by full install / `--plugins` |
+| Ranger | Pinned Git clones | devicons2, fzf-filter, zoxide and archives; installed by full / server install / `--plugins` |
 
 To install just the four Ranger plugins, run
 `bash ranger/.config/ranger/install-plugins.sh` from this repository, then restart
@@ -338,7 +342,7 @@ Ranger. Ignored clones are pinned to reviewed commits of
 updates or overwrites existing clones. Review upstream code before changing pins
 and manually updating clean clones. Select a Nerd Font for icons; Dracula stays
 unchanged. Without devicons2, Ranger uses its default filename display.
-Minimal installs skip downloads; plugin shortcuts require the corresponding
+Server installs also run the installer; plugin shortcuts require the corresponding
 plugin. Uninstall does not delete clones automatically.
 
 `fzf` and `zoxide` must be on PATH; the installer skips a new plugin download

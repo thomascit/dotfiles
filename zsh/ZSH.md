@@ -20,7 +20,6 @@
 | `sc` | `~/.config/starship/starship.toml` |
 | `sshc` | `~/.ssh/config` |
 | `vrc` | `~/.config/vim/vimrc` |
-| `hyc` | `~/.config/hypr/hyprland.conf` |
 
 Editor shortcuts resolve `$EDITOR` when invoked (default: `vim`), accept extra
 arguments, and quote config paths. `EDITOR` may contain an executable and flags;
@@ -80,30 +79,12 @@ too). It is the shell twin of tmux's `prefix + s`.
 | `ba` | Autoremove |
 | `bc` | Cleanup, pruning all cached downloads (`--prune=all`) |
 
-### Pacman / Yay / Paru (Arch)
-
-| Alias | Description |
-|---|---|
-| `pi` | fzf install (pacman) |
-| `yi` | fzf install (yay) |
-| `pri` | fzf install (paru) |
-| `pu` | fzf uninstall (pacman) |
-| `yu` | fzf uninstall (yay) |
-| `pru` | fzf uninstall (paru) |
-
-### APT (Debian/Ubuntu)
+### APT (Debian/Ubuntu servers)
 
 | Alias | Description |
 |---|---|
 | `ai` | fzf install |
 | `au` | fzf uninstall |
-
-### DNF (Fedora/RHEL)
-
-| Alias | Description |
-|---|---|
-| `dnfi` | fzf install |
-| `dnfu` | fzf uninstall |
 
 ---
 
@@ -128,6 +109,7 @@ syntax highlighting. Optional replacements are only enabled when installed.
 |---|---|
 | `v` | `$EDITOR` |
 | `oc` | `opencode` |
+| `saf [URL\|FILE]` | Open in Safari (macOS); bare domains get `https://` prepended |
 | `ff` | `fastfetch` |
 | `l` | `clear` |
 | `r` | `reset` |
@@ -136,7 +118,7 @@ syntax highlighting. Optional replacements are only enabled when installed.
 | `sa` | Add SSH key to the running agent (`ssh-add`) |
 | `sskg COMMENT` | Generate an Ed25519 SSH key with the supplied comment |
 | `u` | Run the dotfiles setup menu (`setup.sh`); does not reload the shell |
-| `c` | Copy to clipboard; checks tools and display availability when invoked, or reports an error |
+| `c [FILE]` | Copy stdin or FILE to the clipboard — `pbcopy` on macOS, OSC 52 over SSH |
 | `bashc` | Clear + launch bash |
 | `fishc` | Clear + launch fish |
 | `zshc` | Clear + launch zsh |
@@ -162,8 +144,11 @@ syntax highlighting. Optional replacements are only enabled when installed.
 | `lg` | Lazygit wrapper — cd into the directory lazygit navigated to |
 
 `c` and `_edit` are functions in the shared alias file, alongside `s` and its
-helper `_tmux_goto`. Clipboard priority is macOS `pbcopy`, Wayland `wl-copy`,
-X11 `xclip`, then WSL `clip.exe`, provided the corresponding tool is installed.
+helper `_tmux_goto`. On macOS `c` uses `pbcopy`. Anywhere else (a Linux
+server over SSH) it emits an OSC 52 escape sequence, which asks your *local*
+terminal to set its clipboard — no display, X forwarding or `xclip` needed.
+tmux passes it through (`set-clipboard on`). Payloads are capped by the
+terminal, typically around 100 KB.
 
 ---
 

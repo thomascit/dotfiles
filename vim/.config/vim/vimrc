@@ -32,8 +32,9 @@ set smartcase                 " Override ignorecase if uppercase used
 set hlsearch                  " Highlight search matches
 
 " Clipboard
-" macOS uses the * register (unnamed); Linux X11/Wayland uses + (unnamedplus,
-" and needs xclip or wl-clipboard installed).
+" macOS uses the * register (unnamed). On a Linux server over SSH there is no
+" system clipboard (Debian's vim-nox lacks +clipboard), so unnamedplus is a
+" harmless no-op there; pipe to `c` from the shell to copy via OSC 52.
 if has('macunix')
   set clipboard=unnamed
 else

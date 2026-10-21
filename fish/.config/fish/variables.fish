@@ -44,18 +44,19 @@ set -gx FZF_DEFAULT_OPTS '--color=border:#44475a --color=fg:#f8f8f2,bg:#282a36,h
 
 # ZSH-VI Settings (for compatibility if needed)
 set -gx ZVM_VI_ESCAPE_BINDKEY jk
-set -gx ZVM_SYSTEM_CLIPBOARD_ENABLED true
-# (MAC)
-# set -gx ZVM_CLIPBOARD_COPY_CMD pbcopy
-# set -gx ZVM_CLIPBOARD_PASTE_CMD pbpaste
-# (LINUX)
-set -gx ZVM_CLIPBOARD_COPY_CMD 'xclip -selection clipboard'
-set -gx ZVM_CLIPBOARD_PASTE_CMD 'xclip -selection clipboard -o'
+# System clipboard: macOS only (mirrors .zprofile). Servers use `c` (OSC 52).
+if test (uname) = Darwin
+    set -gx ZVM_SYSTEM_CLIPBOARD_ENABLED true
+    set -gx ZVM_CLIPBOARD_COPY_CMD pbcopy
+    set -gx ZVM_CLIPBOARD_PASTE_CMD pbpaste
+else
+    set -gx ZVM_SYSTEM_CLIPBOARD_ENABLED false
+end
 
 # LAZYGIT Settings
 set -gx LAZYGIT_NEW_DIR_FILE "$HOME/.lazygit/newdir"
 
-# ssh-agent (systemd user socket, Linux)
+# ssh-agent (systemd user socket, Linux servers)
 # Debian/systemd ships a socket-activated agent (ssh-agent.socket, enabled by
 # default) listening on $XDG_RUNTIME_DIR/openssh_agent, but only exports
 # SSH_AUTH_SOCK into the systemd user manager — not into tty/ssh login shells.

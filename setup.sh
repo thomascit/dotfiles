@@ -42,21 +42,26 @@ else
   DOTFILES_DIR="$HOME/Projects/dotfiles"
 fi
 
-# Stow package groups
-# nvim is discontinued: the config still lives in nvim/ but is no longer stowed
-# or maintained. vim is now the default editor ($EDITOR). See README.
+# Platform model: macOS is the workstation and gets every flow. Linux is
+# supported only as a headless server reached over SSH (--minimal), so nothing
+# that needs a local display — terminal emulators, fonts, Homebrew casks — is
+# ever installed there. The last commit with Linux desktop configs is tagged
+# `linux-final`.
+
+# Stow package groups (macOS)
 PACKAGES_CLI="atuin bash bat btop eza fish lazygit ranger starship superfile tmux vim zsh"
 PACKAGES_TERMINALS="alacritty ghostty kitty"
-PACKAGES_WM_LINUX="hypr noctalia rofi wofi"
 
-# Headless/server subset. Shells, editor and multiplexer, plus config-only
-# packages whose tools are in the Debian/Ubuntu repos. A stowed config for a
-# tool you have not installed is just an unused symlink, so these cost nothing
-# and activate later if you install the tool.
+# Headless/server subset: only tools that run entirely inside an SSH session.
+# Shells, editor and multiplexer, plus config-only packages whose tools are in
+# the Debian/Ubuntu repos. A stowed config for a tool you have not installed is
+# just an unused symlink, so these cost nothing and activate later if you
+# install the tool.
 #
 # Deliberately excluded:
-#   nvim   — discontinued; no longer stowed by any flow (vim is the editor now)
-#   atuin  — not in Debian 12; also expects a sync server
+#   atuin      — not in Debian 12; also expects a sync server
+#   superfile  — not packaged in Debian/Ubuntu
+#   terminals  — they run on the client machine, not the server
 # zsh is required even if unused: bash/bashrc sources ~/.config/zsh/aliases.sh.
 PACKAGES_MINIMAL="bash zsh fish tmux vim bat btop eza starship lazygit ranger"
 
@@ -65,10 +70,11 @@ PACKAGES_MINIMAL="bash zsh fish tmux vim bat btop eza starship lazygit ranger"
 # whatever the host's repos do not carry is reported and skipped.
 #   ncurses-term  provides the tmux-256color terminfo entry (tmux won't start
 #                 without it, given tmux.conf's default-terminal)
-#   curl          needed by install_vim_plug
-#   xclip         clipboard over `ssh -X`
+#   curl          needed by install_vim_plug and the tarball fallback
+# No clipboard tool (xclip/wl-clipboard): those need a display. Over SSH the
+# shells and tmux copy via OSC 52, which the *client* terminal handles.
 APT_DEPS_MINIMAL="git stow tmux vim fish zsh ncurses-term bat fd-find ripgrep \
-fzf zoxide btop eza starship lazygit ranger trash-cli xclip curl"
+fzf zoxide btop eza starship lazygit ranger trash-cli curl"
 
 # Wrapper files to copy (not stowed) to $HOME
 WRAPPER_FILES=".bashrc .zshrc .vimrc"
@@ -143,8 +149,12 @@ apt_candidate() {
   [[ -n "$candidate" && "$candidate" != "(none)" ]]
 }
 
-get_wm_packages() {
-  echo "$PACKAGES_WM_LINUX"
+# Guard for workstation-only flows. Linux hosts are servers here, so a desktop
+# flow on one is a mistake: stop and point at the server flow instead.
+require_macos() {
+  if [[ "${OS:-}" != "macos" ]]; then
+    error "This option is macOS-only. On a Linux server use: setup.sh --minimal [--with-deps]"
+  fi
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -601,6 +611,34 @@ install_atuin() {
   fi
 }
 
+# Install everything recorded in the Brewfile (formulae, casks, taps, VS Code
+# extensions). Homebrew itself is not installed automatically: that is a
+# curl|bash installer, which this script deliberately never runs for you.
+# Refresh the Brewfile after installing something: brew bundle dump --force
+install_brew_bundle() {
+  local brewfile="$DOTFILES_DIR/Brewfile"
+
+  if [[ ! -f "$brewfile" ]]; then
+    warn "No Brewfile at $brewfile — skipping"
+    return
+  fi
+
+  if ! command_exists brew; then
+    warn "Homebrew is not installed — skipping Brewfile"
+    info "Install it from https://brew.sh, then re-run: setup.sh --brew"
+    return
+  fi
+
+  info "Installing from $brewfile (this can take a while)..."
+  # Guarded: one failing entry (e.g. a vscode extension without the `code`
+  # CLI) must not abort the rest of the install under set -e.
+  if brew bundle install --file="$brewfile"; then
+    success "Brewfile installed"
+  else
+    warn "Some Brewfile entries failed — see output above (check with: brew bundle check --file=\"$brewfile\")"
+  fi
+}
+
 remove_plugin_managers() {
   info "Removing plugin managers..."
 
@@ -632,21 +670,14 @@ install_fonts() {
 
   info "Installing fonts from $fonts_dir..."
 
-  local dest
-  if [[ "${OS:-}" == "macos" ]]; then
-    dest="$HOME/Library/Fonts"
-  else
-    dest="$HOME/.local/share/fonts"
-  fi
+  # macOS only: over SSH, glyphs are rendered by the client terminal, so a
+  # server never needs fonts.
+  local dest="$HOME/Library/Fonts"
 
   mkdir -p "$dest"
   # Single pass matching both TrueType and OpenType fonts.
   # The `+` terminator batches files into fewer cp invocations than `\;`.
   find "$fonts_dir" \( -name "*.ttf" -o -name "*.otf" \) -exec cp {} "$dest/" +
-
-  if [[ "${OS:-}" == "linux" ]]; then
-    fc-cache -f >/dev/null 2>&1 && info "Font cache refreshed"
-  fi
 
   success "Fonts installed to $dest"
 }
@@ -718,6 +749,8 @@ run_minimal_install() {
   info "Skipped: fonts, TPM/vim-plug/Zinit and Ranger plugins (network)."
   # $0 is "bash" when piped, so point at the on-disk copy instead.
   info "To add plugin managers later on a networked host: $DOTFILES_DIR/setup.sh --plugins"
+  info "Clipboard over SSH uses OSC 52: \`c\` and tmux copy-mode reach your local clipboard"
+  info "when the client terminal allows it (Ghostty and kitty do by default)."
 }
 
 run_full_install() {
@@ -726,7 +759,12 @@ run_full_install() {
   create_xdg_dirs
   clone_dotfiles
   configure_git_hooks
-  ensure_fd_shim
+
+  echo ""
+  prompt "Install Homebrew packages from the Brewfile first? (y/n)"
+  read_input ans_brew
+  [[ "$ans_brew" =~ ^[Yy]$ ]] && install_brew_bundle
+
   stow_packages "$PACKAGES_CLI"
   copy_wrapper_files
   install_atuin
@@ -740,11 +778,6 @@ run_full_install() {
   prompt "Install terminal emulator configs? (y/n)"
   read_input ans_term
   [[ "$ans_term" =~ ^[Yy]$ ]] && stow_packages "$PACKAGES_TERMINALS"
-
-  echo ""
-  prompt "Install window manager configs? (y/n)"
-  read_input ans_wm
-  [[ "$ans_wm" =~ ^[Yy]$ ]] && stow_packages "$(get_wm_packages)"
 
   success "Full installation complete!"
 }
@@ -760,7 +793,6 @@ run_custom_install() {
   echo -e "  ${YELLOW}CLI:${NC}       $PACKAGES_CLI"
   echo -e "  ${YELLOW}Minimal:${NC}   $PACKAGES_MINIMAL"
   echo -e "  ${YELLOW}Terminals:${NC} $PACKAGES_TERMINALS"
-  echo -e "  ${YELLOW}WM:${NC}        $PACKAGES_WM_LINUX"
   echo ""
   prompt "Enter packages to stow (space-separated):"
   read_input SELECTED_PACKAGES
@@ -796,6 +828,11 @@ run_fonts_only() {
   install_fonts
 }
 
+run_brew_only() {
+  clone_dotfiles
+  install_brew_bundle
+}
+
 run_uninstall() {
   echo ""
   echo -e "${CYAN}Uninstall Options:${NC}"
@@ -813,7 +850,7 @@ run_uninstall() {
     prompt "This will remove all dotfile symlinks and plugin managers. Continue? (y/n)"
     read_input confirm
     if [[ "$confirm" =~ ^[Yy]$ ]]; then
-      unstow_packages "$PACKAGES_CLI $PACKAGES_TERMINALS $(get_wm_packages)"
+      unstow_packages "$PACKAGES_CLI $PACKAGES_TERMINALS"
       remove_wrapper_files
       remove_plugin_managers
       success "Full uninstall complete!"
@@ -828,19 +865,17 @@ run_uninstall() {
     echo "  2) CLI packages"
     echo "  3) Minimal (server) packages"
     echo "  4) Terminal emulators"
-    echo "  5) Window managers"
-    echo "  6) Custom"
+    echo "  5) Custom"
     echo ""
-    prompt "Select packages to unstow [1-6]:"
+    prompt "Select packages to unstow [1-5]:"
     read_input unstow_choice
 
     case "$unstow_choice" in
-    1) unstow_packages "$PACKAGES_CLI $PACKAGES_TERMINALS $(get_wm_packages)" ;;
+    1) unstow_packages "$PACKAGES_CLI $PACKAGES_TERMINALS" ;;
     2) unstow_packages "$PACKAGES_CLI" ;;
     3) unstow_packages "$PACKAGES_MINIMAL" ;;
     4) unstow_packages "$PACKAGES_TERMINALS" ;;
-    5) unstow_packages "$(get_wm_packages)" ;;
-    6)
+    5)
       prompt "Enter packages to unstow (space-separated):"
       read_input SELECTED_PACKAGES
       unstow_packages "$SELECTED_PACKAGES"
@@ -874,17 +909,59 @@ EOF
   echo ""
 }
 
+# The menu depends on the platform: a Linux host is a server, so it is only
+# offered the SSH-safe flows.
 show_menu() {
   echo ""
   echo -e "${CYAN}Options:${NC}"
-  echo "  1) Full install (CLI + wrappers + plugin managers + fonts)"
-  echo "  2) Minimal install (server/headless: shells + tmux + vim, no network)"
-  echo "  3) Custom install (select packages)"
-  echo "  4) Install plugin managers and Ranger plugins (TPM, vim-plug, Zinit)"
-  echo "  5) Install fonts only"
-  echo "  6) Uninstall"
-  echo "  7) Exit"
+  if [[ "$OS" == "macos" ]]; then
+    echo "  1) Full install (Brewfile? + CLI + wrappers + plugin managers + fonts)"
+    echo "  2) Custom install (select packages)"
+    echo "  3) Install Homebrew packages from Brewfile"
+    echo "  4) Install plugin managers and Ranger plugins (TPM, vim-plug, Zinit)"
+    echo "  5) Install fonts only"
+    echo "  6) Uninstall"
+    echo "  7) Exit"
+  else
+    echo "  1) Server install (shells + tmux + vim configs, no network)"
+    echo "  2) Server install + apt dependencies (needs root or sudo)"
+    echo "  3) Install plugin managers and Ranger plugins (TPM, vim-plug, Zinit)"
+    echo "  4) Uninstall"
+    echo "  5) Exit"
+  fi
   echo ""
+}
+
+run_menu() {
+  local choice
+  while true; do
+    show_menu
+    if [[ "$OS" == "macos" ]]; then
+      prompt "Select an option [1-7]:"
+      read_input choice
+      case "$choice" in
+      1) run_full_install;         return ;;
+      2) run_custom_install;       return ;;
+      3) run_brew_only;            return ;;
+      4) run_plugin_managers_only; return ;;
+      5) run_fonts_only;           return ;;
+      6) run_uninstall;            return ;;
+      7) info "Exiting..."; exit 0 ;;
+      *) warn "Invalid option, please try again" ;;
+      esac
+    else
+      prompt "Select an option [1-5]:"
+      read_input choice
+      case "$choice" in
+      1) run_minimal_install;               return ;;
+      2) WITH_DEPS=1; run_minimal_install;  return ;;
+      3) run_plugin_managers_only;          return ;;
+      4) run_uninstall;                     return ;;
+      5) info "Exiting..."; exit 0 ;;
+      *) warn "Invalid option, please try again" ;;
+      esac
+    fi
+  done
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -906,13 +983,15 @@ ensure_prereqs() {
   fi
 
   if ! command_exists stow; then
-    if [[ "${OS:-}" == "linux" ]] && is_apt_host; then
-      warn "GNU Stow is required but not installed"
+    warn "GNU Stow is required but not installed"
+    if [[ "${OS:-}" == "macos" ]]; then
+      info "Install it with:  brew install stow"
+      info "Or run:           setup.sh --brew  (installs the whole Brewfile, stow included)"
+    elif is_apt_host; then
       info "Install it with:  sudo apt-get install -y stow"
       info "Or re-run with:   --minimal --with-deps  (installs dependencies for you)"
-      exit 1
     fi
-    error "GNU Stow is required but not installed"
+    exit 1
   fi
 }
 
@@ -933,6 +1012,7 @@ main() {
     --custom | -c)    ACTION="custom" ;;
     --plugins | -p)   ACTION="plugins" ;;
     --fonts)          ACTION="fonts" ;;
+    --brew | -b)      ACTION="brew" ;;
     --uninstall | -u) ACTION="uninstall" ;;
     --with-deps)      WITH_DEPS=1 ;;
     --help | -h)      ACTION="help" ;;
@@ -945,11 +1025,18 @@ main() {
     warn "--with-deps only applies to --minimal; ignoring"
   fi
 
+  # Desktop flows are refused on Linux before anything is touched.
+  case "$ACTION" in
+  full | custom | fonts | brew) require_macos ;;
+  esac
+
   # --help needs no tools; everything else does. Prereqs are checked after
   # parsing so --with-deps can install them, and inside run_minimal_install
-  # rather than here for that same flow.
+  # rather than here for that same flow. --brew, --full and the interactive
+  # menu ("") skip it too: each can install stow itself (Brewfile prompt, or the
+  # menu's apt option), and stow_packages still errors if it is missing.
   case "$ACTION" in
-  help) : ;;
+  help | brew | full | "") : ;;
   minimal) [[ "$WITH_DEPS" == "1" ]] || ensure_prereqs ;;
   *) ensure_prereqs ;;
   esac
@@ -960,6 +1047,7 @@ main() {
   custom)    run_custom_install;       exit 0 ;;
   plugins)   run_plugin_managers_only; exit 0 ;;
   fonts)     run_fonts_only;           exit 0 ;;
+  brew)      run_brew_only;            exit 0 ;;
   uninstall) run_uninstall;            exit 0 ;;
   help)
     # $0 is "bash" when piped, which would render a misleading usage line.
@@ -967,12 +1055,17 @@ main() {
     [[ -z "$SCRIPT_DIR" ]] && invocation="curl -fsSL <url>/setup.sh | bash -s --"
     echo "Usage: $invocation [OPTION]"
     echo ""
-    echo "Options:"
-    echo "  --full, -f      Stow all CLI configs + plugin managers + fonts"
-    echo "  --minimal, -m   Server/headless: stow a reduced set, no prompts, no network"
+    echo "macOS (workstation):"
+    echo "  --full, -f      Brewfile (asks) + all CLI configs + plugin managers + fonts"
     echo "  --custom, -c    Select specific packages to stow"
-    echo "  --plugins, -p   Install TPM, vim-plug, Zinit and pinned Ranger plugins"
+    echo "  --brew, -b      Install everything in the Brewfile (brew bundle)"
     echo "  --fonts         Install fonts from reference/fonts/"
+    echo ""
+    echo "Linux (server over SSH) — also works on macOS:"
+    echo "  --minimal, -m   Stow the headless set, no prompts, no network"
+    echo ""
+    echo "Both:"
+    echo "  --plugins, -p   Install TPM, vim-plug, Zinit and pinned Ranger plugins"
     echo "  --uninstall, -u Remove dotfile symlinks and plugin managers"
     echo "  --help, -h      Show this help message"
     echo ""
@@ -997,7 +1090,6 @@ main() {
     echo "  CLI:       $PACKAGES_CLI"
     echo "  Minimal:   $PACKAGES_MINIMAL"
     echo "  Terminals: $PACKAGES_TERMINALS"
-    echo "  WM:        $PACKAGES_WM_LINUX"
     echo ""
     echo "Without options, an interactive menu is shown."
     echo "--minimal is the only flag that is fully non-interactive; every other"
@@ -1007,22 +1099,7 @@ main() {
   esac
 
   # Interactive mode
-  while true; do
-    show_menu
-    prompt "Select an option [1-7]:"
-    read_input choice
-
-    case "$choice" in
-    1) run_full_install;         break ;;
-    2) run_minimal_install;      break ;;
-    3) run_custom_install;       break ;;
-    4) run_plugin_managers_only; break ;;
-    5) run_fonts_only;           break ;;
-    6) run_uninstall;            break ;;
-    7) info "Exiting..."; exit 0 ;;
-    *) warn "Invalid option, please try again" ;;
-    esac
-  done
+  run_menu
 
   echo ""
   echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"

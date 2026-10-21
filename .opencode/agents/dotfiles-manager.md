@@ -45,6 +45,7 @@ This repo is a GNU Stow package tree. `.stowrc` sets `--target=$HOME`, `--ignore
 - New configs go at `<pkg>/.config/<pkg>/...` so they land at `~/.config/<pkg>/...`. Do not invent flatter layouts.
 - **Root wrapper dotfiles `.bashrc`, `.zshrc`, `.vimrc` are copied, not stowed** (see `copy_wrapper_files()` in `setup.sh`). They are thin shims that source the real config from `~/.config/`. Editing them does not take effect via symlink — they must be re-copied.
 - `reference/` is deliberately **not** stowed; it holds fonts and a Vimium config installed by other means.
+- `Brewfile` at the repo root is the Homebrew manifest (installed by `setup.sh --brew`). It is a stow-root file, not a package. Refresh it with `brew bundle dump --force` from the repo root; never hand-edit entries the dump would overwrite.
 - Because stow uses symlinks, editing `~/.config/<pkg>/...` edits the repo file through the link. Prefer editing inside the repo so paths in diffs stay unambiguous.
 
 ### What Is Deliberately Not Tracked
@@ -52,18 +53,18 @@ This repo is a GNU Stow package tree. `.stowrc` sets `--target=$HOME`, `--ignore
 Vendored plugin trees are managed by their own tools, not Git or submodules — there is no `.gitmodules`. Do not "fix" these by committing them:
 
 - `tmux/.config/tmux/plugins/*` — TPM
-- `nvim/.config/nvim/lazy-lock.json` — ignored at `.gitignore:24`. **Neovim is discontinued** (no longer stowed or maintained), so this lock file is inert; the `nvim/` tree is kept for reference only.
 - `.opencode/*` — allow-listed; only `agents/` is shared.
+
+Removed packages — `hypr` `noctalia` `rofi` `wofi` (Linux desktop) and `nvim` (discontinued) — survive only at the `linux-final` tag. Do not reintroduce them.
 
 ## Scope — Actual Packages
 
 Grouped exactly as `setup.sh` defines them.
 
-- **CLI (`PACKAGES_CLI`, 12):** `atuin` `bash` `bat` `btop` `eza` `fish` `lazygit` `ranger` `starship` `tmux` `vim` `zsh` — `nvim` is **discontinued** (config kept under `nvim/` but no longer stowed; `vim` is the default `$EDITOR`)
-- **Minimal / server (`PACKAGES_MINIMAL`, 11):** `bash` `zsh` `fish` `tmux` `vim` `bat` `btop` `eza` `starship` `lazygit` `ranger` — a subset of CLI, not a separate set of packages
-- **Terminals (`PACKAGES_TERMINALS`, 3):** `alacritty` `ghostty` `kitty`
-- **Linux window manager (`PACKAGES_WM_LINUX`, 4):** `hypr` `noctalia` `rofi` `wofi`
-- **Not stowed:** `reference/fonts` (JetBrainsMono Nerd Font), `reference/vimium`
+- **CLI (`PACKAGES_CLI`, 13, macOS):** `atuin` `bash` `bat` `btop` `eza` `fish` `lazygit` `ranger` `starship` `superfile` `tmux` `vim` `zsh` — `vim` is the default `$EDITOR`
+- **Minimal / server (`PACKAGES_MINIMAL`, 11, Linux over SSH):** `bash` `zsh` `fish` `tmux` `vim` `bat` `btop` `eza` `starship` `lazygit` `ranger` — a subset of CLI, not a separate set of packages
+- **Terminals (`PACKAGES_TERMINALS`, 3, macOS):** `alacritty` `ghostty` `kitty`
+- **Not stowed:** `Brewfile`, `reference/fonts` (JetBrainsMono Nerd Font), `reference/vimium`
 
 If you change this list, update `setup.sh`, the "What's Inside" table in `README.md`, and this file together.
 
@@ -71,7 +72,13 @@ If you change this list, update `setup.sh`, the "What's Inside" table in `README
 
 ## Platform Awareness
 
-`setup.sh` supports macOS and Linux (`detect_os()` accepts `darwin*` and any `linux*`, including musl; anything else is a hard error). The WM packages are Linux-only. Do not add Linux-specific paths or commands to shared CLI configs without guarding them by OS.
+**macOS is the workstation; Linux is supported only as a headless server used over SSH.** `detect_os()` accepts `darwin*` and any `linux*` (including musl); anything else is a hard error. `require_macos()` refuses `--full`, `--custom`, `--fonts` and `--brew` on Linux, and the interactive menu there offers only the server flows (`--minimal`, `--plugins`, `--uninstall`).
+
+Rules that follow from this:
+- Never add anything to the server path that needs a local display: no GUI apps, fonts, terminal configs, or clipboard tools (`xclip`, `wl-clipboard`). Desktop Linux support was removed deliberately.
+- Clipboard is `pbcopy` on macOS and **OSC 52** everywhere else (`c` in `aliases.sh` / `aliases.fish`, plus tmux `set-clipboard on`). Keep the two shells' `c` implementations equivalent.
+- Server-relevant Linux code in shared configs stays, guarded: the Debian `fdfind`/`batcat` fallbacks, the systemd `ssh-agent` socket block, apt aliases, and tmux's `/usr/share/tmux-plugin-manager` fallback.
+- Do not add Linux-specific paths or commands to shared CLI configs without guarding them by OS or command availability.
 
 `DISTRO_NAME` is read from `/etc/os-release` for reporting only. **Do not branch on distro or version.** Capability is probed instead — `command -v` for tools, `apt_candidate()` for packages, `infocmp` for terminfo — so the script does not carry a release table that goes stale. Follow that pattern for anything new.
 
@@ -89,7 +96,7 @@ Shell configs must guard every optional tool. Two failure modes to keep in mind:
 - **Theme:** Dracula across every tool. New or updated configs should match the existing palette.
 - **Structure:** Follow the naming and file layout already used by neighbouring packages rather than introducing new patterns.
 - **Docs:** Keep documentation current — this is a real duty, not an afterthought:
-  - `README.md` — packages, setup flags, plugin managers, troubleshooting
+  - `README.md` — packages, setup flags, Brewfile, plugin managers, troubleshooting
   - `KEYBINDINGS.md` — any keybinding change in any tool
   - `tmux/TMUX.md` — tmux prefix bindings and shell aliases
   - `zsh/ZSH.md` — zsh aliases, functions, plugins

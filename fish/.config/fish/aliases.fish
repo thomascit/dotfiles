@@ -1,22 +1,22 @@
 # ─────────────────────────────────────────────
-# Clipboard (OS-specific)
+# Clipboard
 # ─────────────────────────────────────────────
-for retired in fc yc df cat p40 p50 p20 y work rest
+for retired in fc yc df cat p40 p50 p20 y work rest hyc pi yi pri pu yu pru dnfi dnfu
     functions -e $retired
 end
+# macOS: pbcopy. Anywhere else (a Linux server over SSH): OSC 52, an escape
+# sequence asking the *client* terminal to set its clipboard, so no display or
+# xclip is needed. tmux forwards it (set-clipboard on). Terminals cap the
+# payload, typically around 100 KB. Usage: `cmd | c` or `c FILE`.
 function c
     if test (uname) = Darwin; and command -q pbcopy
-        command pbcopy $argv
-    else if test -n "$WAYLAND_DISPLAY"; and command -q wl-copy
-        command wl-copy $argv
-    else if test -n "$DISPLAY"; and command -q xclip
-        command xclip -i -selection clipboard $argv
-    else if grep -qiE '(microsoft|wsl)' /proc/version 2>/dev/null; and command -q clip.exe
-        command clip.exe $argv
-    else
-        echo 'c: no clipboard available (requires pbcopy, Wayland + wl-copy, X11 + xclip, or WSL + clip.exe)' >&2
-        return 1
+        cat $argv | command pbcopy
+        return
     end
+    # Piped into `read`, not captured with (…): a command substitution inside a
+    # function does not receive the pipeline's stdin, so `cmd | c` would be empty.
+    cat $argv | base64 | tr -d '\r\n' | read -l data
+    printf '\e]52;c;%s\a' "$data" >/dev/tty
 end
 
 # Run the dotfiles setup menu (does not reload the shell).
@@ -37,7 +37,6 @@ alias alsf '_edit "$HOME/.config/fish/aliases.fish"'
 alias brc '_edit "$HOME/.config/bash/bashrc"'
 alias fsh '_edit "$HOME/.config/fish/config.fish"'
 alias gc '_edit "$HOME/.config/ghostty/config"'
-alias hyc '_edit "$HOME/.config/hypr/hyprland.conf"'
 alias kc '_edit "$HOME/.config/kitty/kitty.conf"'
 alias sc '_edit "$HOME/.config/starship/starship.toml"'
 alias sshc '_edit "$HOME/.ssh/config"'
@@ -71,27 +70,10 @@ alias buc "brew list --cask | fzf --multi --preview 'brew info --cask {1}' | xar
 alias bup "brew update && brew upgrade -g"
 
 # ─────────────────────────────────────────────
-# Pacman (Arch)
-# ─────────────────────────────────────────────
-alias pi "pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S"
-alias yi "yay -Slq | fzf --multi --preview 'yay -Si {1}' | xargs -ro yay -S"
-alias pri "paru -Slq 2>/dev/null | grep -a '^[a-zA-Z0-9._+-]*\$' | fzf --multi --preview 'paru -Si {1}' | xargs -ro paru -S"
-alias pu "pacman -Qq | fzf --multi --preview 'pacman -Qi {1}' | xargs -ro sudo pacman -Rns"
-alias yu "yay -Qq | fzf --multi --preview 'yay -Qi {1}' | xargs -ro yay -Rns"
-alias pru "paru -Qq | fzf --multi --preview 'paru -Qi {1}' | xargs -ro paru -Rns"
-
-# ─────────────────────────────────────────────
-# APT (Debian/Ubuntu)
+# APT (Debian/Ubuntu servers)
 # ─────────────────────────────────────────────
 alias ai "apt-cache pkgnames | fzf --multi --preview 'apt-cache show {1}' | xargs -ro sudo apt install"
 alias au "dpkg --get-selections | grep -v deinstall | cut -f1 | fzf --multi --preview 'apt-cache show {1}' | xargs -ro sudo apt remove"
-
-# ─────────────────────────────────────────────
-# DNF (Fedora/RHEL)
-# ─────────────────────────────────────────────
-alias dnfi "dnf repoquery --available -y --qf '%{name}\n' 2>/dev/null | fzf --multi --preview 'dnf info {1}' | xargs -ro sudo dnf install"
-# Note: not 'du' — that shadows the disk-usage command.
-alias dnfu "dnf repoquery --installed --qf '%{name}\n' 2>/dev/null | fzf --multi --preview 'dnf info {1}' | xargs -ro sudo dnf remove"
 
 # ─────────────────────────────────────────────
 # LS/FS
@@ -115,8 +97,8 @@ end
 # Source Shells
 # ─────────────────────────────────────────────
 alias sf "source $HOME/.config/fish/config.fish"
-# Add SSH keys to the already-running agent (systemd ssh-agent.socket on Linux,
-# launchd on macOS); SSH_AUTH_SOCK is exported in variables.fish. Not piped to
+# Add SSH keys to the already-running agent (launchd on macOS, systemd
+# ssh-agent.socket on a Linux server); SSH_AUTH_SOCK is exported in variables.fish. Not piped to
 # /dev/null: ssh-add prompts for the key passphrase on stderr.
 alias sa "ssh-add ~/.ssh/id_ed25519"
 
@@ -132,6 +114,14 @@ alias v '_edit'
 alias r reset
 alias zshc "clear && zsh"
 alias oc opencode
+# saf [url|file] — open in Safari; bare domains get https:// prepended.
+function saf
+    if test -z "$argv[1]"; or test -e "$argv[1]"; or string match -q '*://*' -- "$argv[1]"
+        open -a Safari $argv
+    else
+        open -a Safari "https://$argv[1]"
+    end
+end
 
 # ─────────────────────────────────────────────
 # Tmux

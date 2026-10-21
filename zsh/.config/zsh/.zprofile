@@ -50,29 +50,22 @@ fi
 export FZF_DEFAULT_OPTS='--color=border:#44475a --color=fg:#f8f8f2,bg:#282a36,hl:#bd93f9 --color=fg+:#f8f8f2,bg+:#44475a,hl+:#bd93f9 --color=info:#ffb86c,prompt:#50fa7b,pointer:#ff79c6 --color=marker:#ff79c6,spinner:#ffb86c,header:#6272a4 --layout=reverse'
 # ZSH-VI Settings
 export ZVM_VI_ESCAPE_BINDKEY=jk
-export ZVM_SYSTEM_CLIPBOARD_ENABLED=true
 
-# Clipboard commands for zsh-vi-mode (OS-conditional, mirrors aliases.sh).
+# System clipboard for zsh-vi-mode: macOS only. A server over SSH has no
+# clipboard tool, so vi-mode yanks stay in zsh's own registers there; use `c`
+# (OSC 52) to copy to the client machine instead.
 if [[ "$OSTYPE" == "darwin"* ]]; then
+  export ZVM_SYSTEM_CLIPBOARD_ENABLED=true
   export ZVM_CLIPBOARD_COPY_CMD='pbcopy'
   export ZVM_CLIPBOARD_PASTE_CMD='pbpaste'
-elif [[ "$OSTYPE" == linux* ]]; then
-  if grep -qiE "(microsoft|wsl)" /proc/version 2>/dev/null; then
-    export ZVM_CLIPBOARD_COPY_CMD='clip.exe'
-    export ZVM_CLIPBOARD_PASTE_CMD='powershell.exe -Command Get-Clipboard'
-  elif [[ -n "$WAYLAND_DISPLAY" ]]; then
-    export ZVM_CLIPBOARD_COPY_CMD='wl-copy'
-    export ZVM_CLIPBOARD_PASTE_CMD='wl-paste'
-  else
-    export ZVM_CLIPBOARD_COPY_CMD='xclip -selection clipboard'
-    export ZVM_CLIPBOARD_PASTE_CMD='xclip -selection clipboard -o'
-  fi
+else
+  export ZVM_SYSTEM_CLIPBOARD_ENABLED=false
 fi
 
 # LAZYGIT Settings
 export LAZYGIT_NEW_DIR_FILE=$HOME/.lazygit/newdir
 
-# ssh-agent (systemd user socket, Linux)
+# ssh-agent (systemd user socket, Linux servers)
 # Debian/systemd ships a socket-activated agent (ssh-agent.socket, enabled by
 # default) listening on $XDG_RUNTIME_DIR/openssh_agent, but only exports
 # SSH_AUTH_SOCK into the systemd user manager — not into tty/ssh login shells.

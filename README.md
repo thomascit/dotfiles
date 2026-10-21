@@ -14,13 +14,24 @@
 > _Dotfiles for developers who appreciate clean configs, powerful tools, and the Dracula aesthetic._
 
 [![Theme: Dracula](https://img.shields.io/badge/Theme-Dracula-bd93f9?style=flat-square)](https://draculatheme.com)
-[![Platform: Linux](https://img.shields.io/badge/Platform-Linux-FCC624?style=flat-square&logo=linux&logoColor=black)](https://www.linux.org/)
 [![Platform: macOS](https://img.shields.io/badge/Platform-macOS-000000?style=flat-square&logo=apple&logoColor=white)](https://www.apple.com/macos/)
+[![Servers: Linux over SSH](https://img.shields.io/badge/Servers-Linux_over_SSH-FCC624?style=flat-square&logo=linux&logoColor=black)](#linux-server-install)
 [![Manager: GNU Stow](https://img.shields.io/badge/Manager-GNU_Stow-4EAA25?style=flat-square)](https://www.gnu.org/software/stow/)
 
 </div>
 
 ---
+
+## Platform Model
+
+| Host | Role | What gets installed |
+|---|---|---|
+| **macOS** | Workstation | Everything: Brewfile apps, CLI configs, terminal configs, fonts |
+| **Linux** | Server, used over SSH | Only headless tools: shells, tmux, vim and CLI utilities (`--minimal`) |
+
+Desktop Linux (Hyprland, noctalia, rofi, wofi) and the discontinued Neovim
+config were removed. The last commit containing them is tagged
+**`linux-final`** — `git checkout linux-final` to get them back.
 
 ## Prerequisites
 
@@ -30,7 +41,10 @@
 
 Both can be installed for you — see [Bootstrap without cloning](#bootstrap-without-cloning).
 
-All other tools (vim, tmux, zsh, etc.) should be installed separately beforehand. The setup script only manages config files, not package installation — the one exception is `--minimal --with-deps`, which apt-installs the server tool set on Debian/Ubuntu (see [Minimal / Server Install](#minimal--server-install)).
+On macOS, tools come from the [Brewfile](#brewfile) (`./setup.sh --brew`). On a
+Linux server, `--minimal --with-deps` apt-installs the headless tool set (see
+[Linux Server Install](#linux-server-install)). Otherwise the script only manages
+config files.
 
 Every config guards the optional tools it uses, so a missing tool degrades that feature rather than breaking the shell.
 
@@ -38,10 +52,38 @@ Every config guards the optional tools it uses, so a missing tool degrades that 
 
 ## Quick Start
 
+**macOS** (install [Homebrew](https://brew.sh) first):
+
 ```sh
 git clone git@github.com:thomascit/dotfiles.git ~/Projects/dotfiles
-~/Projects/dotfiles/setup.sh
+~/Projects/dotfiles/setup.sh --brew   # installs the Brewfile, including stow
+~/Projects/dotfiles/setup.sh          # interactive menu
 ```
+
+**Linux server**, straight over SSH — see [Linux Server Install](#linux-server-install):
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/thomascit/dotfiles/main/setup.sh \
+  | bash -s -- --minimal --with-deps
+```
+
+## Brewfile
+
+`Brewfile` is a snapshot of everything Homebrew manages on the Mac — taps,
+formulae, casks, VS Code extensions and global npm packages — produced by
+[`brew bundle`](https://docs.brew.sh/Brew-Bundle-and-Brewfile).
+
+```sh
+./setup.sh --brew              # install everything in it
+brew bundle check              # is anything missing?
+brew bundle dump --force       # refresh it after installing something
+brew bundle cleanup            # list what is installed but NOT in it
+brew bundle cleanup --force    # ...and uninstall those
+```
+
+Run `brew bundle` commands from the repo root (or pass `--file=Brewfile`).
+Re-dump after `brew install`, then commit, so the file stays the source of
+truth. The repo is public, so the Brewfile also publishes your app list.
 
 ### Bootstrap without cloning
 
@@ -84,24 +126,34 @@ location, so you can point a run at an alternate checkout deliberately.
 
 ## Setup Script
 
-The setup script stows configs, installs plugin managers, and copies fonts. It does not install packages.
+The setup script stows configs, installs plugin managers, copies fonts and
+(on macOS) installs the Brewfile.
 
 ```sh
-./setup.sh --full       # Stow all CLI configs + plugin managers + fonts
-./setup.sh --minimal    # Server/headless: reduced set, no prompts, no network
+# macOS only — refused on Linux
+./setup.sh --full       # Brewfile (asks) + all CLI configs + plugin managers + fonts
 ./setup.sh --custom     # Select specific packages to stow
-./setup.sh --plugins    # Install TPM, vim-plug, Zinit and pinned Ranger plugins
+./setup.sh --brew       # Install everything in the Brewfile
 ./setup.sh --fonts      # Install fonts from reference/fonts/
+
+# Linux server (also works on macOS)
+./setup.sh --minimal    # Headless set: no prompts, no network
+
+# Both
+./setup.sh --plugins    # Install TPM, vim-plug, Zinit and pinned Ranger plugins
 ./setup.sh --uninstall  # Remove dotfile symlinks and plugin managers
 ./setup.sh --help       # Show help and package lists
 ```
 
-`--minimal` is the only flag that is fully non-interactive; every other flow
-prompts on `/dev/tty` and so cannot be scripted.
+Run with no flags for an interactive menu; on Linux it only offers the server
+flows. `--minimal` is the only flag that is fully non-interactive; every other
+flow prompts on `/dev/tty` and so cannot be scripted.
 
-## Minimal / Server Install
+## Linux Server Install
 
-For a bare Debian or Ubuntu box where you want a working shell but no desktop:
+For a Debian or Ubuntu server you reach over SSH. Only things that work inside
+an SSH session are installed — no terminal emulators, fonts, GUI apps or
+clipboard tools, because all of those live on the *client* (your Mac):
 
 ```sh
 ./setup.sh --minimal              # configs only
@@ -120,10 +172,22 @@ Stows `bash zsh fish tmux vim bat btop eza starship lazygit ranger`. `zsh` is in
 even if you never run it, because `bash/bashrc` sources
 `~/.config/zsh/aliases.sh`.
 
-Excluded on purpose: `nvim` (discontinued — no longer stowed by any flow),
-`atuin` (absent
-from Debian 12, and expects a sync server), plus all terminal and window
-manager configs.
+Excluded on purpose: `atuin` (absent from Debian 12, and expects a sync
+server), `superfile` (not packaged for Debian/Ubuntu), and the terminal
+emulator configs (they run on the client).
+
+### Clipboard over SSH (OSC 52)
+
+There is no `xclip` on a server — it would need X forwarding. Instead, the `c`
+function and tmux copy mode use **OSC 52**: an escape sequence that asks your
+*local* terminal to put text on its clipboard.
+
+```sh
+cat ~/.ssh/id_ed25519.pub | c    # lands on your Mac's clipboard
+```
+
+tmux forwards it because `tmux.conf` sets `set-clipboard on`. Ghostty and kitty
+allow OSC 52 writes by default; payloads are capped at roughly 100 KB.
 
 Skips fonts (glyphs come from your local terminal, not the server) and the
 TPM / vim-plug / Zinit and Ranger plugins, since these need network access.
@@ -198,7 +262,6 @@ tool below, so an absent one is a missing feature, never a broken shell.
 | `atuin` | ❌ | 18.6 | ❌ | ✅ |
 | `lazygit` | ❌ | 0.50 | ❌ | 0.57 |
 | `ranger` | ✅ | ✅ | ✅ | ✅ |
-| ~~`neovim`~~ (discontinued) | — | — | — | — |
 
 Debian 13 or Ubuntu 26.04 gives you nearly everything. On Debian 12 you lose
 `starship`, `eza` and `lazygit` — the prompt falls back to plain and `ls`
@@ -212,42 +275,33 @@ the config also falls back to `screen-256color` as a second line of defence.
 
 | Package | Description |
 |---------|-------------|
-| `alacritty` | Terminal emulator with Dracula theme |
+| `alacritty` | Terminal emulator with Dracula theme (macOS) |
 | `atuin` | Shell history sync and search |
 | `bash` / `zsh` / `fish` | Shells with VI mode, Starship prompt, Zoxide, shared aliases |
 | `bat` | Syntax-highlighted file viewer (invoke `bat` or `batcat`; `cat` is unchanged) |
 | `btop` | Resource monitor |
 | `eza` | Modern ls replacement with icons and Git status |
-| `ghostty` | Fast GPU-accelerated terminal |
-| `hypr` | Hyprland compositor — `kitty` terminal, `firefox` browser, `nemo` file manager |
-| `kitty` | GPU-based terminal emulator |
+| `ghostty` | Fast GPU-accelerated terminal (macOS) |
+| `kitty` | GPU-based terminal emulator (macOS) |
 | `lazygit` | Terminal UI for Git |
-| `noctalia` | Hyprland shell — bar, launcher, dock, lock screen, notifications, control center |
-| ~~`nvim`~~ | **(Discontinued)** Neovim with LazyVim + lazy.nvim — no longer stowed or maintained. See note below. |
-| `rofi` | Application launcher (X11) |
 | `ranger` | Terminal file manager with Dracula colors and Vim-style navigation |
 | `starship` | Fast, customizable shell prompt |
 | `superfile` | Modern terminal file manager (`spf`) with Dracula theme |
 | `tmux` | Terminal multiplexer with TPM plugins and Dracula theme |
-| `vim` | Vim with vim-plug and Dracula theme |
-| `wofi` | Application launcher (Wayland) |
-
-> **Discontinued:** `nvim` is no longer stowed or maintained. `vim` is now the
-> default editor (`$EDITOR`). The Neovim config still lives in `nvim/` for
-> reference and git history, but no setup flow links it. To remove a stale
-> symlink from an older install, run `stow -D nvim` from the repo root.
+| `vim` | Vim with vim-plug and Dracula theme (`$EDITOR`) |
 
 ### Reference Files (not stowed)
 
 | File | Description |
 |------|-------------|
+| `Brewfile` | Homebrew manifest — see [Brewfile](#brewfile) |
 | `reference/fonts/` | JetBrainsMono Nerd Font |
 | `reference/vimium/` | Vimium browser extension settings (Dracula theme + custom keymaps) |
 
 
 ## Theme
 
-Dracula across the board — vim, fish, tmux, terminals, rofi, wofi, ranger, noctalia. See https://draculatheme.com.
+Dracula across the board — vim, fish, tmux, terminals, ranger, fzf. See https://draculatheme.com.
 
 ## Fonts
 
@@ -257,14 +311,14 @@ JetBrainsMono Nerd Font is included at `reference/fonts/`. Install with:
 ./setup.sh --fonts
 ```
 
-Terminal configs (alacritty, ghostty, kitty) and noctalia are pre-configured to use this font.
+Terminal configs (alacritty, ghostty, kitty) are pre-configured to use this font.
+Servers need no fonts: over SSH, glyphs are drawn by your local terminal.
 
 ## Plugin Managers
 
 | Tool | Manager | Notes |
 |------|---------|-------|
 | Vim | vim-plug | Run `:PlugInstall` on first launch |
-| ~~Neovim~~ | ~~lazy.nvim (LazyVim)~~ | **(Discontinued)** no longer stowed or bootstrapped |
 | Zsh | Zinit | Bootstraps automatically on first shell start |
 | Tmux | TPM | Press `<prefix>+I` to install plugins after first launch |
 | Ranger | Pinned Git clones | devicons2, fzf-filter, zoxide and archives; installed by full install / `--plugins` |
@@ -361,7 +415,7 @@ stow -D vim && stow vim
 ```
 
 **Fonts not showing in terminals?**
-Run `./setup.sh --fonts` then restart the terminal. Fonts install to `~/.local/share/fonts` on Linux and `~/Library/Fonts` on macOS. On Linux, `fc-cache -f` is run automatically but you may need to restart the application.
+Run `./setup.sh --fonts` then restart the terminal. Fonts install to `~/Library/Fonts`.
 
 **TPM plugins not loading?**
 Start tmux and press `<prefix>+I` to install plugins. The prefix is `Ctrl+Space`.
@@ -379,8 +433,7 @@ git config core.hooksPath .githooks
 Install the scanner:
 
 ```sh
-brew install gitleaks   # macOS
-# Linux: see https://github.com/gitleaks/gitleaks#installing
+brew install gitleaks   # already in the Brewfile
 ```
 
 If `gitleaks` is not on `PATH`, the hook prints a warning and lets the commit proceed. Bypass entirely (not recommended) with `git commit --no-verify`.

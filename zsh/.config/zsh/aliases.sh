@@ -1,24 +1,22 @@
 # Remove retired definitions when this file is re-sourced in an existing shell.
-unalias c fc yc df cat p40 p50 p20 2>/dev/null || :
+unalias c fc yc df cat p40 p50 p20 hyc pi yi pri pu yu pru dnfi dnfu 2>/dev/null || :
 unset -f y work rest 2>/dev/null || :
 
 # ─────────────────────────────────────────────
-# Clipboard (OS-specific)
+# Clipboard
 # ─────────────────────────────────────────────
-# Check at invocation time: display forwarding can change during a session.
+# macOS: pbcopy. Anywhere else (a Linux server over SSH): OSC 52, an escape
+# sequence asking the *client* terminal to set its clipboard, so no display or
+# xclip is needed. tmux forwards it (set-clipboard on). Terminals cap the
+# payload, typically around 100 KB. Usage: `cmd | c` or `c FILE`.
 c() {
   if [[ "$OSTYPE" == "darwin"* ]] && command -v pbcopy >/dev/null 2>&1; then
-    command pbcopy "$@"
-  elif [[ -n "$WAYLAND_DISPLAY" ]] && command -v wl-copy >/dev/null 2>&1; then
-    command wl-copy "$@"
-  elif [[ -n "$DISPLAY" ]] && command -v xclip >/dev/null 2>&1; then
-    command xclip -i -selection clipboard "$@"
-  elif grep -qiE '(microsoft|wsl)' /proc/version 2>/dev/null && command -v clip.exe >/dev/null 2>&1; then
-    command clip.exe "$@"
-  else
-    printf '%s\n' 'c: no clipboard available (requires pbcopy, Wayland + wl-copy, X11 + xclip, or WSL + clip.exe)' >&2
-    return 1
+    cat "$@" | command pbcopy
+    return
   fi
+  local data
+  data=$(cat "$@" | base64 | tr -d '\r\n') || return 1
+  printf '\033]52;c;%s\a' "$data" > /dev/tty
 }
 
 # Run the dotfiles setup menu (does not reload the shell).
@@ -43,7 +41,6 @@ alias alsf='_edit "$HOME/.config/fish/aliases.fish"'
 alias brc='_edit "$HOME/.config/bash/bashrc"'
 alias fsh='_edit "$HOME/.config/fish/config.fish"'
 alias gc='_edit "$HOME/.config/ghostty/config"'
-alias hyc='_edit "$HOME/.config/hypr/hyprland.conf"'
 alias kc='_edit "$HOME/.config/kitty/kitty.conf"'
 alias sc='_edit "$HOME/.config/starship/starship.toml"'
 alias sshc='_edit "$HOME/.ssh/config"'
@@ -77,27 +74,10 @@ alias buc="brew list --cask | fzf --multi --preview 'brew info --cask {1}' | xar
 alias bup="brew update && brew upgrade -g"
 
 # ─────────────────────────────────────────────
-# Pacman (Arch)
-# ─────────────────────────────────────────────
-alias pi="pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S"
-alias yi="yay -Slq | fzf --multi --preview 'yay -Si {1}' | xargs -ro yay -S"
-alias pri="paru -Slq | grep -a '^[a-zA-Z0-9._+-]*\$' | fzf --multi --preview 'paru -Si {1}' | xargs -ro paru -S"
-alias pu="pacman -Qq | fzf --multi --preview 'pacman -Qi {1}' | xargs -ro sudo pacman -Rns"
-alias yu="yay -Qq | fzf --multi --preview 'yay -Qi {1}' | xargs -ro yay -Rns"
-alias pru="paru -Qq | fzf --multi --preview 'paru -Qi {1}' | xargs -ro paru -Rns"
-
-# ─────────────────────────────────────────────
-# APT (Debian/Ubuntu)
+# APT (Debian/Ubuntu servers)
 # ─────────────────────────────────────────────
 alias ai="apt-cache pkgnames | fzf --multi --preview 'apt-cache show {1}' | xargs -ro sudo apt install"
 alias au="dpkg --get-selections | grep -v deinstall | cut -f1 | fzf --multi --preview 'apt-cache show {1}' | xargs -ro sudo apt remove"
-
-# ─────────────────────────────────────────────
-# DNF (Fedora/RHEL)
-# ─────────────────────────────────────────────
-alias dnfi='dnf repoquery --available -y --qf "%{name}\n" 2>/dev/null | fzf --multi --preview "dnf info {1}" | xargs -ro sudo dnf install'
-# Note: not 'du' — that shadows the disk-usage command.
-alias dnfu='dnf repoquery --installed --qf "%{name}\n" 2>/dev/null | fzf --multi --preview "dnf info {1}" | xargs -ro sudo dnf remove'
 
 # ─────────────────────────────────────────────
 # LS/FS
@@ -115,8 +95,8 @@ command -v trash &>/dev/null && alias rm="trash"
 # Source Shells
 # ─────────────────────────────────────────────
 alias sz="source $HOME/.config/zsh/zshrc"
-# Add SSH keys to the already-running agent (systemd ssh-agent.socket on Linux,
-# launchd on macOS); SSH_AUTH_SOCK is exported in .zprofile. Not piped to
+# Add SSH keys to the already-running agent (launchd on macOS, systemd
+# ssh-agent.socket on a Linux server); SSH_AUTH_SOCK is exported in .zprofile. Not piped to
 # /dev/null: ssh-add prompts for the key passphrase on stderr.
 alias sa="ssh-add ~/.ssh/id_ed25519"
 
@@ -132,6 +112,14 @@ alias v='_edit'
 alias r="reset"
 alias zshc="clear && zsh"
 alias oc="opencode"
+# saf [url|file] — open in Safari; bare domains get https:// prepended.
+saf() {
+  if [ -z "$1" ] || [ -e "$1" ] || [[ "$1" == *://* ]]; then
+    open -a Safari "$@"
+  else
+    open -a Safari "https://$1"
+  fi
+}
 
 # ─────────────────────────────────────────────
 # Tmux

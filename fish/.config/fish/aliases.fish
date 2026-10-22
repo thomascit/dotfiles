@@ -114,6 +114,7 @@ alias v '_edit'
 alias r reset
 alias zshc "clear && zsh"
 alias oc opencode
+alias o "opencode --continue"
 # saf [url|file] — open in Safari; bare domains get https:// prepended.
 function saf
     if test -z "$argv[1]"; or test -e "$argv[1]"; or string match -q '*://*' -- "$argv[1]"
@@ -132,10 +133,11 @@ for retired in tmr tmt tmp
     functions -q $retired; and functions -e $retired
 end
 alias tm tmux
+alias t tmux
 alias tma "tmux attach-session -t"
 
 # ─────────────────────────────────────────────
-# Session pickers
+# Session and project pickers
 # ─────────────────────────────────────────────
 # Enter a session: switch when already inside tmux, attach when outside.
 # "=" forces an exact name match, so "dot" cannot match "dotfiles".
@@ -158,6 +160,28 @@ function s
     test -z "$picked"; and return
 
     _tmux_goto "$picked"
+end
+
+# p — fzf over directories directly under ~/Projects; cd only.
+function p
+    if not command -q fzf
+        echo "p: fzf not found" >&2
+        return 1
+    end
+    if not test -d "$HOME/Projects"
+        echo "p: ~/Projects not found" >&2
+        return 1
+    end
+
+    set -l picked (
+        for dir in "$HOME"/Projects/*
+            test -d "$dir"; and string replace -r '^.*/' '' -- "$dir"
+        end | fzf --no-sort --height 40% --reverse --border \
+            --border-label " projects " --prompt "project > "
+    )
+    test -z "$picked"; and return
+
+    cd -- "$HOME/Projects/$picked"
 end
 
 # ─────────────────────────────────────────────

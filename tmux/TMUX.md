@@ -23,8 +23,8 @@
 | Binding | Description |
 |---|---|
 | `prefix + c` | New window (current path) |
-| `prefix + N` | Editor (`$EDITOR`, defaults to `vim`) |
-| `prefix + O` | OpenCode (fresh session — `prefix + o` is the one that continues) |
+| `prefix + v` | Editor (`$EDITOR`, defaults to `vim`) |
+| `prefix + o` | OpenCode (fresh session) |
 | `prefix + f` | Ranger file manager |
 | `prefix + g` | Lazygit |
 | `prefix + p` | btop |
@@ -38,8 +38,6 @@
 |---|---|
 | `prefix + -` | Horizontal split (current path) |
 | `prefix + _` | Vertical split (current path) |
-| `prefix + v` | Vertical split left, 60% → `$EDITOR` |
-| `prefix + o` | Vertical split 40% → `opencode --continue` |
 | `prefix + t` | Horizontal split 25% |
 | `prefix + m` | Horizontal split 10% |
 
@@ -183,6 +181,7 @@ installed. They are bound in the **prefix** table, not as bare `M-s`/`M-r`.
 | Alias | Description |
 |---|---|
 | `s` | fzf picker over running sessions → switch (inside tmux) or attach (outside) |
+| `t` | Bare `tmux` (shorter alternative to `tm`) |
 | `tm` | Bare `tmux` |
 | `tma` | Attach to a session by name (`tmux attach-session -t`) |
 | `tmk` | Kill the tmux server (`tmux kill-server`, zsh/bash only) |
@@ -191,3 +190,7 @@ installed. They are bound in the **prefix** table, not as bare `M-s`/`M-r`.
 `s` is a shell **function**, not an alias, so bash and zsh share one definition
 from `zsh/.config/zsh/aliases.sh`; fish has its own copy in
 `fish/.config/fish/aliases.fish`.
+
+`p` uses the same fzf layout to show folder names directly under `~/Projects` and
+`cd` to the selected one; it does not create or switch tmux sessions. At the shell
+prompt, `o` runs `opencode --continue`; tmux's `prefix + o` opens a fresh session.

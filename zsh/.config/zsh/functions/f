@@ -1,0 +1,9 @@
+# Ranger wrapper: follow the last visited directory on exit.
+local dirfile dir
+dirfile=$(mktemp "${TMPDIR:-/tmp}/ranger-cd.XXXXXXXX") || return 1
+command ranger --choosedir="$dirfile" "$@"
+if [ -s "$dirfile" ]; then
+    IFS= read -r dir < "$dirfile"
+    [ -d "$dir" ] && cd -- "$dir"
+fi
+command rm -f -- "$dirfile"

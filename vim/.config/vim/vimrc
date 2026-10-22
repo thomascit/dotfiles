@@ -66,6 +66,7 @@ set termguicolors             " Enable 24-bit RGB colors
 
 " Leader key
 let mapleader = " "           " Set leader key to space
+set timeoutlen=500            " Show the leader guide after 0.5s (also affects other mappings)
 
 " One group for every autocmd in this file. `autocmd!` clears it first, so
 " re-sourcing (e.g. the PlugInstall autocmd below) cannot stack duplicates.
@@ -147,8 +148,21 @@ if !empty(glob('~/.vim/autoload/plug.vim'))
   Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
   Plug 'tpope/vim-surround'
   Plug 'vim-airline/vim-airline'
+  Plug 'liuchengxu/vim-which-key'
 
   call plug#end()
+
+  " Space shows the existing leader mappings after 'timeoutlen' (0.5s).
+  " Wait until the plugin is installed so a missing plugin cannot break Space.
+  if isdirectory(g:plugs['vim-which-key'].dir)
+    let g:which_key_map = {
+      \ 't': {'name': '+toggles', 'w': 'toggle wrap', 'c': 'toggle color column'},
+      \ 'f': {'name': '+files', 'n': 'new file'},
+      \ 'q': {'name': '+quit', 'q': 'quit all'},
+      \ }
+    call which_key#register('<Space>', 'g:which_key_map')
+    nnoremap <silent> <leader> :<C-U>WhichKey '<Space>'<CR>
+  endif
 endif
 
 " Airline configuration (settings that don't require functions)

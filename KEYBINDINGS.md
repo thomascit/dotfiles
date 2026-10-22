@@ -41,8 +41,8 @@
 | Keybinding | Description |
 |---|---|
 | `<prefix> c` | New window in current path |
-| `<prefix> N` | New window with `$EDITOR` (defaults to `vim`) |
-| `<prefix> O` | New window with OpenCode — fresh session (`<prefix> o` is the one that continues) |
+| `<prefix> v` | New window with `$EDITOR` (defaults to `vim`) |
+| `<prefix> o` | New window with OpenCode — fresh session |
 | `<prefix> f` | New window with Ranger file manager |
 | `<prefix> g` | New window with Lazygit |
 | `<prefix> p` | New window with btop |
@@ -57,8 +57,6 @@ wording in the `<prefix> ?` popup.
 |---|---|
 | `<prefix> -` | Split pane horizontally (current path) |
 | `<prefix> _` | Split pane vertically (current path) |
-| `<prefix> v` | Split pane vertically — left, 60% width, opens `$EDITOR` |
-| `<prefix> o` | Split pane vertically — 40% width, opens `opencode --continue` |
 | `<prefix> t` | Split pane horizontally — 25% height (current path) |
 | `<prefix> m` | Split pane horizontally — 10% height (current path) |
 | `<prefix> Ctrl+l` | Clear screen (sends `Ctrl+l` to the pane; bare `Ctrl+l` navigates) |
@@ -141,6 +139,11 @@ Only available where TPM is installed, and bound in the **prefix** table.
 
 **Leader key:** `Space`
 
+Pause after pressing Space to show vim-which-key's guide to the available
+leader mappings; quick key sequences still run normally. The delay is 500 ms
+(`timeoutlen`, which also affects other mappings such as `jk`). `set showcmd`
+also shows keys as you type them.
+
 ### General
 
 | Keybinding | Mode | Description |
@@ -192,22 +195,29 @@ zsh-vi-mode initialises at the first prompt and rebinds every key, which would
 silently overwrite the fzf and atuin bindings.
 
 fzf itself is still used heavily for the aliases below, the tmux popups, and the
-`s` session picker. Theming for all of those comes from `FZF_DEFAULT_OPTS`.
+`s` session and `p` project pickers. Theming for all of those comes from
+`FZF_DEFAULT_OPTS`.
 
 ### fzf-powered Shell Aliases
 
 These aliases use fzf for interactive selection:
 
-**Tmux sessions**
+**Sessions and projects**
 
 | Alias | Description |
 |---|---|
 | `s` | Pick a running session → `switch-client` inside tmux, `attach-session` outside |
+| `p` | Pick a folder name directly under `~/Projects` → `cd` there (no tmux action) |
 
-`s` is a shell **function**, not an alias, so bash gets it too via
+`s` and `p` are shell **functions**, not aliases, so bash gets them too via
 `aliases.sh`. `FZF_DEFAULT_OPTS` / `FZF_DEFAULT_COMMAND` are set in
 `zsh/.config/zsh/.zprofile`, `bash/.config/bash/bashrc` and
 `fish/.config/fish/variables.fish`.
+
+At the shell prompt, `f` opens Ranger and follows its last directory on exit
+(zsh and fish); `t` starts tmux, `o` opens OpenCode continuing the last session,
+and `oc` opens OpenCode without resuming (bash, zsh, and fish). `v` runs `$EDITOR`,
+while `e` still exits and `r` still resets the terminal.
 
 **Homebrew (macOS)**
 

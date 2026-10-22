@@ -112,6 +112,7 @@ alias v='_edit'
 alias r="reset"
 alias zshc="clear && zsh"
 alias oc="opencode"
+alias o="opencode --continue"
 # saf [url|file] — open in Safari; bare domains get https:// prepended.
 saf() {
   if [ -z "$1" ] || [ -e "$1" ] || [[ "$1" == *://* ]]; then
@@ -129,11 +130,12 @@ saf() {
 unalias tmr tmt 2>/dev/null || :
 unset -f tmp 2>/dev/null || :
 alias tm="tmux"
+alias t="tmux"
 alias tma="tmux attach-session -t"
 alias tmk='tmux kill-server'
 
 # ─────────────────────────────────────────────
-# Session picker (function, shared by bash and zsh)
+# Session and project pickers (functions, shared by bash and zsh)
 # ─────────────────────────────────────────────
 # Enter a session: switch when already inside tmux, attach when outside.
 # "=" forces an exact name match, so "dot" cannot match "dotfiles".
@@ -159,6 +161,23 @@ s() {
     [ -n "$picked" ] || return 0
 
     _tmux_goto "$picked"
+}
+
+# p — fzf over directories directly under ~/Projects; cd only.
+p() {
+    command -v fzf >/dev/null 2>&1 || { echo "p: fzf not found" >&2; return 1; }
+    [ -d "$HOME/Projects" ] || { echo "p: ~/Projects not found" >&2; return 1; }
+
+    local picked dir
+    picked=$(
+        for dir in "$HOME"/Projects/*; do
+            [ -d "$dir" ] && printf '%s\n' "${dir##*/}"
+        done | fzf --no-sort --height 40% --reverse --border \
+            --border-label ' projects ' --prompt 'project > '
+    ) || return 0
+    [ -n "$picked" ] || return 0
+
+    cd -- "$HOME/Projects/$picked"
 }
 
 # ─────────────────────────────────────────────
